@@ -1,2 +1,29 @@
 server:
   port: 8080
+  servlet: 
+    context-path: /smart-house
+  tomcat:
+    uri-encoding: utf-8
+spring:
+  thymeleaf:
+    cache: false
+smart-house:
+  # 时间类型参数在前端页面的展示格式，默认格式为 yyyy-MM-dd HH:mm:ss
+  timeFormat: yyyy-MM-dd HH:mm:ss
+  shiro:
+    # shiro redis缓存时长，默认1800秒
+    expireIn: 1800
+    # session 超时时间，默认1800000毫秒
+    sessionTimeout: 1800000
+    # rememberMe cookie有效时长，默认86400秒，即一天
+    cookieTimeout: 86400
+    # 免认证的路径配置，如静态资源，druid监控页面，注册页面，验证码请求等
+    anonUrl: /css/**,/js/**,/fonts/**,/img/**,/druid/**,/user/regist,/gifCode,/,/actuator/**,/test/**
+    # 登录 url
+    loginUrl: /login
+    # 登录成功后跳转的 url
+    successUrl: /index
+    # 登出 url
+    logoutUrl: /logout
+    # 未授权跳转 url
+    unauthorizedUrl: /403
