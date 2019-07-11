@@ -49,9 +49,4 @@ public class OAuth2Realm extends AuthorizingRealm {
 		return new SimpleAuthenticationInfo(user, password, getName());
 	}
 
-	@Override
-	public boolean supports(AuthenticationToken token) {
-		return token instanceof OAuth2Token;
-	}
-
 }

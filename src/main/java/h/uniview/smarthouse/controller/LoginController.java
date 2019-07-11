@@ -44,15 +44,7 @@ public class LoginController extends BaseController {
 
     @PostMapping("/login")
     @ResponseBody
-    public R login(String username, String password, String code, Boolean rememberMe) {
-        if (!StringUtils.isNotBlank(code)) {
-            return R.warn("验证码不能为空！");
-        }
-        Session session = super.getSession();
-        String sessionCode = (String) session.getAttribute(CODE_KEY);
-        if (!code.equalsIgnoreCase(sessionCode)) {
-            return R.warn("验证码错误！");
-        }
+    public R login(String username, String password, Boolean rememberMe) {
         // 密码 MD5 加密
         password = MD5Utils.encrypt(username.toLowerCase(), password);
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
