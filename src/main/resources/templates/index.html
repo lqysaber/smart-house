@@ -113,15 +113,15 @@
     <li class="nav-item">
       <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown" href="#">
         <span class="user-profile">
-          <span>Admin,欢迎您！</span>
-          <img src="assets/images/avatar-15.png" class="img-circle" alt="user avatar">
+          <span>[[${user.username}]],欢迎您！</span>
+          <img th:src="@{assets/images/avatar-15.png}" class="img-circle" alt="user avatar">
           
         </span>
       </a>
       <ul class="dropdown-menu dropdown-menu-right">
         <li class="dropdown-item"><i class="icon-settings mr-2"></i>修改密码</li>
         <li class="dropdown-divider"></li>
-        <li class="dropdown-item"><a href="SignIn.html"><i class="icon-power mr-2"></i>退 出</a></li>
+        <li class="dropdown-item"><a data-th-href="@{logout}"><i class="icon-power mr-2"></i>退 出</a></li>
       </ul>
     </li>
   </ul>
@@ -139,26 +139,24 @@
 </div>
 
 
+<script th:src="@{assets/js/jquery.min.js}"></script>
+<script th:src="@{assets/js/popper.min.js}"></script>
+<script th:src="@{assets/js/bootstrap.min.js}"></script>
+<script th:src="@{assets/plugins/simplebar/js/simplebar.js}"></script>
+<script th:src="@{assets/js/sidebar-menu.js}"></script>
+<script th:src="@{assets/js/app-script.js}"></script>
+<script th:src="@{js/bootstrap-notify/bootstrap-notify.min.js}"></script>
 
-<!-- Bootstrap core JavaScript-->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/js/popper.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
+<script data-th-inline="javascript">
+var ctx = [[@{/}]];
+var userName = [[${user.username}]];
 
-<!-- simplebar js -->
-<script src="assets/plugins/simplebar/js/simplebar.js"></script>
-<!-- sidebar-menu js -->
-<script src="assets/js/sidebar-menu.js"></script>
-
-<!-- Custom scripts -->
-<script src="assets/js/app-script.js"></script>
-<script>
 $(function(){
-  $('.do-nicescrol li').click(function(e) {
-        $(this).addClass('active').siblings().removeClass('active');
-      
-    });
-})
+	  $('.do-nicescrol li').click(function(e) {
+	        $(this).addClass('active').siblings().removeClass('active');
+	      
+	    });
+	})
 </script>
 
 </body>
