@@ -1,0 +1,332 @@
+/*public*/
+
+.btn-Unifi {
+  color: #fff;
+  background-color: #2f84ec;
+  border-color: #2375da;
+  margin:1rem 0;
+}
+.btn-Unifi:hover {
+  color: #fff;
+  background-color: #0071bd;
+  border-color: #026bb2;
+}
+.Line{
+    padding-bottom: 1rem;
+    margin: 1rem 0;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+/*index*/
+.head_ri{
+  width: 14%;
+  height: 100%;
+}
+.navbar-nav{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+/*Monitor*/
+.Monitor{
+  width: 100%;
+  height: 100%;
+}
+.Monitor .nav-item{
+  border: 1px solid #a8acb9;
+}
+.Monitor .nav-item1{
+ border-right: 0;
+ border-radius: 2rem 0 0 2rem;
+}
+.Monitor .nav-item2{
+  border-left: 0;
+  border-radius: 0 2rem 2rem 0;
+}
+.Monitor .nav-tabs .nav-link{
+  color: #ccc;
+  padding:0.3rem 0.6rem;
+  margin:0 1.5rem;
+
+}
+
+.Monitor .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+  color: #0071bd;
+}
+.Monitor .col-lg-12{
+  padding: 15px !important;
+}
+.model_Left{
+  border-right: 1px solid #d9d9d9;
+  height: calc(100vh - 30px);
+  padding-left: 0;
+}
+.model_Left label{
+  font-size: 14px;
+  color: #4f556e;
+  margin-bottom: 6px;
+
+}
+
+.model_Left .list-group-item{
+  padding: 0.45rem 1.25rem;
+}
+
+.Console{
+  width: 100%;
+  height:auto;
+  padding-bottom: 1rem;
+}
+.Circular{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.Cos_l{
+  width: 120px;
+  height: 120px;
+  border-radius:50%;
+  background: #d2eff7;
+  position: relative;
+}
+.Cos_l button{
+  background: 0;
+  border: 0;
+  color: #3b5998;
+  position:absolute;
+  left:50%;
+  top: 50%;
+  margin-left: -1.1rem;
+  margin-top: -1.5rem;
+}
+.Cos_l button.butA{
+  margin-top: -3.6rem;
+}
+.Cos_l button.butB{
+  margin-left: -3rem;
+}
+.Cos_l button.butC{
+  margin-left: 1.3rem;
+}
+.Cos_l button.butD{
+  margin-top: 0.4rem;
+}
+.Cos_l button.butE{
+  margin-top: -1rem;
+}
+.Cos_l button.butE i{
+  font-size: 2rem;
+}
+.Cos_l button i{
+  font-size: 3rem;
+}
+.Cos_r{
+  width: 50%;
+  height: auto;
+  margin-left: 10px;
+}
+.Cos_r .COr{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin:4px 0;
+}
+.Cos_r .COr label{
+  font-size: 12px;
+  width: 100px;
+  margin:0;
+}
+.Cos_r .COr div{
+  display: flex;
+  justify-content:flex-start;
+  align-items: center;
+}
+.Cos_r .COr input{
+  width: 40%;
+}
+.Cos_r .COr span{
+  font-size: 1.4rem;
+  cursor: pointer;
+  margin:0 6px;
+}
+.Color{
+  width: 100%;
+  height:auto;
+  padding-bottom: 1rem;
+}
+.col_con{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.col_con label{
+  font-size: 12px;
+}
+.Col_IN{
+  width: 70%;
+}
+
+/*model_Right*/
+.model_Right{
+  padding-right: 0;
+}
+
+.model_Right .mRt{
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  padding:10px;
+  
+}
+.mRtab{
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  float: right;
+}
+.mRtab label{
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.mRc{
+  width: 94%;
+  margin:0 auto;
+  position: relative;
+}
+.mRc .tab-content{
+  width: 100%;
+  height: calc(100vh - 95px);
+  
+}
+
+.mRc .mRimg{
+  width: 100%;
+  height: calc(100vh /2 - 44px);
+  padding: 0;
+  position: relative;
+}
+.mRc .mRimg .fa-play-circle{
+  position: absolute;
+  left: 44%;
+  top: 44%;
+  font-size: 6rem;
+  color: #fff;
+}
+.mRc .mRimg img{
+  width: 100%;
+  height: 100%;
+  padding:5px;
+}
+.mRc i{
+ font-size: 2.2rem;
+ position: absolute;
+ cursor: pointer;
+ top: 48%;
+}
+.mRc i.ileft{
+  left: -3.2%;
+  
+}
+.mRc i.iRight{
+  right: -3.2%;
+}
+.mRc .mRimgA{
+  height: calc(100vh - 88px);
+
+}
+.mRc .mRimgB{
+ height: calc(100vh /2 - 170px);
+}
+.mRc .mRimgA .fa-play-circle{
+  font-size: 8rem;
+}
+.mRc .mRimgB .fa-play-circle{
+  font-size: 4rem;
+}
+
+
+
+
+
+
+
+/*Visibility*/
+.Vi_name{
+  width: 100%;
+  height: auto;
+  padding: 5px;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.Vi_name div{
+  padding: 15px 0;
+  background: rgba(221,238,255,0.6);
+}
+.Vi_name span{
+  font-size: 0.8rem;
+  color: #fff;
+  margin: 0 6px;
+  line-height: 30px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+
+/*DeviceStatus*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (min-width:0px) and (max-width:1366px){
+  .mRc .mRimgB{
+    height: calc(100vh /2 - 144px) ;
+  }
+  .mRc i{
+    font-size: 2rem;
+  }
+  .Cos_l{
+    width: 110px;
+    height: 110px;
+    margin:0 auto;
+  }
+  .Cos_r{
+    width: 100%;
+  }
+  .Circular{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+
+}
+
+
+
