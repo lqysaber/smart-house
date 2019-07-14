@@ -204,7 +204,12 @@
 .mRc .tab-content{
   width: 100%;
   height: calc(100vh - 95px);
-  
+}
+
+#playerContainer{
+  width: 100%;
+  /*height: 400px;*/
+  height: calc(100vh - 100px);
 }
 
 .mRc .mRimg{

@@ -11,7 +11,6 @@ function login() {
         $MB.n_warning("请输入密码！");
         return;
     }
-//    $loginButton.html("").append("<div class='login-loder'><div class='line-scale'><div></div><div></div><div></div><div></div><div></div></div></div>");
 
     $.ajax({
         type: "post",
@@ -27,7 +26,6 @@ function login() {
                 location.href = ctx + 'index';
             } else {
                 $MB.n_warning(r.msg);
-//                $loginButton.html("登录");
             }
         }
     });

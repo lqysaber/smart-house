@@ -1,121 +1,128 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 <head>
-	<meta charset="utf-8"/>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-	<meta name="description" content=""/>
-	<meta name="author" content=""/>
-	<title>登 录</title>
-	<!--favicon-->
-	<link rel="icon" th:href="@{assets/images/favicon.ico}" type="image/x-icon">
-	<!-- Bootstrap core CSS-->
-	<link rel="stylesheet" th:href="@{assets/css/bootstrap.min.css}" type="text/css">
-	<!-- animate CSS-->
-	<link rel="stylesheet" th:href="@{assets/css/animate.css}" type="text/css">
-	<!-- Icons CSS-->
-	<link rel="stylesheet" th:href="@{assets/css/icons.css}" type="text/css">
-	<!-- Custom Style-->
-	<link rel="stylesheet" th:href="@{assets/css/app-style.css}" type="text/css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>登 录</title>
+    <!--favicon-->
+    <link rel="icon" th:href="@{assets/images/favicon.ico}" type="image/x-icon"/>
+    <!-- Bootstrap core CSS-->
+    <link rel="stylesheet" th:href="@{assets/css/bootstrap.min.css}" type="text/css">
+    <!-- animate CSS-->
+    <link rel="stylesheet" th:href="@{assets/css/animate.css}" type="text/css">
+    <!-- Icons CSS-->
+    <link rel="stylesheet" th:href="@{assets/css/icons.css}" type="text/css">
+    <!-- Custom Style-->
+    <link rel="stylesheet" th:href="@{assets/css/app-style.css}" type="text/css">
+
+    <script th:src="@{assets/js/jquery.min.js}"></script>
+    <script th:src="@{assets/js/bootstrap.min.js}"></script>
+    <script th:src="@{assets/js/sidebar-menu.js}"></script>
+    <script th:src="@{assets/js/app-script.js}"></script>
+
+    <style type="text/css">
+        .mr-auto, .mx-auto {
+            margin-right: 18rem !important;
+            margin-top: 16rem;
+        }
+
+        .card-authentication1 {
+            width: 22rem;
+        }
+
+        .card-body {
+            padding: 3.2rem 0.8rem;
+        }
+
+        .btn-login {
+            color: #fff;
+            background: #0071bd;
+        }
+
+        .btn-login:hover {
+            color: #fff;
+            background: #0462a1;
+        }
+
+        .form-control {
+            border: 1px solid #eaf2f9;
+            background-color: #fff;
+            color: #495057 !important;
+        }
+
+        .form-control:focus {
+            border: 1px solid rgba(59, 89, 152, 0.7);
+            background-color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(20, 171, 239, 0.0)
+        }
+
+    </style>
 </head>
-<style type="text/css">
-	.mr-auto, .mx-auto{
-		margin-right: 18rem !important;
-		margin-top: 16rem;
-	}
-	.card-authentication1{
-		width: 22rem;
-	}
-	.card-body{
-		padding:3.2rem 0.8rem;
-	}
-	.btn-login{
-		color: #fff;
-		background: #0071bd;
-	}
-	.btn-login:hover{
-		color: #fff;
-		background: #0462a1;
-	}
-	
-	.form-control{
-	border: 1px solid #eaf2f9;
-    background-color: #fff;
-    color: #495057 !important;
-	}
-
-	.form-control:focus{
-	  border: 1px solid rgba(59, 89, 152, 0.7);
-	 background-color: #fff;
-	  box-shadow: 0 0 0 0.2rem rgba(20, 171, 239, 0.0)
-	}
-	
-</style>
-
 <body class="bg-facebook-2">
-	<!-- loading -->
-	<!-- <div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div> -->
-	<div class="sign_img">
-		<img th:src="@{assets/images/signL.png}" height="100%">
-	</div>
-	
-	<div id="wrapper">
-		<h1>智慧站房视频监控系统</h1>
-		<div class="card card-authentication1 cardSign">
-			<div class="card-body">
-				<div class="card-content p-2">
-					<div class="text-center">
-						<img th:src="@{assets/images/logo-icon.png}" alt="logo icon">
-					</div>
-					<div class="card-title text-uppercase text-center py-3"></div>
-					<form>
-						<div class="form-group">
-							<label for="exampleInputUsername" class="sr-only">用户名</label>
-							<div class="position-relative has-icon-right">
-								<input type="text" id="exampleInputUsername" class="form-control input-shadow" placeholder="请输入用户名">
-								<div class="form-control-position">
-									<i class="icon-user"></i>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="exampleInputPassword" class="sr-only">密码</label>
-							<div class="position-relative has-icon-right">
-								<input type="password" id="exampleInputPassword" class="form-control input-shadow" placeholder="请输入密码">
-								<div class="form-control-position">
-									<i class="icon-lock"></i>
-								</div>
-							</div>
-						</div>
-						<div class="form-row">
-							<div class="form-group col-6">
-								<div class="icheck-material-primary">
-									<input type="checkbox" id="primary" name="rememberme" checked="" />
-									<label for="user-checkbox">记住密码</label>
-								</div>
-							</div>
-							<div class="form-group col-6 text-right">
-								<a href="#">忘记密码？</a>
-							</div>
-						</div>
-						<button type="button" onclick="login()" id="loginButton" class="btn btn-login btn-block">登录</button>
-					</form>
-				</div>
-			</div>
+<!-- loading -->
+<!-- <div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div> -->
+<div class="sign_img">
+    <img th:src="@{assets/images/signL.png}" height="100%">
+</div>
 
-		</div>
-	</div>
-	<script th:inline="javascript">
-		var ctx = [[@{/}]];
-	</script>
-	<script th:src="@{assets/js/jquery.min.js}"></script>
-	<script th:src="@{assets/js/bootstrap.min.js}"></script>
-	<script th:src="@{assets/js/sidebar-menu.js}"></script>
-	<script th:src="@{assets/js/app-script.js}"></script>
-	<script th:src="@{js/bootstrap-notify/bootstrap-notify.min.js}"></script>
-	<script th:src="@{js/common.js}"></script>
-	<script th:src="@{assets/login.js}"></script>
-	
+<div id="wrapper">
+    <h1>智慧站房视频监控系统</h1>
+    <div class="card card-authentication1 cardSign">
+        <div class="card-body">
+            <div class="card-content p-2">
+                <div class="text-center">
+                    <img th:src="@{assets/images/logo-icon.png}" alt="logo icon">
+                </div>
+                <div class="card-title text-uppercase text-center py-3"></div>
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInputUsername" class="sr-only">用户名</label>
+                        <div class="position-relative has-icon-right">
+                            <input type="text" id="exampleInputUsername" class="form-control input-shadow"
+                                   placeholder="请输入用户名">
+                            <div class="form-control-position">
+                                <i class="icon-user"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword" class="sr-only">密码</label>
+                        <div class="position-relative has-icon-right">
+                            <input type="password" id="exampleInputPassword" class="form-control input-shadow"
+                                   placeholder="请输入密码">
+                            <div class="form-control-position">
+                                <i class="icon-lock"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <div class="icheck-material-primary">
+                                <input type="checkbox" id="primary" checked=""/>
+                                <label for="primary">记住密码</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-6 text-right">
+                            <a href="#">忘记密码？</a>
+                        </div>
+                    </div>
+                    <button type="button" onclick="login()" id="loginButton" class="btn btn-login btn-block">登录</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script th:inline="javascript">
+    var ctx = [[@{/}]];
+</script>
+<script th:src="@{assets/js/bootstrap-notify.min.js}"></script>
+<script th:src="@{assets/js/common.js}"></script>
+<script th:src="@{assets/login.js}"></script>
 </body>
 </html>
