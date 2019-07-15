@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>基本信息操作</title>
+    <!--favicon-->
+    <link rel="icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
+    <!--Select Plugins-->
+    <link data-th-href="@{/assets/plugins/select2/css/select2.min.css}" rel="stylesheet" type="text/css"/>
+    <!--inputtags-->
+    <link data-th-href="@{/assets/plugins/inputtags/css/bootstrap-tagsinput.css}" rel="stylesheet" type="text/css"/>
+    <!--multi select-->
+    <link data-th-href="@{/assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css">
+    <!--Bootstrap Datepicker-->
+    <link data-th-href="@{/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css">
+    <!--Touchspin-->
+    <link data-th-href="@{/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css}" rel="stylesheet" type="text/css">
+    <!-- simplebar CSS-->
+    <link data-th-href="@{/assets/plugins/simplebar/css/simplebar.css}" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap core CSS-->
+    <link data-th-href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <!-- animate CSS-->
+    <link data-th-href="@{/assets/css/animate.css}" rel="stylesheet" type="text/css"/>
+    <!-- Icons CSS-->
+    <link data-th-href="@{/assets/css/icons.css}" rel="stylesheet" type="text/css"/>
+    <!-- Sidebar CSS-->
+    <link data-th-href="@{/assets/css/sidebar-menu.css}" rel="stylesheet" type="text/css"/>
+    <!-- Custom Style-->
+    <link data-th-href="@{/assets/css/app-style.css}" rel="stylesheet" type="text/css"/>
+    <!-- 2019/7/9-->
+    <link data-th-href="@{/assets/css/style.css}" rel="stylesheet" type="text/css"/>
+
+    <!--Data Tables -->
+    <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
+    <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+
+
+  <!-- Start wrapper-->
+  <div id="wrapper" class="Basic">
+
+      <!-- 站点信息配置-->
+    <div class="row BasCon">
+     <div class="locaName"><i class="fa fa-map-marker"></i><label>站点信息配置</label></div>
+     <div class="col-lg-12">
+      <div class="row">
+        <div class="col-lg-10">
+          <form>
+           <div class="form-group row">
+            <label  class="col-sm-2 col-form-label text-right">站点名称:</label>
+            <div class="col-sm-10 input-group-sm">
+              <input type="text" class="form-control" placeholder="站点名称">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="input-22" class="col-sm-2 col-form-label text-right">站点编号:</label>
+            <div class="col-sm-10 input-group-sm">
+              <input type="text" class="form-control" placeholder="001">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-lg-2"><button type="button" class="btn btn-primary"> 保存</button></div>
+    </div>
+  </div>
+</div>
+<!-- 后台参数配置-->
+<div class="row BasCon">
+ <div class="locaName"><i class="fa fa-home"></i><label>后台参数配置</label></div>
+ <div class="col-lg-12">
+  <div class="row">
+    <div class="col-lg-10">
+      <form>
+       <div class="form-group row">
+        <label  class="col-sm-2 col-form-label text-right">配置信息文件路径:</label>
+        <div class="col-sm-10 input-group-sm">
+          <input type="text" class="form-control" placeholder="">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="input-22" class="col-sm-2 col-form-label text-right">环境数据文件路径:</label>
+        <div class="col-sm-10 input-group-sm">
+          <input type="text" class="form-control" placeholder="">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-lg-2"><button type="button" class="btn btn-primary"> 保存</button></div>
+</div>
+</div>
+</div>
+<!-- 数据存储配置-->
+<div class="row BasCon">
+ <div class="locaName"><i class="fa fa-sitemap"></i><label>数据存储配置</label></div>
+ <div class="col-lg-12">
+  <div class="row">
+    <div class="col-lg-10">
+      <form>
+       <div class="form-group row">
+        <label  class="col-sm-2 col-form-label text-right">室外图像采集路径:</label>
+        <div class="col-sm-10 input-group-sm">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="input-22" class="col-sm-2 col-form-label text-right">室外图像归档:</label>
+        <div class="col-sm-10 input-group-sm">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="input-22" class="col-sm-2 col-form-label text-right">视频监控截图路径:</label>
+        <div class="col-sm-10 input-group-sm">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="input-22" class="col-sm-2 col-form-label text-right">视频监控录像路径:</label>
+        <div class="col-sm-10 input-group-sm">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="input-22" class="col-sm-2 col-form-label text-right">移动侦截图路径:</label>
+        <div class="col-sm-10 input-group-sm">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="input-22" class="col-sm-2 col-form-label text-right">硬盘录像机使用率:</label>
+        <div class="col-sm-10 input-group-sm">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-lg-2"><button type="button" class="btn btn-primary"> 保存</button></div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+
+
+
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/popper.min.js"></script>
+<script src="../assets/js/bootstrap.min.js"></script>
+<!-- simplebar js -->
+<script src="../assets/plugins/simplebar/js/simplebar.js"></script>
+<!-- sidebar-menu js -->
+<script src="../assets/js/sidebar-menu.js"></script>
+<!-- Custom scripts -->
+<script src="../assets/js/app-script.js"></script>
+<script src="../assets/js/political_WeCall.js"></script>
+
+<!--Data Tables js-->
+<script src="../assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
+<script src="../assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
+  <script src="../assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+
+
+
+</body>
+</html>

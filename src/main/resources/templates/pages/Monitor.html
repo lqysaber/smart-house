@@ -45,189 +45,144 @@
 
 <body onbeforeunload="Index.destory_activex();">
 
-  <!-- Start wrapper-->
-  <div id="wrapper">
-    <div class="row Monitor">
-      <div class="col-lg-12">
-        <div class="row">
-          <div class="col-lg-2 col-md-4  model_Left">
-            <div class="shadow-none Line">
-              <label>监控点：</label>
-              <div class="list-group shadow-none">
-                <a href="javascript:void(0);" class="list-group-item active"><i class="fa fa-inbox mr-2"></i>监控点一</a>
-                <a href="javascript:void(0);" class="list-group-item"><i class="fa fa-star-o mr-2"></i>监控点二</a>
-                <a href="javascript:void(0);" class="list-group-item"><i class="fa fa-file-text-o mr-2"></i>监控点三</a>
-              </div>
-            </div>
-            <div class="Console Line">
-              <label>云台控制：</label>
-              <div class="Circular">
-                <div class="Cos_l">
-                  <button class="butA"><i class="fa fa-caret-up"></i></button>
-                  <button class="butB"><i class="fa fa-caret-left"></i></button>
-                  <button class="butC"><i class="fa fa-caret-right"></i></button>
-                  <button class="butD"><i class="fa fa-caret-down"></i></button>
-                  <button class="butE"><i class="fa fa-circle"></i></button>
-                </div>
-                <div class="Cos_r">
-                  <!-- <div class="row mt-3">
-                    <div class="col-sm-12">
-                      <label>焦距：</label>
-                      <input id="demo3" type="text" value="" name="demo3">
-                    </div>
-                  </div> -->
-                  <div class="COr">
-                    <label>焦距:</label>
-                    <div>
-                      <span class="fa fa-plus-circle"></span>
-                      <input type="text" placeholder="1">
-                      <span class="fa fa-minus-circle"></span>
-                    </div>
-                  </div>
-                  <div class="COr">
-                    <label>焦点:</label>
-                    <div>
-                      <span class="fa fa-plus-circle"></span>
-                      <input type="text" placeholder="1">
-                      <span class="fa fa-minus-circle"></span>
-                    </div>
-                  </div>
-                  <div class="COr">
-                    <label>光圈:</label>
-                    <div>
-                      <span class="fa fa-plus-circle"></span>
-                      <input type="text" placeholder="1">
-                      <span class="fa fa-minus-circle"></span>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="Color">
-              <label>色彩调节：</label>
-              <div class="col_con">
-                <label for="">亮度:</label>
-                <div class="Col_IN"><input type="text" id="range_01" value="" name="range" /></div>
-              </div>
-              <div class="col_con">
-                <label for="">对比度:</label>
-                <div class="Col_IN"><input type="text" id="range_011" value="" name="range" /></div>
-              </div>
-              <div class="col_con">
-                <label for="">饱和度:</label>
-                <div class="Col_IN"><input type="text" id="range_012" value="" name="range" /></div>
-              </div>
-
+<!-- Start wrapper-->
+<div id="wrapper">
+  <div class="row Monitor">
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-lg-2 col-md-4  model_Left">
+          <div class="shadow-none Line">
+            <label>监控点：</label>
+            <div class="list-group shadow-none">
+              <a href="javascript:void(0);" class="list-group-item active"><i class="fa fa-inbox mr-2"></i>监控点一</a>
+              <a href="javascript:void(0);" class="list-group-item"><i class="fa fa-star-o mr-2"></i>监控点二</a>
+              <a href="javascript:void(0);" class="list-group-item"><i class="fa fa-file-text-o mr-2"></i>监控点三</a>
             </div>
           </div>
-
-          <div class="col-lg-10 col-md-8 model_Right">
-            <div class="mRt">
-              <div class="mRtab">
-                <label>视窗数量：</label>
-                <ul class="nav nav-tabs top-icon">
-                  <li class="nav-item nav-item1">
-                    <a class="nav-link active" data-toggle="tab" href="#tabe-10"><i class="fa fa-square"></i></a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#tabe-11"><i class="ti-layout-grid2-alt"></i></a>
-                  </li>
-                  <li class="nav-item nav-item2">
-                    <a class="nav-link" data-toggle="tab" href="#tabe-12"><i class="ti-layout-grid3-alt"></i></a>
-                  </li>
-                </ul>
+          <div class="Console Line">
+            <label>云台控制：</label>
+            <div class="Circular">
+              <div class="Cos_l">
+                <button class="butA"><i class="fa fa-caret-up"></i></button>
+                <button class="butB"><i class="fa fa-caret-left"></i></button>
+                <button class="butC"><i class="fa fa-caret-right"></i></button>
+                <button class="butD"><i class="fa fa-caret-down"></i></button>
+                <button class="butE"><i class="fa fa-circle"></i></button>
               </div>
-            </div>
-            <div class="bg-transparent border-0 mRc">
-              <div class="tab-content">
-                <div id="tabe-10" class="tab-pane active">
-                  <div class="row">
-                    <div class="col-md-12 col-xs-12 mRimg mRimgA">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                      <i class="fa fa-chevron-circle-left ileft"></i>
-                      <i class="fa fa-chevron-circle-right iRight"></i>
-                    </div>
-
+              <div class="Cos_r">
+                <!-- <div class="row mt-3">
+                  <div class="col-sm-12">
+                    <label>焦距：</label>
+                    <input id="demo3" type="text" value="" name="demo3">
+                  </div>
+                </div> -->
+                <div class="COr">
+                  <label>焦距:</label>
+                  <div>
+                    <span class="fa fa-plus-circle"></span>
+                    <input type="text" placeholder="1">
+                    <span class="fa fa-minus-circle"></span>
                   </div>
                 </div>
-                <div id="tabe-11" class="container-fluid tab-pane fade">
-                  <div class="row">
-                    <div class="col-md-6 col-xs-6 mRimg">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-6 col-xs-6 mRimg">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-6 col-xs-6 mRimg">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-6 col-xs-6 mRimg">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <i class="fa fa-chevron-circle-left ileft"></i>
-                    <i class="fa fa-chevron-circle-right iRight"></i>
+                <div class="COr">
+                  <label>焦点:</label>
+                  <div>
+                    <span class="fa fa-plus-circle"></span>
+                    <input type="text" placeholder="1">
+                    <span class="fa fa-minus-circle"></span>
                   </div>
                 </div>
-                <div id="tabe-12" class="container-fluid tab-pane fade">
-                  <div class="row">
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <span class="fa fa-play-circle"></span>
-                      <img src="../assets/images/m2.jpg" width="100%">
-                    </div>
-                    <i class="fa fa-chevron-circle-left ileft"></i>
-                    <i class="fa fa-chevron-circle-right iRight"></i>
+                <div class="COr">
+                  <label>光圈:</label>
+                  <div>
+                    <span class="fa fa-plus-circle"></span>
+                    <input type="text" placeholder="1">
+                    <span class="fa fa-minus-circle"></span>
                   </div>
                 </div>
 
               </div>
-
             </div>
           </div>
+          <div class="ColorA">
+            <label>色彩调节：</label>
+            <div class="col_con">
+              <label for="">亮度:</label>
+              <div class="Col_IN"><input type="text" id="range_01" value="" name="range" /></div>
+            </div>
+            <div class="col_con">
+              <label for="">对比度:</label>
+              <div class="Col_IN"><input type="text" id="range_011" value="" name="range" /></div>
+            </div>
+            <div class="col_con">
+              <label for="">饱和度:</label>
+              <div class="Col_IN"><input type="text" id="range_012" value="" name="range" /></div>
+            </div>
 
-
-
+          </div>
         </div>
+
+        <div class="col-lg-10 col-md-8 model_Right">
+          <div class="mRt">
+            <div class="mRtab">
+              <label>视窗数量：</label>
+              <ul class="nav nav-tabs top-icon">
+                <li class="nav-item nav-item1">
+                  <a class="nav-link active" data-toggle="tab" href="#tabe-10"><i class="fa fa-square"></i></a>
+                </li>
+                <li class="nav-item nav-item2">
+                  <a class="nav-link" data-toggle="tab" href="#tabe-11"><i class="ti-layout-grid2-alt"></i></a>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+          <div class="bg-transparent border-0 mRc">
+            <div class="tab-content">
+              <div id="tabe-10" class="tab-pane active">
+                <div class="row">
+                  <div class="col-md-12 col-xs-12 mRimg mRimgA">
+                    <span class="fa fa-play-circle"></span>
+                    <img src="../assets/images/m2.jpg" width="100%">
+                    <i class="fa fa-chevron-circle-left ileft"></i>
+                    <i class="fa fa-chevron-circle-right iRight"></i>
+                  </div>
+
+                </div>
+              </div>
+              <div id="tabe-11" class="container-fluid tab-pane fade">
+                <div class="row">
+                  <div class="col-md-6 col-xs-6 mRimg">
+                    <span class="fa fa-play-circle"></span>
+                    <img src="../assets/images/m2.jpg" width="100%">
+                  </div>
+                  <div class="col-md-6 col-xs-6 mRimg">
+                    <span class="fa fa-play-circle"></span>
+                    <img src="../assets/images/m2.jpg" width="100%">
+                  </div>
+                  <div class="col-md-6 col-xs-6 mRimg">
+                    <span class="fa fa-play-circle"></span>
+                    <img src="../assets/images/m2.jpg" width="100%">
+                  </div>
+                  <div class="col-md-6 col-xs-6 mRimg">
+                    <span class="fa fa-play-circle"></span>
+                    <img src="../assets/images/m2.jpg" width="100%">
+                  </div>
+                  <i class="fa fa-chevron-circle-left ileft"></i>
+                  <i class="fa fa-chevron-circle-right iRight"></i>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+
       </div>
     </div>
   </div>
+</div>
 
   <!-- Bootstrap core JavaScript-->
   <script data-th-src="@{/assets/js/jquery.min.js}"></script>

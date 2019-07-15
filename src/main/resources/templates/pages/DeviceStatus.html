@@ -1,50 +1,51 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-  <meta name="description" content=""/>
-  <meta name="author" content=""/>
-  <title>设备状态</title>
-  <!--favicon-->
-  <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
-  <!--Select Plugins-->
-  <link href="../assets/plugins/select2/css/select2.min.css" rel="stylesheet"/>
-  <!--inputtags-->
-  <link href="../assets/plugins/inputtags/css/bootstrap-tagsinput.css" rel="stylesheet" />
-  <!--multi select-->
-  <link href="../assets/plugins/jquery-multi-select/multi-select.css" rel="stylesheet" type="text/css">
-  <!--Bootstrap Datepicker-->
-  <link href="../assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
-  <!--Touchspin-->
-  <link href="../assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css" rel="stylesheet" type="text/css">
-  <!-- simplebar CSS-->
-  <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet"/>
-  <!-- Bootstrap core CSS-->
-  <link href="../assets/css/bootstrap.min.css" rel="stylesheet"/>
-  <!--Data Tables -->
-  <link href="../assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css">
-  <link href="../assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css">
-  <!-- animate CSS-->
-  <link href="../assets/css/animate.css" rel="stylesheet" type="text/css"/>
-  <!-- Icons CSS-->
-  <link href="../assets/css/icons.css" rel="stylesheet" type="text/css"/>
-  <!-- Sidebar CSS-->
-  <link href="../assets/css/sidebar-menu.css" rel="stylesheet"/>
-  <!-- Custom Style-->
-  <link href="../assets/css/app-style.css" rel="stylesheet"/>
-  <!-- 2019/7/9-->
-  <link href="../assets/css/style.css" rel="stylesheet" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>设备状态</title>
+    <!--favicon-->
+    <link rel="icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
+    <!--Select Plugins-->
+    <link data-th-href="@{/assets/plugins/select2/css/select2.min.css}" rel="stylesheet" type="text/css"/>
+    <!--inputtags-->
+    <link data-th-href="@{/assets/plugins/inputtags/css/bootstrap-tagsinput.css}" rel="stylesheet" type="text/css"/>
+    <!--multi select-->
+    <link data-th-href="@{/assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css">
+    <!--Bootstrap Datepicker-->
+    <link data-th-href="@{/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css">
+    <!--Touchspin-->
+    <link data-th-href="@{/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css}" rel="stylesheet" type="text/css">
+    <!-- simplebar CSS-->
+    <link data-th-href="@{/assets/plugins/simplebar/css/simplebar.css}" rel="stylesheet" type="text/css"/>
+    <!-- Bootstrap core CSS-->
+    <link data-th-href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <!-- animate CSS-->
+    <link data-th-href="@{/assets/css/animate.css}" rel="stylesheet" type="text/css"/>
+    <!-- Icons CSS-->
+    <link data-th-href="@{/assets/css/icons.css}" rel="stylesheet" type="text/css"/>
+    <!-- Sidebar CSS-->
+    <link data-th-href="@{/assets/css/sidebar-menu.css}" rel="stylesheet" type="text/css"/>
+    <!-- Custom Style-->
+    <link data-th-href="@{/assets/css/app-style.css}" rel="stylesheet" type="text/css"/>
+    <!-- 2019/7/9-->
+    <link data-th-href="@{/assets/css/style.css}" rel="stylesheet" type="text/css"/>
+
+    <!--Data Tables -->
+    <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
+    <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        .row{
+            margin:0;
+        }
+        .card-body{
+            padding: 0rem;
+        }
+    </style>
 </head>
-<style type="text/css">
-.row{
-  margin:0;
-}
-.card-body{
-  padding: 0rem;
-}
-</style>
 <body>
 
 
@@ -198,7 +199,7 @@
                     </tr>
                    
                 </tbody>
-                <tfoot>
+                <!--<tfoot>
                     <tr>
                         <th>设备名称</th>
                         <th>在线状态</th>
@@ -208,7 +209,7 @@
                         <th>类别</th>
                         <th>备注</th>
                     </tr>
-                </tfoot>
+                </tfoot>-->
             </table>
             </div>
             </div>

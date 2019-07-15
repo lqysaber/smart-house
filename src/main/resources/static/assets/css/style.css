@@ -12,9 +12,16 @@
   border-color: #026bb2;
 }
 .Line{
-    padding-bottom: 1rem;
-    margin: 1rem 0;
+    padding-bottom: 15px;
+    margin: 10px 0;
     border-bottom: 1px solid #d9d9d9;
+}
+
+
+#playerContainer{
+  width: 100%;
+  /*height: 400px;*/
+  height: calc(100vh - 100px);
 }
 
 /*index*/
@@ -43,7 +50,7 @@
  border-radius: 2rem 0 0 2rem;
 }
 .Monitor .nav-item2{
-  border-left: 0;
+  /*border-left: 0;*/
   border-radius: 0 2rem 2rem 0;
 }
 .Monitor .nav-tabs .nav-link{
@@ -87,8 +94,8 @@
   flex-wrap: nowrap;
 }
 .Cos_l{
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   border-radius:50%;
   background: #d2eff7;
   position: relative;
@@ -125,7 +132,7 @@
   font-size: 3rem;
 }
 .Cos_r{
-  width: 50%;
+  width: 54%;
   height: auto;
   margin-left: 10px;
 }
@@ -154,10 +161,17 @@
   cursor: pointer;
   margin:0 6px;
 }
-.Color{
+.ColorA{
   width: 100%;
   height:auto;
-  padding-bottom: 1rem;
+  padding-bottom: 10px;
+}
+.ColorA .irs-slider{
+  width: 17px;
+  height: 22px;
+}
+.ColorA .irs-single{
+  padding: 0 5px;
 }
 .col_con{
   display: flex;
@@ -201,20 +215,15 @@
   margin:0 auto;
   position: relative;
 }
-.mRc .tab-content{
+/*.mRc .tab-content{
   width: 100%;
   height: calc(100vh - 95px);
-}
-
-#playerContainer{
-  width: 100%;
-  /*height: 400px;*/
-  height: calc(100vh - 100px);
-}
+  
+}*/
 
 .mRc .mRimg{
   width: 100%;
-  height: calc(100vh /2 - 44px);
+  height: calc(100vh /2 - 48px);
   padding: 0;
   position: relative;
 }
@@ -222,7 +231,7 @@
   position: absolute;
   left: 44%;
   top: 44%;
-  font-size: 6rem;
+  font-size: 4rem;
   color: #fff;
 }
 .mRc .mRimg img{
@@ -244,11 +253,11 @@
   right: -3.2%;
 }
 .mRc .mRimgA{
-  height: calc(100vh - 88px);
+  height: calc(100vh - 95px);
 
 }
 .mRc .mRimgB{
- height: calc(100vh /2 - 170px);
+ height: calc(100vh /2 - 174px);
 }
 .mRc .mRimgA .fa-play-circle{
   font-size: 8rem;
@@ -256,12 +265,6 @@
 .mRc .mRimgB .fa-play-circle{
   font-size: 4rem;
 }
-
-
-
-
-
-
 
 /*Visibility*/
 .Vi_name{
@@ -287,7 +290,92 @@
 }
 
 
-/*DeviceStatus*/
+/*Playback*/
+.Location input{
+  padding: 0;
+  height: 32px;
+}
+.Location .input-group{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mRd .mRimg{
+  height: calc(100vh /2 - 78px);
+}
+.mRd .tab-content{
+  width: 100%;
+  height: calc(100vh - 95px);
+  
+}
+
+/*BasicInfo*/
+
+.Basic .BasCon{
+  width: 80%;
+  margin:34px auto 10px;
+  padding: 30px 0 10px 0;
+  border:1px solid #a8acb9;
+  border-radius: 10px;
+  position: relative;
+}
+.locaName{
+  background: #fff;
+  padding: 4px 20px;
+  position: absolute;
+  left: 20px;
+  top: -20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.locaName i{
+  font-size: 30px;
+  color: #2f84ec;
+}
+.locaName label{
+  font-size: 20px;
+  color: #4f556e;
+  margin-left: 20px;
+  margin-bottom: 0;
+}
+
+
+
+.Netw .BasCon{
+  padding: 10px 0 10px 0;
+}
+.Netw button{
+  background: 0;
+  border: 0;
+}
+.Netw button i{
+  font-size: 20px;
+  color: #2f84ec;
+}
+.Netw .table th,.Netw .table td{
+  text-align: center;
+}
+.Netw .net_con{
+  padding: 0 30px;
+}
+.Lpush{
+  width: 100%;
+  display: flex;
+  justify-content:flex-end;
+  margin:10px 10px 10px 0;
+}
+.modal .modal-footer button{
+  background: #3b5998;
+  color: #fff;
+}
+.modal .modal-footer button i{
+  font-size: 12px;
+  color: #fff;
+}
+.modal .modal-footer button.btny{
+   background: #36d9fa;
+}
 
 
 
@@ -295,22 +383,21 @@
 
 
 
+@media(max-width:1367px) and (max-width:1600px){
+
+}
 
 
 
-
-
-
-
-
-
-
-
-
-
-@media screen and (min-width:0px) and (max-width:1366px){
+/*@media screen and (min-width:0px) and (max-width:1365px){*/
+@media(max-width:1367px){
+  .irs-slider{
+    width: 18px;
+    height: 18px;
+    top: 28px;
+  }
   .mRc .mRimgB{
-    height: calc(100vh /2 - 144px) ;
+    height: calc(100vh /2 - 134px) ;
   }
   .mRc i{
     font-size: 2rem;
@@ -323,14 +410,24 @@
   .Cos_r{
     width: 100%;
   }
+  .ColorA .irs{
+    height: 50px;
+  }
   .Circular{
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
   }
-
-
+  .Basic .BasCon{
+    width: 94%;
+  }
+  .Basic .BasCon{
+  margin:20px auto 10px;
+  }
+  .BasCon .form-group{
+    margin-bottom: 0.6rem;
+  }
 }
 
 
