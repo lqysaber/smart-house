@@ -56,7 +56,7 @@
   </style>
 
 </head>
-<body>
+<body onbeforeunload="Index.destory_activex();">
 <!-- Start wrapper-->
 <div id="wrapper" class="PlayB">
   <div class="row Monitor">
@@ -66,11 +66,12 @@
           <div class="shadow-none Line">
             <label>监控点:</label>
             <div class="list-group shadow-none">
-              <a href="javascript:void();" class="list-group-item active"><i class="fa fa-inbox mr-2"></i>监控点一</a>
-              <a href="javascript:void();" class="list-group-item"><i class="fa fa-star-o mr-2"></i>监控点二</a>
-              <a href="javascript:void();" class="list-group-item"><i class="fa fa-file-text-o mr-2"></i>监控点三</a>
+              <a href="javascript:void(0);" class="list-group-item active"><i class="fa fa-inbox mr-2"></i>监控点一</a>
+              <a href="javascript:void(0);" class="list-group-item"><i class="fa fa-star-o mr-2"></i>监控点二</a>
+              <a href="javascript:void(0);" class="list-group-item"><i class="fa fa-file-text-o mr-2"></i>监控点三</a>
             </div>
           </div>
+
           <div class="Line">
             <label>历史视频:</label>
             <div id="inline-datepicker"></div>
@@ -86,9 +87,6 @@
               <button type="button" class="btn btn-primary waves-effect waves-light m-1">确认</button>
             </div>
           </div>
-
-
-
         </div>
 
         <div class="col-lg-10 col-md-8 model_Right">
@@ -97,84 +95,73 @@
               <label>视窗数量：</label>
               <ul class="nav nav-tabs top-icon">
                 <li class="nav-item nav-item1">
-                  <a class="nav-link active" data-toggle="tab" href="#tabe-10"><i class="fa fa-square"></i></a>
+                  <a class="nav-link active" id="uniview_ctrl_win1" data-toggle="tab" href="javascript:Index.rendersdkviewwindow(1);"><i class="fa fa-square"></i></a>
                 </li>
                 <li class="nav-item nav-item2">
-                  <a class="nav-link" data-toggle="tab" href="#tabe-11"><i class="ti-layout-grid2-alt"></i></a>
+                  <a class="nav-link" id="uniview_ctrl_win4" data-toggle="tab" href="javascript:Index.rendersdkviewwindow(4);"><i class="ti-layout-grid2-alt"></i></a>
                 </li>
-
               </ul>
             </div>
           </div>
+
           <div class="bg-transparent border-0 mRc mRd">
             <div class="tab-content">
-              <div id="tabe-10" class="tab-pane active">
-                <div class="row">
-                  <div class="col-md-12 col-xs-12 mRimg mRimgA">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                    <i class="fa fa-chevron-circle-left ileft"></i>
-                    <i class="fa fa-chevron-circle-right iRight"></i>
-                  </div>
-                  <div class="timeAx"><img src="../assets/images/time axis.jpg"></div>
-                </div>
+              <div class="ocxStyle">
+                <div id="playerContainer"></div>
               </div>
-              <div id="tabe-11" class="container-fluid tab-pane fade">
-                <div class="row">
-                  <div class="col-md-6 col-xs-6 mRimg">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                  </div>
-                  <div class="col-md-6 col-xs-6 mRimg">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                  </div>
-                  <div class="col-md-6 col-xs-6 mRimg">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                  </div>
-                  <div class="col-md-6 col-xs-6 mRimg">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                  </div>
-                  <i class="fa fa-chevron-circle-left ileft"></i>
-                  <i class="fa fa-chevron-circle-right iRight"></i>
-                  <div class="timeAx"><img src="../assets/images/time axis.jpg"></div>
-                </div>
-              </div>
-
+              <i class="fa fa-chevron-circle-left ileft"></i>
+              <i class="fa fa-chevron-circle-right iRight"></i>
             </div>
-
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
 
-<script src="../assets/js/jquery.min.js"></script>
-<script src="../assets/js/popper.min.js"></script>
-<script src="../assets/js/bootstrap.min.js"></script>
 
-<script src="../assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js"></script>
-<script src="../assets/plugins/bootstrap-touchspin/js/bootstrap-touchspin-script.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script data-th-src="@{/assets/js/jquery.min.js}"></script>
 
-<script src="../assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js"></script>
-<script src="../assets/plugins/ion-rangeslider/js/range-slider-script.js"></script>
+<script data-th-src="@{/assets/js/json2.js}"></script>
+<script data-th-src="@{/assets/js/jquery.jqGrid.min.js}"></script>
+<script data-th-src="@{/assets/js/nprogress.js}"></script>
+
+<script data-th-src="@{/assets/common/comscript.js}"></script>
+<script data-th-src="@{/assets/common/zh_lang.js}"></script>
+<script data-th-src="@{/assets/common/utils.js}"></script>
+
+<script data-th-src="@{/assets/js/popper.min.js}"></script>
+<script data-th-src="@{/assets/js/bootstrap.min.js}"></script>
+
+<script data-th-src="@{/assets/plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.js}"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-touchspin/js/bootstrap-touchspin-script.js}"></script>
+
+<script data-th-src="@{/assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js}"></script>
+<script data-th-src="@{/assets/plugins/ion-rangeslider/js/range-slider-script.js}"></script>
 <!--Bootstrap Datepicker Js-->
-<script src="../assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="../assets/plugins/bootstrap-datepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
+
+<!--控件加载Begin-->
+<script th:src="@{/assets/common/plugin.js}"></script>
+<script th:src="@{/assets/common/sdkviewer.js}"></script>
+<!--控件加载End-->
+
+<script th:src="@{/assets/js/bootstrap-notify.min.js}"></script>
+<script th:src="@{/assets/js/common.js}"></script>
+
+<script data-th-src="@{/assets/index.js}"></script>
+
 <script>
   $( function() {
-    $("#inline-datepicker").datepicker
-    ({
+    $("#inline-datepicker").datepicker({
       autoclose: true,
       todayHighlight: true,
       /*汉化*/
       language: "zh-CN",
       /*日期格式*/
-      format:"yyyy-mm-dd"       });
+      format:"yyyy-mm-dd"
+    });
   })
 </script>
 </body>

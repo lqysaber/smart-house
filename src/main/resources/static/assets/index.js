@@ -70,16 +70,12 @@ var Index = function ($) {
 
         initEvent: function () {
             var _this = this;
-            $("#uniview-grid-1").on("click", function () {
+            $("#uniview_ctrl_win1").on("click", function () {
                 _this.rendersdkviewwindow(1);
             });
 
-            $("#uniview-grid-2").on("click", function () {
+            $("#uniview_ctrl_win4").on("click", function () {
                 _this.rendersdkviewwindow(4);
-            });
-
-            $("#uniview-grid-3").on("click", function () {
-                _this.rendersdkviewwindow(9);
             });
 
             $("#channel_list_ws").on("click", function () {
@@ -111,7 +107,7 @@ var Index = function ($) {
 
         /*************************************** show multi windows  **********************************/
         rendersdkviewwindow: function(num) {
-            // this.testlogin();
+            debugger;
             this.initOcxWindownum = num;
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {

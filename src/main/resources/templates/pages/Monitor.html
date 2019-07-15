@@ -128,57 +128,24 @@
               <label>视窗数量：</label>
               <ul class="nav nav-tabs top-icon">
                 <li class="nav-item nav-item1">
-                  <a class="nav-link active" data-toggle="tab" href="#tabe-10"><i class="fa fa-square"></i></a>
+                  <a class="nav-link active" id="uniview_ctrl_win1" data-toggle="tab" href="javascript:Index.rendersdkviewwindow(1);"><i class="fa fa-square"></i></a>
                 </li>
                 <li class="nav-item nav-item2">
-                  <a class="nav-link" data-toggle="tab" href="#tabe-11"><i class="ti-layout-grid2-alt"></i></a>
+                  <a class="nav-link" id="uniview_ctrl_win4" data-toggle="tab" href="javascript:Index.rendersdkviewwindow(4);"><i class="ti-layout-grid2-alt"></i></a>
                 </li>
-
               </ul>
             </div>
           </div>
           <div class="bg-transparent border-0 mRc">
             <div class="tab-content">
-              <div id="tabe-10" class="tab-pane active">
-                <div class="row">
-                  <div class="col-md-12 col-xs-12 mRimg mRimgA">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                    <i class="fa fa-chevron-circle-left ileft"></i>
-                    <i class="fa fa-chevron-circle-right iRight"></i>
-                  </div>
-
-                </div>
+              <div class="ocxStyle">
+                <div id="playerContainer"></div>
               </div>
-              <div id="tabe-11" class="container-fluid tab-pane fade">
-                <div class="row">
-                  <div class="col-md-6 col-xs-6 mRimg">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                  </div>
-                  <div class="col-md-6 col-xs-6 mRimg">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                  </div>
-                  <div class="col-md-6 col-xs-6 mRimg">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                  </div>
-                  <div class="col-md-6 col-xs-6 mRimg">
-                    <span class="fa fa-play-circle"></span>
-                    <img src="../assets/images/m2.jpg" width="100%">
-                  </div>
-                  <i class="fa fa-chevron-circle-left ileft"></i>
-                  <i class="fa fa-chevron-circle-right iRight"></i>
-                </div>
-              </div>
+              <i class="fa fa-chevron-circle-left ileft"></i>
+              <i class="fa fa-chevron-circle-right iRight"></i>
             </div>
-
           </div>
         </div>
-
-
-
       </div>
     </div>
   </div>
@@ -186,6 +153,15 @@
 
   <!-- Bootstrap core JavaScript-->
   <script data-th-src="@{/assets/js/jquery.min.js}"></script>
+
+<script data-th-src="@{/assets/js/json2.js}"></script>
+<script data-th-src="@{/assets/js/jquery.jqGrid.min.js}"></script>
+<script data-th-src="@{/assets/js/nprogress.js}"></script>
+
+<script data-th-src="@{/assets/common/comscript.js}"></script>
+<script data-th-src="@{/assets/common/zh_lang.js}"></script>
+<script data-th-src="@{/assets/common/utils.js}"></script>
+
   <script data-th-src="@{/assets/js/popper.min.js}"></script>
   <script data-th-src="@{/assets/js/bootstrap.min.js}"></script>
 
@@ -194,15 +170,6 @@
 
   <script data-th-src="@{/assets/plugins/ion-rangeslider/js/ion.rangeSlider.min.js}"></script>
   <script data-th-src="@{/assets/plugins/ion-rangeslider/js/range-slider-script.js}"></script>
-
-
-  <script data-th-src="@{/assets/js/json2.js}"></script>
-  <script data-th-src="@{/assets/js/jquery.jqGrid.min.js}"></script>
-  <script data-th-src="@{/assets/js/nprogress.js}"></script>
-
-  <script data-th-src="@{/assets/common/comscript.js}"></script>
-  <script data-th-src="@{/assets/common/zh_lang.js}"></script>
-  <script data-th-src="@{/assets/common/utils.js}"></script>
 
   <!--控件加载Begin-->
   <script th:src="@{/assets/common/plugin.js}"></script>
