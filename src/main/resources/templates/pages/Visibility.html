@@ -60,13 +60,13 @@
                 <label>视窗数量：</label>
                 <ul class="nav nav-tabs top-icon">
                   <li class="nav-item nav-item1">
-                    <a class="nav-link active" data-toggle="tab" href="javascript:Index.rendersdkviewwindow(1);"><i class="fa fa-square"></i></a>
+                    <a class="nav-link active" onclick='switchPhotoWin(1, "#tabe-10", this);'><i class="fa fa-square"></i></a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="javascript:Index.rendersdkviewwindow(4);"><i class="ti-layout-grid2-alt"></i></a>
+                    <a class="nav-link" onclick='switchPhotoWin(4, "#tabe-11", this);'><i class="ti-layout-grid2-alt"></i></a>
                   </li>
                   <li class="nav-item nav-item2">
-                    <a class="nav-link" data-toggle="tab" href="javascript:Index.rendersdkviewwindow(9);"><i class="ti-layout-grid3-alt"></i></a>
+                    <a class="nav-link" onclick='switchPhotoWin(9, "#tabe-12", this);'><i class="ti-layout-grid3-alt"></i></a>
                   </li>
                 </ul>
               </div>
@@ -153,6 +153,8 @@
         </div>
       </div>
     </div>
+    <input type="hidden" id="visibility_pagesize" value="1" />
+    <input type="hidden" id="visibility_currpage" value="1" />
   </div>
 
   <!-- Bootstrap core JavaScript-->
@@ -176,8 +178,8 @@
 
   <!--Bootstrap Datepicker Js-->
   <script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
-  <script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datetimepicker.zh-CN.js}"></script>
 
+  <!--<script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datetimepicker.zh-CN.js}"></script>-->
 <script>
   $(function() {
       $("#inline-datepicker").datepicker({
@@ -188,9 +190,50 @@
           /*日期格式*/
           format:"yyyy-mm-dd"
       });
-      
-      sho
   });
+
+  function switchPhotoWin(pageSize, htmlId, winObj) {
+    debugger;
+    $(".nav-link").removeClass("active");
+    $(".tab-pane").removeClass("active show");
+
+    $(htmlId).addClass("active show");
+    $(winObj).addClass("active");
+
+    $("#visibility_pagesize").val(pageSize);
+    $("#visibility_currpage").val(1);
+
+    listPhoto();
+  }
+
+  function listPhoto() {
+    var pageSize = $("#visibility_pagesize").val().trim();
+    var currPage = $("#visibility_currpage").val().trim();
+    var reqParam = {
+      "queryDate": "2019-07-16",
+      "pageSize": pageSize,
+      "currPage": currPage
+    };
+    $.ajax({
+      type: "post",
+      contentType: "application/json;charset=UTF-8",
+      url: "/smart-house/photo/list",
+      data: JSON.stringify(reqParam),
+      dataType: "json",
+      success: function (r) {
+        alert(r);
+        if (r.code === 0) {
+          alert(r.msg);
+        } else {
+          alert(r.msg);
+        }
+      },
+      error: function (XMLhttpRequest, textStatus, errorThrown) {
+        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+      }
+    });
+
+  }
 </script>
 
 
