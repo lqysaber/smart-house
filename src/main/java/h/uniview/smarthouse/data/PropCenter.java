@@ -12,6 +12,8 @@ public class PropCenter implements Serializable {
 	private ShiroProperties shiro = new ShiroProperties();
 
 	private String timeFormat = "yyyy-MM-dd HH:mm:ss";
+	
+	private String configDir;
 
 	public ShiroProperties getShiro() {
 		return shiro;
@@ -27,6 +29,14 @@ public class PropCenter implements Serializable {
 
 	public void setTimeFormat(String timeFormat) {
 		this.timeFormat = timeFormat;
+	}
+
+	public String getConfigDir() {
+		return configDir;
+	}
+
+	public void setConfigDir(String configDir) {
+		this.configDir = configDir;
 	}
 
 }
