@@ -1,10 +1,7 @@
 package h.uniview.smarthouse.form;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import java.io.Serializable;
 
 public class PhotoForm implements Serializable {
 
@@ -20,7 +17,6 @@ public class PhotoForm implements Serializable {
 	private Integer currPage;
 	
 	@NotNull
-	@DateTimeFormat(pattern = "yyyy-mm-dd")
 	private String queryDate;
 
 	public Integer getPageSize() {

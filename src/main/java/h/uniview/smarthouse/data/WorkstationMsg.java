@@ -28,6 +28,12 @@ public class WorkstationMsg implements Serializable {
 	public void setCode(String code) {
 		this.Code = code;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "WorkstationMsg{" +
+				"Name='" + Name + '\'' +
+				", Code='" + Code + '\'' +
+				'}';
+	}
 }

@@ -2,7 +2,7 @@ package h.uniview.smarthouse.data;
 
 import java.io.Serializable;
 
-public class NVRInfo extends CameraInfo implements Serializable {
+public class BVideoInfo extends CameraInfo implements Serializable {
 
 	/**
 	 * 
@@ -11,7 +11,9 @@ public class NVRInfo extends CameraInfo implements Serializable {
 
 	private String LoginName;
 	private String LoginPwd;
-	private String ChannelSum;
+	private String ChannelID;
+	private String HardDiskUsage;
+
 
 	public String getLoginName() {
 		return LoginName;
@@ -29,20 +31,29 @@ public class NVRInfo extends CameraInfo implements Serializable {
 		LoginPwd = loginPwd;
 	}
 
-	public String getChannelSum() {
-		return ChannelSum;
+	public String getChannelID() {
+		return ChannelID;
 	}
 
-	public void setChannelSum(String channelSum) {
-		ChannelSum = channelSum;
+	public void setChannelID(String channelID) {
+		ChannelID = channelID;
+	}
+
+	public String getHardDiskUsage() {
+		return HardDiskUsage;
+	}
+
+	public void setHardDiskUsage(String hardDiskUsage) {
+		HardDiskUsage = hardDiskUsage;
 	}
 
 	@Override
 	public String toString() {
-		return "NVRInfo{" +
+		return "BVideoInfo{" +
 				"LoginName='" + LoginName + '\'' +
 				", LoginPwd='" + LoginPwd + '\'' +
-				", ChannelSum='" + ChannelSum + '\'' +
+				", ChannelID='" + ChannelID + '\'' +
+				", HardDiskUsage='" + HardDiskUsage + '\'' +
 				", CameraInfo='" + super.toString() + '\'' +
 				'}';
 	}

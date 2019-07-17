@@ -43,6 +43,16 @@
             border-radius: 4px;
             box-shadow: 0 0 1px #c2d6ea;
         }
+
+        .Rbtn button{
+            background: 0;
+            border: 0;
+        }
+
+        .modal-dialog
+        {
+            top:22%;
+        }
     </style>
 </head>
 
@@ -129,11 +139,10 @@
           
         </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li class="dropdown-item"><i class="icon-settings mr-2"></i>修改密码</li>
+                        <ul class="dropdown-menu dropdown-menu-right  Rbtn">
+                            <li class="dropdown-item" ><button  data-toggle="modal" data-target="#defaultsizemodal"><i class="icon-settings mr-2"></i>修改密码</button></li>
                             <li class="dropdown-divider"></li>
-                            <li class="dropdown-item"><a data-th-href="@{logout}"><i class="icon-power mr-2"></i>退 出</a>
-                            </li>
+                            <li class="dropdown-item"><button onclick="logout_uniview();"><i class="icon-power mr-2"></i>退 出</button></li>
                         </ul>
                     </li>
                 </ul>
@@ -145,10 +154,49 @@
     <!--Start 内容区-->
     <div class="content-wrapper ConMain">
         <div class="container-fluid ">
-            <iframe name="fn" style="width:100%;height: 100%;" frameborder="0" th:src="@{pages/DeviceStatus.html}"></iframe>
+            <iframe name="fn" style="width:100%;height: 100%;" frameborder="0" th:src="@{pages/NetworkInfo.html}"></iframe>
         </div>
     </div>
 
+</div>
+
+<!-- 修改密码 Modal -->
+<div class="modal fade" id="defaultsizemodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">重置密码</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label  class="col-sm-3 col-form-label text-right">旧密码:</label>
+                    <div class="col-sm-9 input-group-sm">
+                        <input type="text" class="form-control" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label  class="col-sm-3 col-form-label text-right">新密码:</label>
+                    <div class="col-sm-9 input-group-sm">
+                        <input type="password" class="form-control" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label  class="col-sm-3 col-form-label text-right">确认密码:</label>
+                    <div class="col-sm-9 input-group-sm">
+                        <input type="password" class="form-control" placeholder="">
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm" data-dismiss="modal"><i class="fa fa-times"></i> 取消</button>
+                <button type="button" class="btn btn-sm btny"><i class="fa fa-check-square-o"></i> 确认</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -168,7 +216,11 @@
             $(this).addClass('active').siblings().removeClass('active');
 
         });
-    })
+    });
+
+    function logout_uniview() {
+        window.location.href=[[@{logout}]];
+    }
 </script>
 
 </body>

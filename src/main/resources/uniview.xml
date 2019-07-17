@@ -31,7 +31,7 @@
 			<ChannelSum>8</ChannelSum>
 			<Mess />
 		</NVRInfo>
-		<VideoNode1Info Type="2" TypeName="室内监控球机">
+		<BVideoInfo Type="2" TypeName="室内监控球机">
 			<Name>宇视1号球机</Name>
 			<Status>在线</Status>
 			<WorkModel>录像中</WorkModel>
@@ -42,8 +42,8 @@
 			<ChannelID>1</ChannelID>
 			<HardDiskUsage>30%</HardDiskUsage>
 			<Mess />
-		</VideoNode1Info>
-		<VideoNode2Info Type="3" TypeName="室内监控枪机">
+		</BVideoInfo>
+		<GVideoInfo Type="3" TypeName="室内监控枪机">
 			<Name>宇视1号枪机</Name>
 			<Status>在线</Status>
 			<WorkModel>录像中</WorkModel>
@@ -53,8 +53,8 @@
 			<LoginPwd>123456</LoginPwd>
 			<ChannelID>2</ChannelID>
 			<Mess />
-		</VideoNode2Info>
-		<VideoNode3Info Type="3" TypeName="室内监控枪机">
+		</GVideoInfo>
+		<GVideoInfo Type="3" TypeName="室内监控枪机">
 			<Name>宇视2号枪机</Name>
 			<Status>在线</Status>
 			<WorkModel>录像中</WorkModel>
@@ -64,7 +64,7 @@
 			<LoginPwd>123456</LoginPwd>
 			<ChannelID>3</ChannelID>
 			<Mess />
-		</VideoNode3Info>
+		</GVideoInfo>
 	</DevMsg>
 	<ConfigMsg>
 		<LocationFile>C:\Users\Administrator\Desktop\config.xml</LocationFile>

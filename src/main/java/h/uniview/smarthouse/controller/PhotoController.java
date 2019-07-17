@@ -1,32 +1,22 @@
 package h.uniview.smarthouse.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
-import org.springframework.http.MediaType;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import h.uniview.smarthouse.form.PhotoForm;
 import h.uniview.smarthouse.utils.FileUtils;
 import h.uniview.smarthouse.utils.PageUtils;
 import h.uniview.smarthouse.utils.R;
+import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.*;
+import java.util.List;
 
 @RestController
 public class PhotoController extends BaseController {
 	
-	String path = "D:\\P201807072328\\入册\\";
+	String path = "C:\\Users\\HugoLi\\Downloads\\子骏\\入册\\";
 	@RequestMapping(value = "/photo/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public R list(@RequestBody @Valid PhotoForm photoForm, BindingResult bindingResult) {

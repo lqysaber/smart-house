@@ -1,19 +1,18 @@
 package h.uniview.smarthouse.data;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-import java.util.Map;
-
+import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class Configuration implements Serializable {
 
@@ -24,12 +23,16 @@ public class Configuration implements Serializable {
 	
 	private static WorkstationMsg workstationMsg = new WorkstationMsg();
 	
-	private static ServerMsg serverMsg = new ServerMsg();
-	
 	private static ConfigMsg configMsg = new ConfigMsg();
-	
-	 
-	public static void upadteConfigData(File url) throws Exception {
+
+    private static List<ServerMsg> serverMsgList = new ArrayList<ServerMsg>();
+    private static List<CameraInfo> cameraList = new ArrayList<CameraInfo>();
+    private static List<NVRInfo> NVRList = new ArrayList<NVRInfo>();
+    private static List<BVideoInfo> bVideoList = new ArrayList<BVideoInfo>();
+    private static List<GVideoInfo> gVideoList = new ArrayList<GVideoInfo>();
+
+
+    public static void upadteConfigData(File url) throws Exception {
 		// 获取一个Document对象
 		SAXReader saxReader = new SAXReader();
 		Document doc = saxReader.read(url);
@@ -104,46 +107,58 @@ public class Configuration implements Serializable {
 		SAXReader saxReader = new SAXReader();
 		Document doc = saxReader.read(url);
 		
-		Object value = null;
-		Element elem = null;
-		Element wsElement = (Element) doc.selectSingleNode("/Configuration/WorkstationMsg");
-		Iterator wsIT = wsElement.elementIterator();
-		while(wsIT.hasNext()) {
-			elem = (Element) wsIT.next();
-			System.out.println(elem.getName()+","+elem.getTextTrim());
-			
-//			String setMethodName = "set" + elem.getName();
-//			Field field = getClassField(WorkstationMsg.class, elem.getName());
-//			Class<?> fieldTypeClass = field.getType();
-//			value = convertValType(elem.getTextTrim(), fieldTypeClass);
-//			WorkstationMsg.class.getMethod(setMethodName, field.getType()).invoke(workstationMsg, value);
-			mapObject(elem.getName(), elem.getTextTrim(), WorkstationMsg.class, workstationMsg);
-		}
-		System.out.println(workstationMsg.getName());
-		System.out.println(workstationMsg.getCode());
-		
-		
+        workstationMsg = convert2Object((Element) doc.selectSingleNode("/Configuration/WorkstationMsg"), WorkstationMsg.class);
+        System.out.println(workstationMsg);
+
+        configMsg = convert2Object((Element) doc.selectSingleNode("/Configuration/ConfigMsg"), ConfigMsg.class);
+        System.out.println(configMsg);
+
+        List<Element> camList = (List<Element>) doc.selectNodes("/Configuration/DevMsg/CameraInfo");
+        for(Element element : camList) {
+            cameraList.add(convert2Object(element, CameraInfo.class));
+        }
+        System.out.println(cameraList);
+
+        List<Element> nvrList = (List<Element>) doc.selectNodes("/Configuration/DevMsg/NVRInfo");
+        for(Element element : nvrList) {
+            NVRList.add(convert2Object(element, NVRInfo.class));
+        }
+        System.out.println(NVRList);
+
+        List<Element> bvideoList = (List<Element>) doc.selectNodes("/Configuration/DevMsg/BVideoInfo");
+        for(Element element : bvideoList) {
+            bVideoList.add(convert2Object(element, BVideoInfo.class));
+        }
+        System.out.println(bVideoList);
+
+        List<Element> gvideoList = (List<Element>) doc.selectNodes("/Configuration/DevMsg/GVideoInfo");
+        for(Element element : gvideoList) {
+            gVideoList.add(convert2Object(element, GVideoInfo.class));
+        }
+        System.out.println(gVideoList);
 	
-	}
-	
-	public static void mapObject(String key, String value, Class<?> clazz, Object obj) throws Exception {
-		String setMethodName = "set" + key;
-		Field field = getClassField(WorkstationMsg.class, key);
-		Class<?> fieldTypeClass = field.getType();
-		Object v = convertValType(value, fieldTypeClass);
-		clazz.getMethod(setMethodName, field.getType()).invoke(obj, v);
 	}
 
-	/**
-	 * 将Map对象通过反射机制转换成Bean对象
-	 * 
-	 * @param map   存放数据的map对象
-	 * @param clazz 待转换的class
-	 * @return 转换后的Bean对象
-	 * @throws Exception 异常
-	 */
-	public static Object mapToBean(Map<String, Object> map, Class<?> clazz) throws Exception {
-		Object obj = clazz.newInstance();
+	public static <T> T convert2Object(Element element, Class<T> clazz) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+
+        Iterator it = element.elementIterator();
+        while(it.hasNext()) {
+            Element tmp = (Element) it.next();
+            map.put(tmp.getName(), tmp.getTextTrim());
+        }
+
+        Iterator attrIT = element.attributeIterator();
+        while(attrIT.hasNext()) {
+            Attribute tmp = (Attribute) attrIT.next();
+            map.put(tmp.getName(), tmp.getValue());
+        }
+
+        return mapToBean(map, clazz);
+    }
+
+	public static <T> T mapToBean(Map<String, Object> map, Class<T> clazz) throws Exception {
+		T obj = clazz.newInstance();
 		if(null == map || map.isEmpty()) {
 			return obj;
 		}
@@ -159,13 +174,6 @@ public class Configuration implements Serializable {
 		return obj;
 	}
 
-	/**
-	 * 将Object类型的值，转换成bean对象属性里对应的类型值
-	 * 
-	 * @param value          Object对象值
-	 * @param fieldTypeClass 属性的类型
-	 * @return 转换后的值
-	 */
 	private static Object convertValType(Object value, Class<?> fieldTypeClass) {
 		Object retVal = null;
 		if (Long.class.getName().equals(fieldTypeClass.getName())
@@ -186,13 +194,6 @@ public class Configuration implements Serializable {
 		return retVal;
 	}
 
-	/**
-	 * 获取指定字段名称查找在class中的对应的Field对象(包括查找父类)
-	 * 
-	 * @param clazz     指定的class
-	 * @param fieldName 字段名称
-	 * @return Field对象
-	 */
 	private static Field getClassField(Class<?> clazz, String fieldName) {
 		if (Object.class.getName().equals(clazz.getName())) {
 			return null;
@@ -213,16 +214,9 @@ public class Configuration implements Serializable {
 
 	public static void main(String[] args) throws Exception {
 		
-		initialConfigData("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
+		initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
 		
 //		File uri = new File("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
-//		System.out.println(cm.getCameraManageCatalog());
-//		System.out.println(cm.getCameraOriginalCatalog());
-//		System.out.println(cm.getEnvironmentalFile());
-//		System.out.println(cm.getLocationFile());
-//		System.out.println(cm.getVideoScreenshotCatalog());
-//		System.out.println(cm.getVideoVideotapeCatalog());
-//		System.out.println(cm.getVideoVmdalarmCatalog());
 	}
 
 	
@@ -244,12 +238,4 @@ public class Configuration implements Serializable {
 		this.workstationMsg = workstationMsg;
 	}
 
-	public ServerMsg getServerMsg() {
-		return serverMsg;
-	}
-
-	public void setServerMsg(ServerMsg serverMsg) {
-		this.serverMsg = serverMsg;
-	}
-	
 }

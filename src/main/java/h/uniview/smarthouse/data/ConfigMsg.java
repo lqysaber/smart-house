@@ -9,74 +9,86 @@ public class ConfigMsg implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String locationFile; // 此配置文件位置C:\Users\Administrator\Desktop\config.xml
+	private String LocationFile; // 此配置文件位置C:\Users\Administrator\Desktop\config.xml
 	
-	private String environmentalFile; // 环境数据文件位置C:\Users\Administrator\Desktop\tt.txt
+	private String EnvironmentalFile; // 环境数据文件位置C:\Users\Administrator\Desktop\tt.txt
 	
-	private String cameraOriginalCatalog;// 相机拍摄原始文件存储位置C:\Users\Administrator\Desktop\
+	private String CameraOriginalCatalog;// 相机拍摄原始文件存储位置C:\Users\Administrator\Desktop\
 	
-	private String cameraManageCatalog;// 相机拍摄后加工处理的文件存储位置C:\Users\Administrator\Desktop\
+	private String CameraManageCatalog;// 相机拍摄后加工处理的文件存储位置C:\Users\Administrator\Desktop\
 	
-	private String videoScreenshotCatalog;// 视频快照截图存储位置C:\Users\Administrator\Desktop\
+	private String VideoScreenshotCatalog;// 视频快照截图存储位置C:\Users\Administrator\Desktop\
 	
-	private String videoVideotapeCatalog; // 视频录像存储位置C:\Users\Administrator\Desktop\
+	private String VideoVideotapeCatalog; // 视频录像存储位置C:\Users\Administrator\Desktop\
 	
-	private String videoVmdalarmCatalog;// 视频移动侦测警报截图存储位置C:\Users\Administrator\Desktop\
+	private String VideoVmdalarmCatalog;// 视频移动侦测警报截图存储位置C:\Users\Administrator\Desktop\
 
 	public String getLocationFile() {
-		return locationFile;
+		return LocationFile;
 	}
 
 	public void setLocationFile(String locationFile) {
-		this.locationFile = locationFile;
+		LocationFile = locationFile;
 	}
 
 	public String getEnvironmentalFile() {
-		return environmentalFile;
+		return EnvironmentalFile;
 	}
 
 	public void setEnvironmentalFile(String environmentalFile) {
-		this.environmentalFile = environmentalFile;
+		EnvironmentalFile = environmentalFile;
 	}
 
 	public String getCameraOriginalCatalog() {
-		return cameraOriginalCatalog;
+		return CameraOriginalCatalog;
 	}
 
 	public void setCameraOriginalCatalog(String cameraOriginalCatalog) {
-		this.cameraOriginalCatalog = cameraOriginalCatalog;
+		CameraOriginalCatalog = cameraOriginalCatalog;
 	}
 
 	public String getCameraManageCatalog() {
-		return cameraManageCatalog;
+		return CameraManageCatalog;
 	}
 
 	public void setCameraManageCatalog(String cameraManageCatalog) {
-		this.cameraManageCatalog = cameraManageCatalog;
+		CameraManageCatalog = cameraManageCatalog;
 	}
 
 	public String getVideoScreenshotCatalog() {
-		return videoScreenshotCatalog;
+		return VideoScreenshotCatalog;
 	}
 
 	public void setVideoScreenshotCatalog(String videoScreenshotCatalog) {
-		this.videoScreenshotCatalog = videoScreenshotCatalog;
+		VideoScreenshotCatalog = videoScreenshotCatalog;
 	}
 
 	public String getVideoVideotapeCatalog() {
-		return videoVideotapeCatalog;
+		return VideoVideotapeCatalog;
 	}
 
 	public void setVideoVideotapeCatalog(String videoVideotapeCatalog) {
-		this.videoVideotapeCatalog = videoVideotapeCatalog;
+		VideoVideotapeCatalog = videoVideotapeCatalog;
 	}
 
 	public String getVideoVmdalarmCatalog() {
-		return videoVmdalarmCatalog;
+		return VideoVmdalarmCatalog;
 	}
 
 	public void setVideoVmdalarmCatalog(String videoVmdalarmCatalog) {
-		this.videoVmdalarmCatalog = videoVmdalarmCatalog;
+		VideoVmdalarmCatalog = videoVmdalarmCatalog;
 	}
 
+	@Override
+	public String toString() {
+		return "ConfigMsg{" +
+				"LocationFile='" + LocationFile + '\'' +
+				", EnvironmentalFile='" + EnvironmentalFile + '\'' +
+				", CameraOriginalCatalog='" + CameraOriginalCatalog + '\'' +
+				", CameraManageCatalog='" + CameraManageCatalog + '\'' +
+				", VideoScreenshotCatalog='" + VideoScreenshotCatalog + '\'' +
+				", VideoVideotapeCatalog='" + VideoVideotapeCatalog + '\'' +
+				", VideoVmdalarmCatalog='" + VideoVmdalarmCatalog + '\'' +
+				'}';
+	}
 }

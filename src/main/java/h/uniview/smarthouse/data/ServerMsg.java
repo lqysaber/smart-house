@@ -9,44 +9,43 @@ public class ServerMsg implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String name;
+	private String Name;
 	
-	private String iP;
+	private String IP;
 	
-	private int port;
+	private int Port;
 	
-	private String mess;
+	private String Mess;
 
 	public String getName() {
-		return name;
+		return Name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		Name = name;
 	}
 
-	public String getiP() {
-		return iP;
+	public String getIP() {
+		return IP;
 	}
 
-	public void setiP(String iP) {
-		this.iP = iP;
+	public void setIP(String IP) {
+		this.IP = IP;
 	}
 
 	public int getPort() {
-		return port;
+		return Port;
 	}
 
 	public void setPort(int port) {
-		this.port = port;
+		Port = port;
 	}
 
 	public String getMess() {
-		return mess;
+		return Mess;
 	}
 
 	public void setMess(String mess) {
-		this.mess = mess;
+		Mess = mess;
 	}
-
 }
