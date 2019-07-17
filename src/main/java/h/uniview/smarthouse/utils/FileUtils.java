@@ -38,7 +38,8 @@ public class FileUtils {
 		
 		List<String> result = new ArrayList<String>();
 		if (f.isFile()) {
-			result.add(f.getAbsolutePath());
+//			result.add(f.getAbsolutePath());
+			result.add(f.getName());
 			return result;
 		}
 		
@@ -51,7 +52,8 @@ public class FileUtils {
 		});
 		
 		for(File t : fileArr) {
-			result.add(t.getAbsolutePath());
+//			result.add(t.getAbsolutePath());
+			result.add(t.getName());
 		}
 		return result;
 	}

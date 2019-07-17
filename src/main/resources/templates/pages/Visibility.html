@@ -74,78 +74,13 @@
             <div class="bg-transparent border-0 mRc">
               <div class="tab-content">
                 <div id="tabe-10" class="tab-pane active">
-                  <div class="row">
-                    <div class="col-md-12 col-xs-12 mRimg mRimgA">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                      <i class="fa fa-chevron-circle-left ileft"></i>
-                      <i class="fa fa-chevron-circle-right iRight"></i>
-                    </div>
-
-                  </div>
+                  
                 </div>
                 <div id="tabe-11" class="container-fluid tab-pane fade">
-                  <div class="row">
-                    <div class="col-md-6 col-xs-6 mRimg">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-6 col-xs-6 mRimg">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-6 col-xs-6 mRimg">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-6 col-xs-6 mRimg">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <i class="fa fa-chevron-circle-left ileft"></i>
-                    <i class="fa fa-chevron-circle-right iRight"></i>
-                  </div>
+                  
                 </div>
                 <div id="tabe-12" class="container-fluid tab-pane fade">
-                  <div class="row">
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <div class="col-md-4 col-xs-4 mRimg mRimgB">
-                      
-                      <img src="../assets/images/m1.jpg" width="100%">
-                    </div>
-                    <i class="fa fa-chevron-circle-left ileft"></i>
-                    <i class="fa fa-chevron-circle-right iRight"></i>
-                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -155,6 +90,8 @@
     </div>
     <input type="hidden" id="visibility_pagesize" value="1" />
     <input type="hidden" id="visibility_currpage" value="1" />
+    <input type="hidden" id="visibility_tab" value="#tabe-10"/>
+    <input type="hidden" id="visibility_total_page" value="0"/>
   </div>
 
   <!-- Bootstrap core JavaScript-->
@@ -191,11 +128,33 @@
           format:"yyyy-mm-dd"
       });
   });
+  
+  function previewPage() {
+	  var currPage = Number($("#visibility_currpage").val().trim());
+	  if(currPage - 1 < 1) {
+		  alert("亲，前方高能，已无数据展示，请知；");
+		  return;
+	  }
+	  $("#visibility_currpage").val(currPage-1);
+	  listPhoto();
+  }
+  
+  function nextPage() {
+	  var currPage = Number($("#visibility_currpage").val().trim());
+	  var totalPage = Number($("#visibility_total_page").val().trim());
+	  if(currPage +1 > totalPage) {
+		  alert("亲，后方高能，已无数据展示，请知；");
+		  return;
+	  }
+	  $("#visibility_currpage").val(currPage + 1);
+	  listPhoto();
+  }
 
   function switchPhotoWin(pageSize, htmlId, winObj) {
     debugger;
     $(".nav-link").removeClass("active");
     $(".tab-pane").removeClass("active show");
+    $("#visibility_tab").val(htmlId);
 
     $(htmlId).addClass("active show");
     $(winObj).addClass("active");
@@ -221,9 +180,11 @@
       data: JSON.stringify(reqParam),
       dataType: "json",
       success: function (r) {
-        alert(r);
         if (r.code === 0) {
-          alert(r.msg);
+          // alert(JSON.stringify(r.msg));
+          $("#visibility_currpage").val(r.msg.currPage);
+          $("#visibility_total_page").val(r.msg.totalPage);
+          handleListRender(r.msg.list);
         } else {
           alert(r.msg);
         }
@@ -232,7 +193,36 @@
         alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
       }
     });
-
+  }
+  
+  function handleListRender(rlistdata) {
+	  
+	  var hstr = "<div class='row'>";
+	  var tabId = $("#visibility_tab").val().trim();
+	  if(tabId === "#tabe-10") {
+		  $.each(rlistdata,function(n,value){
+			  hstr += "<div class='col-md-12 col-xs-12 mRimg mRimgA'>";
+			  hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+			  hstr += "</div>";
+          });
+	  } else if (tabId === "#tabe-11") {
+		  $.each(rlistdata,function(n,value){
+			  hstr += "<div class='col-md-6 col-xs-6 mRimg'>";
+			  hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+			  hstr += "</div>";
+          });
+	  } else if (tabId === "#tabe-12") {
+		  $.each(rlistdata,function(n,value){
+			  hstr += "<div class='col-md-4 col-xs-4 mRimg mRimgB'>";
+			  hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+			  hstr += "</div>";
+          });
+	  }
+	  hstr += "<i class='fa fa-chevron-circle-left ileft' onclick='previewPage();'></i>";
+	  hstr += "<i class='fa fa-chevron-circle-right iRight' onclick='nextPage();'></i>";
+	  hstr += "</div>";
+	  
+	  $(tabId).html(hstr);
   }
 </script>
 

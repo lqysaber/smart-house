@@ -1,6 +1,7 @@
 package h.uniview.smarthouse.utils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,14 @@ public class PageUtils implements Serializable {
 	private int currPage;
 	//列表数据
 	private List<?> list;
+	
+	public PageUtils(List<?> list, int pageSize, int currPage) {
+		this.totalCount = list.size();
+		this.pageSize = pageSize;
+		this.currPage = currPage;
+		this.totalPage = (int)Math.ceil((double)totalCount/pageSize);
+		this.list = list.subList((currPage-1)*pageSize, (currPage*pageSize)>totalCount?totalCount:(currPage*pageSize));
+	}
 	
 	/**
 	 * 分页
