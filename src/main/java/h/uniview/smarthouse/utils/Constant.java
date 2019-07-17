@@ -6,11 +6,11 @@ public class Constant {
 	
 	public enum PhotoType {
 //		BMP、JPG、JPEG、PNG、GIF
-		BMP("。bmp"),
-		JPG("。jpg"),
-		JPEG("。jpeg"),
-		PNG("。png"),
-		GIF("。gif");
+		BMP(".bmp"),
+		JPG(".jpg"),
+		JPEG(".jpeg"),
+		PNG(".png"),
+		GIF(".gif");
 		
 		private String value;
 
