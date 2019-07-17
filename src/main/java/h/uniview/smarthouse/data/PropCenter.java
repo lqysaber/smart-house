@@ -9,6 +9,11 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "smart-house")
 public class PropCenter implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private ShiroProperties shiro = new ShiroProperties();
 
 	private String timeFormat = "yyyy-MM-dd HH:mm:ss";

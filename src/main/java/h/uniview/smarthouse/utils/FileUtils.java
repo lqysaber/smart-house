@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -63,17 +62,8 @@ public class FileUtils {
 	 * 流的关闭顺序：先打开的后关，后打开的先关， 否则有可能出现java.io.IOException: Stream closed异常
 	 * @throws IOException
 	 */
-	public static void readFile(String filePath) throws IOException {
-		FileReader fr = new FileReader(filePath);
-		BufferedReader br = new BufferedReader(fr);
-		String line = "";
-		String[] arrs = null;
-		while ((line = br.readLine()) != null) {
-			arrs = line.split(",");
-			System.out.println(arrs[0] + " : " + arrs[1] + " : " + arrs[2]);
-		}
-		br.close();
-		fr.close();
+	public static String readFile(String filePath) throws IOException {
+		return readFile(filePath, "UTF-8");
 	}
 
 	/**
@@ -83,19 +73,20 @@ public class FileUtils {
 	 * 
 	 * @throws IOException
 	 */
-	public static void readFile(String filePath, String charSet) throws IOException {
+	public static String readFile(String filePath, String charSet) throws IOException {
 		FileInputStream fis = new FileInputStream(filePath);
 		InputStreamReader isr = new InputStreamReader(fis, charSet);
 		BufferedReader br = new BufferedReader(isr);
-		String line = "";
-		String[] arrs = null;
+		String line = null;
+		StringBuffer sb = new StringBuffer();
 		while ((line = br.readLine()) != null) {
-			arrs = line.split(",");
-			System.out.println(arrs[0] + " : " + arrs[1] + " : " + arrs[2]);
+			sb.append(line);
 		}
 		br.close();
 		isr.close();
 		fis.close();
+		
+		return sb.toString();
 	}
 
 	/**

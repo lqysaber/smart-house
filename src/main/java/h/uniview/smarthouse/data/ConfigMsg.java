@@ -2,9 +2,6 @@ package h.uniview.smarthouse.data;
 
 import java.io.Serializable;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-@XStreamAlias("ConfigMsg")
 public class ConfigMsg implements Serializable {
 
 	/**
@@ -12,25 +9,18 @@ public class ConfigMsg implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@XStreamAlias("ocationFile")
 	private String locationFile; // 此配置文件位置C:\Users\Administrator\Desktop\config.xml
 	
-	@XStreamAlias("EnvironmentalFile")
 	private String environmentalFile; // 环境数据文件位置C:\Users\Administrator\Desktop\tt.txt
 	
-	@XStreamAlias("CameraOriginalCatalog")
 	private String cameraOriginalCatalog;// 相机拍摄原始文件存储位置C:\Users\Administrator\Desktop\
 	
-	@XStreamAlias("CameraManageCatalog")
 	private String cameraManageCatalog;// 相机拍摄后加工处理的文件存储位置C:\Users\Administrator\Desktop\
 	
-	@XStreamAlias("VideoScreenshotCatalog")
 	private String videoScreenshotCatalog;// 视频快照截图存储位置C:\Users\Administrator\Desktop\
 	
-	@XStreamAlias("VideoVideotapeCatalog")
 	private String videoVideotapeCatalog; // 视频录像存储位置C:\Users\Administrator\Desktop\
 	
-	@XStreamAlias("VideoVmdalarmCatalog")
 	private String videoVmdalarmCatalog;// 视频移动侦测警报截图存储位置C:\Users\Administrator\Desktop\
 
 	public String getLocationFile() {

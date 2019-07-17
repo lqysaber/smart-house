@@ -9,24 +9,24 @@ public class WorkstationMsg implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String name;
+	private String Name;
 	
-	private String code;
+	private String Code;
 
 	public String getName() {
-		return name;
+		return Name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.Name = name;
 	}
 
 	public String getCode() {
-		return code;
+		return Code;
 	}
 
 	public void setCode(String code) {
-		this.code = code;
+		this.Code = code;
 	}
 	
 
