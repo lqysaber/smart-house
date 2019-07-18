@@ -1,22 +1,25 @@
-package h.uniview.smarthouse.data;
+package h.uniview.smarthouse.form;
 
 import java.io.Serializable;
 
-public class ServerMsg implements Serializable {
-	
+import javax.validation.constraints.NotNull;
+
+public class ServerForm implements Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	@NotNull
 	private String Name;
 	
+	@NotNull
 	private String IP;
 	
+	@NotNull
 	private int Port;
 	
-	private String Mess;
-
 	public String getName() {
 		return Name;
 	}
@@ -29,8 +32,8 @@ public class ServerMsg implements Serializable {
 		return IP;
 	}
 
-	public void setIP(String IP) {
-		this.IP = IP;
+	public void setIP(String iP) {
+		IP = iP;
 	}
 
 	public int getPort() {
@@ -48,4 +51,7 @@ public class ServerMsg implements Serializable {
 	public void setMess(String mess) {
 		Mess = mess;
 	}
+
+	private String Mess;
+
 }

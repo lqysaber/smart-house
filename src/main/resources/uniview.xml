@@ -1,84 +1,101 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <Configuration>
-	<WorkstationMsg>
-		<Name>宏景测试站点</Name>
-		<Code>001</Code>
-	</WorkstationMsg>
-	<ServerMsg>
-		<Name>环保中心服务器</Name>
-		<IP>172.168.1.11</IP>
-		<Port>89</Port>
-		<Mess />
-	</ServerMsg>
-	<DevMsg>
-		<CameraInfo Type="0" TypeName="能见度工业相机">
-			<Name>1号能见度相机</Name>
-			<Status>在线</Status>
-			<WorkModel>拍照中</WorkModel>
-			<IP>192.168.1.11</IP>
-			<Port>811</Port>
-			<Mess />
-		</CameraInfo>
-		<NVRInfo Type="1" TypeName="硬盘录像机">
-			<Name>NVR</Name>
-			<Status>在线</Status>
-			<WorkModel />
-			<IP>192.168.1.12</IP>
-			<Port>8111</Port>
-			<LoginName>admin</LoginName>
-			<LoginPwd>123456</LoginPwd>
-			<ChannelSum>8</ChannelSum>
-			<Mess />
-		</NVRInfo>
-		<BVideoInfo Type="2" TypeName="室内监控球机">
-			<Name>宇视1号球机</Name>
-			<Status>在线</Status>
-			<WorkModel>录像中</WorkModel>
-			<IP>192.168.1.13</IP>
-			<Port>8111</Port>
-			<LoginName>admin</LoginName>
-			<LoginPwd>123456</LoginPwd>
-			<ChannelID>1</ChannelID>
-			<HardDiskUsage>30%</HardDiskUsage>
-			<Mess />
-		</BVideoInfo>
-		<GVideoInfo Type="3" TypeName="室内监控枪机">
-			<Name>宇视1号枪机</Name>
-			<Status>在线</Status>
-			<WorkModel>录像中</WorkModel>
-			<IP>192.168.1.14</IP>
-			<Port>8111</Port>
-			<LoginName>admin</LoginName>
-			<LoginPwd>123456</LoginPwd>
-			<ChannelID>2</ChannelID>
-			<Mess />
-		</GVideoInfo>
-		<GVideoInfo Type="3" TypeName="室内监控枪机">
-			<Name>宇视2号枪机</Name>
-			<Status>在线</Status>
-			<WorkModel>录像中</WorkModel>
-			<IP>192.168.1.15</IP>
-			<Port>8111</Port>
-			<LoginName>admin</LoginName>
-			<LoginPwd>123456</LoginPwd>
-			<ChannelID>3</ChannelID>
-			<Mess />
-		</GVideoInfo>
-	</DevMsg>
-	<ConfigMsg>
-		<LocationFile>C:\Users\Administrator\Desktop\config.xml</LocationFile>
-		<EnvironmentalFile>C:\Users\Administrator\Desktop\tt.txt
-		</EnvironmentalFile>
-		<CameraOriginalCatalog>C:\Users\Administrator\Desktop\
-		</CameraOriginalCatalog>
-		<CameraManageCatalog>C:\Users\Administrator\Desktop\
-		</CameraManageCatalog>
-		<VideoScreenshotCatalog>C:\Users\Administrator\Desktop\
-		</VideoScreenshotCatalog>
-		<VideoVideotapeCatalog>C:\Users\Administrator\Desktop\
-		</VideoVideotapeCatalog>
-		<VideoVmdalarmCatalog>C:\Users\Administrator\Desktop\
-		</VideoVmdalarmCatalog>
-	</ConfigMsg>
+  <WorkstationMsg>
+     <Name>宏景测试站点</Name>
+     <Code>001</Code>
+  </WorkstationMsg>
+  
+  <ServerMsg>
+     <ServerNodeInfo>
+         <Name>环保中心服务器1</Name>
+         <IP>172.168.1.11</IP>     
+         <Port>89</Port>         
+     	 <Mess></Mess>
+     </ServerNodeInfo>
+     <ServerNodeInfo>
+     	 <Name>环保中心服务器2</Name>
+     	 <IP>172.168.1.13</IP>     
+     	 <Port>89</Port>         
+     	 <Mess></Mess>
+     </ServerNodeInfo>
+  </ServerMsg>
+
+  <DevMsg>
+     <CameraMsg>
+       <CameraInfo>
+          <Name>1号能见度相机</Name>
+          <Status>在线</Status>
+          <WorkModel>拍照中</WorkModel> 
+          <IP>192.168.1.11</IP>
+          <Port>811</Port>
+          <Mess></Mess>
+       </CameraInfo>
+     </CameraMsg>
+     <NVRMSG>
+       <NVRInfo>
+          <Name>NVR</Name>
+          <Status>在线</Status>
+          <WorkModel></WorkModel>
+          <IP>192.168.1.12</IP>
+          <Port>8111</Port>
+          <LoginName>admin</LoginName>
+          <LoginPwd>123456</LoginPwd>
+          <ChannelSum>8</ChannelSum>
+          <HardDiskUsage>30%</HardDiskUsage>
+          <Mess></Mess>
+       </NVRInfo>
+     </NVRMSG>
+     <VideoMsg>
+       <VideoNodeInfo>
+          <Name>宇视1号球机</Name>
+          <Status>在线</Status>
+          <WorkModel>录像中</WorkModel>
+          <Type>1</Type>
+          <TypeName>室内监控球机</TypeName> 
+          <IP>192.168.1.13</IP>
+          <Port>8111</Port>
+          <LoginName>admin</LoginName>
+          <LoginPwd>123456</LoginPwd>
+          <ChannelID>1</ChannelID>
+          <Mess></Mess>
+       </VideoNodeInfo>
+       <VideoNodeInfo>
+          <Name>宇视1号枪机</Name>
+          <Status>在线</Status>
+          <WorkModel>录像中</WorkModel>
+          <Type>2</Type>
+          <TypeName>室内监控枪机</TypeName> 
+          <IP>192.168.1.14</IP>
+          <Port>8111</Port>
+          <LoginName>admin</LoginName>
+          <LoginPwd>123456</LoginPwd>
+          <ChannelID>2</ChannelID>
+          <Mess></Mess>
+       </VideoNodeInfo>
+       <VideoNodeInfo>
+          <Name>宇视2号枪机</Name>
+          <Status>在线</Status>
+          <WorkModel>录像中</WorkModel>
+          <Type>2</Type>
+          <TypeName>室内监控枪机</TypeName> 
+          <IP>192.168.1.15</IP>
+          <Port>8111</Port>
+          <LoginName>admin</LoginName>
+          <LoginPwd>123456</LoginPwd>
+          <ChannelID>3</ChannelID>
+          <Mess></Mess>
+       </VideoNodeInfo>	 
+     </VideoMsg>
+  </DevMsg>
+
+  <ConfigMsg>
+    <LocationFile>C:\Users\Administrator\Desktop\config.xml</LocationFile>
+    <EnvironmentalFile>C:\Users\Administrator\Desktop\tt.txt</EnvironmentalFile>
+    <CameraOriginalCatalog>C:\Users\Administrator\Desktop\</CameraOriginalCatalog>
+    <CameraManageCatalog>C:\Users\Administrator\Desktop\</CameraManageCatalog>
+    <VideoScreenshotCatalog>C:\Users\Administrator\Desktop\</VideoScreenshotCatalog>
+    <VideoVideotapeCatalog>C:\Users\Administrator\Desktop\</VideoVideotapeCatalog>
+    <VideoVmdalarmCatalog>C:\Users\Administrator\Desktop\</VideoVmdalarmCatalog>
+  </ConfigMsg>
+
 </Configuration>

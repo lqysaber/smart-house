@@ -12,6 +12,7 @@ public class NVRInfo extends CameraInfo implements Serializable {
 	private String LoginName;
 	private String LoginPwd;
 	private String ChannelSum;
+	private String HardDiskUsage;
 
 	public String getLoginName() {
 		return LoginName;
@@ -37,12 +38,21 @@ public class NVRInfo extends CameraInfo implements Serializable {
 		ChannelSum = channelSum;
 	}
 
+	public String getHardDiskUsage() {
+		return HardDiskUsage;
+	}
+
+	public void setHardDiskUsage(String hardDiskUsage) {
+		HardDiskUsage = hardDiskUsage;
+	}
+
 	@Override
 	public String toString() {
 		return "NVRInfo{" +
 				"LoginName='" + LoginName + '\'' +
 				", LoginPwd='" + LoginPwd + '\'' +
 				", ChannelSum='" + ChannelSum + '\'' +
+				", HardDiskUsage='" + HardDiskUsage + '\'' +
 				", CameraInfo='" + super.toString() + '\'' +
 				'}';
 	}
