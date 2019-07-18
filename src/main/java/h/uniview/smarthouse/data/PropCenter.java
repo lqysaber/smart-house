@@ -40,7 +40,7 @@ public class PropCenter implements Serializable {
 		return configDir;
 	}
 
-	public void setConfigDir(String configDir) {
+	public void setConfigDir(String configDir) throws Exception {
 		this.configDir = configDir;
 	}
 

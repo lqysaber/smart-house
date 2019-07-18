@@ -1,5 +1,15 @@
 package h.uniview.smarthouse.data;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -7,32 +17,34 @@ import org.dom4j.Node;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.*;
-
-public class Configuration implements Serializable {
-
+@Service
+@Order(1)
+public class EnvCfgCenter implements CommandLineRunner,Serializable {
+	
+	@Autowired
+	private PropCenter propCenter;
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static WorkstationMsg workstationMsg = new WorkstationMsg();
+	private WorkstationMsg workstationMsg = new WorkstationMsg();
 	
-	private static ConfigMsg configMsg = new ConfigMsg();
+	private ConfigMsg configMsg = new ConfigMsg();
 
-    private static List<ServerMsg> serverMsgList = new ArrayList<ServerMsg>();
-    private static List<CameraInfo> cameraList = new ArrayList<CameraInfo>();
-    private static List<NVRInfo> NVRList = new ArrayList<NVRInfo>();
-    private static List<BVideoInfo> bVideoList = new ArrayList<BVideoInfo>();
-    private static List<GVideoInfo> gVideoList = new ArrayList<GVideoInfo>();
-
-
-    public static void upadteConfigData(File url) throws Exception {
+    private List<ServerNode> serverNodeList = new ArrayList<ServerNode>();
+    private List<CameraInfo> cameraInfoList = new ArrayList<CameraInfo>();
+    private List<NVRInfo> nvrInfoList = new ArrayList<NVRInfo>();
+    private List<VideoInfo> videoInfoList = new ArrayList<VideoInfo>();
+    
+    public void upadteNode(String pattern, Object object) throws Exception {
+    	File url = new File(propCenter.getConfigDir());
 		// 获取一个Document对象
 		SAXReader saxReader = new SAXReader();
 		Document doc = saxReader.read(url);
@@ -47,7 +59,8 @@ public class Configuration implements Serializable {
 		writer.close();
 	}
  
-	public static void dom4jAddElement(File url) throws Exception {
+	public void crateNode() throws Exception {
+		File url = new File(propCenter.getConfigDir());
 		// 获取一个Document对象
 		SAXReader saxReader = new SAXReader();
 		Document doc = saxReader.read(url);
@@ -79,7 +92,8 @@ public class Configuration implements Serializable {
 //	    writer.close();
 	}
 	
-	public static void dom4jDeleteElement(File url) throws Exception {
+	public void deleteNode() throws Exception {
+		File url = new File(propCenter.getConfigDir());
 		// 获取一个Document对象
 		SAXReader reader = new SAXReader();
 		Document doc = reader.read(url);		
@@ -101,7 +115,7 @@ public class Configuration implements Serializable {
         writer.close();
 	}
 
-	public static void initialConfigData(String configPath) throws Exception {
+	public void initialConfigData(String configPath) throws Exception {
 		
 		File url = new File(configPath);
 		SAXReader saxReader = new SAXReader();
@@ -113,42 +127,45 @@ public class Configuration implements Serializable {
         configMsg = convert2Object((Element) doc.selectSingleNode("/Configuration/ConfigMsg"), ConfigMsg.class);
         System.out.println(configMsg);
 
-        List<Element> camList = (List<Element>) doc.selectNodes("/Configuration/DevMsg/CameraInfo");
-        for(Element element : camList) {
-            cameraList.add(convert2Object(element, CameraInfo.class));
-        }
-        System.out.println(cameraList);
+        List<?> list = doc.selectNodes("/Configuration/DevMsg/CameraMsg/CameraInfo");
+        Iterator<?> it = list.iterator();
+        while (it.hasNext()) {
+        	cameraInfoList.add(convert2Object((Element) it.next(), CameraInfo.class));
+		}
+        System.out.println(cameraInfoList);
 
-        List<Element> nvrList = (List<Element>) doc.selectNodes("/Configuration/DevMsg/NVRInfo");
-        for(Element element : nvrList) {
-            NVRList.add(convert2Object(element, NVRInfo.class));
-        }
-        System.out.println(NVRList);
+        list = doc.selectNodes("/Configuration/DevMsg/NVRMSG/NVRInfo");
+        it = list.iterator();
+        while (it.hasNext()) {
+        	nvrInfoList.add(convert2Object((Element) it.next(), NVRInfo.class));
+		}
+        System.out.println(nvrInfoList);
 
-        List<Element> bvideoList = (List<Element>) doc.selectNodes("/Configuration/DevMsg/BVideoInfo");
-        for(Element element : bvideoList) {
-            bVideoList.add(convert2Object(element, BVideoInfo.class));
-        }
-        System.out.println(bVideoList);
-
-        List<Element> gvideoList = (List<Element>) doc.selectNodes("/Configuration/DevMsg/GVideoInfo");
-        for(Element element : gvideoList) {
-            gVideoList.add(convert2Object(element, GVideoInfo.class));
-        }
-        System.out.println(gVideoList);
-	
+        list = doc.selectNodes("/Configuration/DevMsg/VideoMsg/VideoNodeInfo");
+        it = list.iterator();
+        while (it.hasNext()) {
+        	videoInfoList.add(convert2Object((Element) it.next(), VideoInfo.class));
+		}
+        System.out.println(videoInfoList);
+        
+        list = doc.selectNodes("/Configuration/ServerMsg/ServerNodeInfo");
+        it = list.iterator();
+        while (it.hasNext()) {
+        	serverNodeList.add(convert2Object((Element) it.next(), ServerNode.class));
+		}
+        System.out.println(serverNodeList);
 	}
 
 	public static <T> T convert2Object(Element element, Class<T> clazz) throws Exception {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 
-        Iterator it = element.elementIterator();
+        Iterator<?> it = element.elementIterator();
         while(it.hasNext()) {
             Element tmp = (Element) it.next();
             map.put(tmp.getName(), tmp.getTextTrim());
         }
 
-        Iterator attrIT = element.attributeIterator();
+        Iterator<?> attrIT = element.attributeIterator();
         while(attrIT.hasNext()) {
             Attribute tmp = (Attribute) attrIT.next();
             map.put(tmp.getName(), tmp.getValue());
@@ -157,41 +174,23 @@ public class Configuration implements Serializable {
         return mapToBean(map, clazz);
     }
 
-	public static <T> T mapToBean(Map<String, Object> map, Class<T> clazz) throws Exception {
+	public static <T> T mapToBean(Map<String, String> map, Class<T> clazz) throws Exception {
 		T obj = clazz.newInstance();
 		if(null == map || map.isEmpty()) {
 			return obj;
 		}
-		for (Map.Entry<String, Object> entry : map.entrySet()) {
-			String propertyName = entry.getKey();
-			Object value = entry.getValue();
+		map.forEach((propertyName, value) -> {
 			String setMethodName = "set" + propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
 			Field field = getClassField(clazz, propertyName);
 			Class<?> fieldTypeClass = field.getType();
-			value = convertValType(value, fieldTypeClass);
-			clazz.getMethod(setMethodName, field.getType()).invoke(obj, value);
-		}
+//			clazz.getMethod(setMethodName, field.getType()).invoke(obj, convertValType(value, fieldTypeClass));
+		});
 		return obj;
 	}
 
-	private static Object convertValType(Object value, Class<?> fieldTypeClass) {
-		Object retVal = null;
-		if (Long.class.getName().equals(fieldTypeClass.getName())
-				|| long.class.getName().equals(fieldTypeClass.getName())) {
-			retVal = Long.parseLong(value.toString());
-		} else if (Integer.class.getName().equals(fieldTypeClass.getName())
-				|| int.class.getName().equals(fieldTypeClass.getName())) {
-			retVal = Integer.parseInt(value.toString());
-		} else if (Float.class.getName().equals(fieldTypeClass.getName())
-				|| float.class.getName().equals(fieldTypeClass.getName())) {
-			retVal = Float.parseFloat(value.toString());
-		} else if (Double.class.getName().equals(fieldTypeClass.getName())
-				|| double.class.getName().equals(fieldTypeClass.getName())) {
-			retVal = Double.parseDouble(value.toString());
-		} else {
-			retVal = value;
-		}
-		return retVal;
+	private static <T> T convertValType(String value, Class<T> fieldTypeClass) {
+		if(fieldTypeClass instanceof String)
+		return null;
 	}
 
 	private static Field getClassField(Class<?> clazz, String fieldName) {
@@ -214,28 +213,46 @@ public class Configuration implements Serializable {
 
 	public static void main(String[] args) throws Exception {
 		
-		initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
+		System.out.println(Long.class);
+		System.out.println(long.class);
+		System.out.println(Long.class.getName());
 		
-//		File uri = new File("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
+		Field f = getClassField(VideoInfo.class, "Name");
+		System.out.println(f);
+		System.out.println(f.getType());
+		
+//		initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
+		
+//		initialConfigData("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
 	}
-
-	
-	
 
 	public ConfigMsg getConfigMsg() {
 		return configMsg;
-	}
-
-	public void setConfigMsg(ConfigMsg configMsg) {
-		this.configMsg = configMsg;
 	}
 
 	public WorkstationMsg getWorkstationMsg() {
 		return workstationMsg;
 	}
 
-	public void setWorkstationMsg(WorkstationMsg workstationMsg) {
-		this.workstationMsg = workstationMsg;
+	public List<CameraInfo> getCameraInfoList() {
+		return cameraInfoList;
+	}
+
+	public List<ServerNode> getServerNodeList() {
+		return serverNodeList;
+	}
+
+	public List<NVRInfo> getNvrInfoList() {
+		return nvrInfoList;
+	}
+
+	public List<VideoInfo> getVideoInfoList() {
+		return videoInfoList;
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		this.initialConfigData(propCenter.getConfigDir());
 	}
 
 }
