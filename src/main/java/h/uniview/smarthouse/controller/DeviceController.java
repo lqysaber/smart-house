@@ -1,22 +1,30 @@
 package h.uniview.smarthouse.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import h.uniview.smarthouse.data.CameraInfo;
 import h.uniview.smarthouse.data.EnvCfgCenter;
+import h.uniview.smarthouse.data.ServerNode;
+import h.uniview.smarthouse.form.CameraForm;
+import h.uniview.smarthouse.form.ServerForm;
+import h.uniview.smarthouse.utils.Constant;
 import h.uniview.smarthouse.utils.PageUtils;
 import h.uniview.smarthouse.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-public class DeviceController {
+public class DeviceController extends BaseController {
 	
 	@Autowired
 	private EnvCfgCenter envCenter;
@@ -49,5 +57,72 @@ public class DeviceController {
             return R.error(e.getMessage());
         }
 	}
+
+    @RequestMapping(value = "/device/network", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+	public R listNetwork() {
+        try {
+            R r = R.ok();
+            r.put("server", envCenter.getServerNodeList());
+            r.put("camera", envCenter.getCameraInfoList());
+
+            List<CameraInfo> result = new ArrayList<CameraInfo>();
+            result.addAll(envCenter.getNvrInfoList());
+            result.addAll(envCenter.getVideoInfoList());
+
+            r.put("control", result);
+            return r;
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/device/server/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public R createServerNode(@RequestBody @Valid ServerForm serverForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return R.error(handleError(bindingResult));
+        }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ServerNode serverNode = objectMapper.convertValue(serverForm, ServerNode.class);
+            envCenter.crateNode(serverNode, Constant.ConfigEnvType.SERVERNODE.getValue());
+            return R.ok();
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/device/camera/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public R createCamerNode(@RequestBody @Valid CameraForm cameraForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return R.error(handleError(bindingResult));
+        }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            CameraInfo cameraNode = objectMapper.convertValue(cameraForm, CameraInfo.class);
+            envCenter.crateNode(cameraNode, Constant.ConfigEnvType.CAMERA.getValue());
+            return R.ok();
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/device/video/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public R createVideo(@RequestBody @Valid CameraForm cameraForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return R.error(handleError(bindingResult));
+        }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            CameraInfo cameraNode = objectMapper.convertValue(cameraForm, CameraInfo.class);
+            envCenter.crateNode(cameraNode, Constant.ConfigEnvType.CAMERA.getValue());
+            return R.ok();
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
 	
 }

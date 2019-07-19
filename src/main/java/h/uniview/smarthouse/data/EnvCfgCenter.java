@@ -1,17 +1,6 @@
 package h.uniview.smarthouse.data;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import h.uniview.smarthouse.utils.Constant.ConfigEnvType;
 import org.apache.commons.beanutils.BeanUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -26,9 +15,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import h.uniview.smarthouse.utils.Constant.ConfigEnvType;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 @Service
 @Order(1)
@@ -86,7 +79,6 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		
 		List<Field> fieldList = listField(clazz);
 		fieldList.forEach(f -> {
-			System.out.println(f.getName());
 			// 添加值到节点中
 			try {
 				Object o = getFieldValue(f, object);

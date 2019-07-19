@@ -195,7 +195,6 @@ function showBasicInfo() {
     	dataType: "json",
     	success: function (r) {
       		if (r.code === 0) {
-        		alert(JSON.stringify(r));
         		var workStation = r.workStation;
         		$("#bi_ws_name").val(workStation.name);
                 $("#bi_ws_code").val(workStation.code);

@@ -53,7 +53,7 @@
     <div class="locaName"><i class="fa fa-pie-chart"></i><label>数据上传信息配置</label></div>
     <div class="Lpush"><button data-toggle="modal" data-target="#largesizemodaladd"><i class="fa fa-plus"></i></button></div>
     <div class="col-lg-12 net_con">
-      <table class="table table-bordered table-sm">
+      <table class="table table-bordered table-sm" id="_nt_ctrl_table">
         <thead>
         <tr>
           <th scope="col">设备名称</th>
@@ -423,25 +423,92 @@
 </div>
 </div>
 
-
-
-<script src="../assets/js/jquery.min.js"></script>
-<script src="../assets/js/popper.min.js"></script>
-<script src="../assets/js/bootstrap.min.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script data-th-src="@{/assets/js/jquery.min.js}"></script>
+<script data-th-src="@{/assets/js/popper.min.js}"></script>
+<script data-th-src="@{/assets/js/bootstrap.min.js}"></script>
 <!-- simplebar js -->
-<script src="../assets/plugins/simplebar/js/simplebar.js"></script>
+<script data-th-src="@{/assets/plugins/simplebar/js/simplebar.js}"></script>
 <!-- sidebar-menu js -->
-<script src="../assets/js/sidebar-menu.js"></script>
+<script data-th-src="@{/assets/js/sidebar-menu.js}"></script>
 <!-- Custom scripts -->
-<script src="../assets/js/app-script.js"></script>
-<script src="../assets/js/political_WeCall.js"></script>
-
+<script data-th-src="@{/assets/js/app-script.js}"></script>
+<script data-th-src="@{/assets/js/political_WeCall.js}"></script>
 <!--Data Tables js-->
-<script src="../assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js"></script>
-<script src="../assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js"></script>
-<script src="../assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js}"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js}"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js}"></script>
 
+<script>
+  function deviceControl() {
+    var reqParam = {};
+    $.ajax({
+      type: "post",
+      contentType: "application/json;charset=UTF-8",
+      url: "/smart-house/device/network",
+      data: JSON.stringify(reqParam),
+      dataType: "json",
+      success: function (r) {
+        if (r.code === 0) {
+          // alert(JSON.stringify(r));
+          this.handleServerNodeRender(r.server);
+        } else {
+          alert(r.msg);
+        }
+      },
+      error: function (XMLhttpRequest, textStatus, errorThrown) {
+        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+      }
+    });
+  }
 
+  function handleServerNodeRender(rlistdata) {
+    var hstr = "";
+    $.each(rlistdata,function(n,v) {
+      hstr += "<tr>";
+      hstr += "<td>"+v.name+"</td>";
+      hstr += "<td>"+v.status+"</td>";
+      hstr += "<td>"+v.workModel+"</td>";
+      hstr += "<td>"+v.iP+"</td>";
+      hstr += "<td>"+v.port+"</td>";
+      hstr += "<td>"+v.typeName+"</td>";
+      hstr += "<td>"+v.mess+"</td>";
+      hstr += "</tr>";
+    });
+    $("#_nt_ctrl_table tbody").html(hstr);
+  }
+
+  function handleCameraNodeRender(rlistdata) {
+    var hstr = "";
+    $.each(rlistdata, function (n, v) {
+      hstr += "<tr>";
+      hstr += "<td>" + v.name + "</td>";
+      hstr += "<td>" + v.status + "</td>";
+      hstr += "<td>" + v.workModel + "</td>";
+      hstr += "<td>" + v.iP + "</td>";
+      hstr += "<td>" + v.port + "</td>";
+      hstr += "<td>" + v.typeName + "</td>";
+      hstr += "<td>" + v.mess + "</td>";
+      hstr += "</tr>";
+    });
+  }
+
+  function handleVideoNodeRender(rlistdata) {
+    var hstr = "";
+    $.each(rlistdata, function (n, v) {
+      hstr += "<tr>";
+      hstr += "<td>" + v.name + "</td>";
+      hstr += "<td>" + v.status + "</td>";
+      hstr += "<td>" + v.workModel + "</td>";
+      hstr += "<td>" + v.iP + "</td>";
+      hstr += "<td>" + v.port + "</td>";
+      hstr += "<td>" + v.typeName + "</td>";
+      hstr += "<td>" + v.mess + "</td>";
+      hstr += "</tr>";
+    });
+  }
+  deviceControl();
+</script>
 
 </body>
 </html>
