@@ -25,11 +25,11 @@ public class ServerNode implements Serializable {
 		this.name = name;
 	}
 
-	public String getiP() {
+	public String getIP() {
 		return iP;
 	}
 
-	public void setiP(String iP) {
+	public void setIP(String iP) {
 		this.iP = iP;
 	}
 

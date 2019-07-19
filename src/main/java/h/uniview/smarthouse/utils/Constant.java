@@ -32,27 +32,21 @@ public class Constant {
 		}
 	}
 
-	public enum MenuType {
-		/**
-		 * 目录
-		 */
-		CATALOG(0),
-		/**
-		 * 菜单
-		 */
-		MENU(1),
-		/**
-		 * 按钮
-		 */
-		BUTTON(2);
+	public enum ConfigEnvType {
+		WROKSTATION("/Configuration/WorkstationMsg"),
+		CONFIGDATA("/Configuration/ConfigMsg"),
+		CAMERA("/Configuration/DevMsg/CameraMsg/CameraInfo"),
+		NVR("/Configuration/DevMsg/NVRMSG/NVRInfo"),
+		VIDEO("/Configuration/DevMsg/VideoMsg/VideoNodeInfo"),
+		SERVERNODE("/Configuration/ServerMsg/ServerNodeInfo");
 
-		private int value;
+		private String value;
 
-		MenuType(int value) {
+		ConfigEnvType(String value) {
 			this.value = value;
 		}
 
-		public int getValue() {
+		public String getValue() {
 			return value;
 		}
 	}

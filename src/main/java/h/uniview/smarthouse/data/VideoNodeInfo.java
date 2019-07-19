@@ -2,7 +2,7 @@ package h.uniview.smarthouse.data;
 
 import java.io.Serializable;
 
-public class VideoInfo extends CameraInfo implements Serializable {
+public class VideoNodeInfo extends CameraInfo implements Serializable {
 
 	/**
 	 * 

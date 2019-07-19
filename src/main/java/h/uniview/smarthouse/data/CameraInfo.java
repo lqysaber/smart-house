@@ -58,11 +58,11 @@ public class CameraInfo implements Serializable {
 		this.workModel = workModel;
 	}
 
-	public String getiP() {
+	public String getIP() {
 		return iP;
 	}
 
-	public void setiP(String iP) {
+	public void setIP(String iP) {
 		this.iP = iP;
 	}
 

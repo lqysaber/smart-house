@@ -12,46 +12,46 @@ public class ServerForm implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull
-	private String Name;
+	private String name;
 	
 	@NotNull
-	private String IP;
+	private String ip;
 	
 	@NotNull
-	private int Port;
+	private int port;
 	
+	private String mess;
+
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
-	public String getIP() {
-		return IP;
+	public String getIp() {
+		return ip;
 	}
 
-	public void setIP(String iP) {
-		IP = iP;
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public int getPort() {
-		return Port;
+		return port;
 	}
 
 	public void setPort(int port) {
-		Port = port;
+		this.port = port;
 	}
 
 	public String getMess() {
-		return Mess;
+		return mess;
 	}
 
 	public void setMess(String mess) {
-		Mess = mess;
+		this.mess = mess;
 	}
-
-	private String Mess;
-
+	
 }
