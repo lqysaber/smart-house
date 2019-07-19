@@ -9,52 +9,50 @@ public class VideoInfo extends CameraInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String LoginName;
-	private String LoginPwd;
-	private String ChannelID;
-	private String HardDiskUsage;
-
+	private String loginName;
+	private String loginPwd;
+	private String channelID;
+	private String hardDiskUsage;
 
 	public String getLoginName() {
-		return LoginName;
+		return loginName;
 	}
 
 	public void setLoginName(String loginName) {
-		LoginName = loginName;
+		this.loginName = loginName;
 	}
 
 	public String getLoginPwd() {
-		return LoginPwd;
+		return loginPwd;
 	}
 
 	public void setLoginPwd(String loginPwd) {
-		LoginPwd = loginPwd;
+		this.loginPwd = loginPwd;
 	}
 
 	public String getChannelID() {
-		return ChannelID;
+		return channelID;
 	}
 
 	public void setChannelID(String channelID) {
-		ChannelID = channelID;
+		this.channelID = channelID;
 	}
 
 	public String getHardDiskUsage() {
-		return HardDiskUsage;
+		return hardDiskUsage;
 	}
 
 	public void setHardDiskUsage(String hardDiskUsage) {
-		HardDiskUsage = hardDiskUsage;
+		this.hardDiskUsage = hardDiskUsage;
 	}
 
 	@Override
 	public String toString() {
-		return "BVideoInfo{" +
-				"LoginName='" + LoginName + '\'' +
-				", LoginPwd='" + LoginPwd + '\'' +
-				", ChannelID='" + ChannelID + '\'' +
-				", HardDiskUsage='" + HardDiskUsage + '\'' +
-				", CameraInfo='" + super.toString() + '\'' +
+		return "VideoInfo{" +
+				"loginName='" + loginName + '\'' +
+				", loginPwd='" + loginPwd + '\'' +
+				", channelID='" + channelID + '\'' +
+				", hardDiskUsage='" + hardDiskUsage + '\'' +
 				'}';
 	}
 }

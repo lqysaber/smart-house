@@ -1,15 +1,6 @@
 package h.uniview.smarthouse.data;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import org.apache.commons.beanutils.BeanUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -21,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Serializable;
+import java.util.*;
 
 @Service
 @Order(1)
@@ -162,66 +158,43 @@ public class EnvCfgCenter implements CommandLineRunner,Serializable {
         Iterator<?> it = element.elementIterator();
         while(it.hasNext()) {
             Element tmp = (Element) it.next();
-            map.put(tmp.getName(), tmp.getTextTrim());
+            map.put(lowerFirst(tmp.getName()), emptyStr(tmp.getTextTrim()));
         }
 
         Iterator<?> attrIT = element.attributeIterator();
         while(attrIT.hasNext()) {
             Attribute tmp = (Attribute) attrIT.next();
-            map.put(tmp.getName(), tmp.getValue());
+            map.put(lowerFirst(tmp.getName()), emptyStr(tmp.getValue()));
         }
 
         return mapToBean(map, clazz);
     }
+
+	public static String lowerFirst(String oldStr){
+		char[]chars = oldStr.toCharArray();
+		chars[0] += 32;
+		return String.valueOf(chars);
+	}
+
+	public static String emptyStr(String value) {
+    	if(null == value){
+    		return "";
+		}
+    	return value;
+	}
 
 	public static <T> T mapToBean(Map<String, String> map, Class<T> clazz) throws Exception {
 		T obj = clazz.newInstance();
 		if(null == map || map.isEmpty()) {
 			return obj;
 		}
-		map.forEach((propertyName, value) -> {
-			String setMethodName = "set" + propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
-			Field field = getClassField(clazz, propertyName);
-			Class<?> fieldTypeClass = field.getType();
-//			clazz.getMethod(setMethodName, field.getType()).invoke(obj, convertValType(value, fieldTypeClass));
-		});
+		BeanUtils.populate(obj, map);
 		return obj;
-	}
-
-	private static <T> T convertValType(String value, Class<T> fieldTypeClass) {
-		if(fieldTypeClass instanceof String)
-		return null;
-	}
-
-	private static Field getClassField(Class<?> clazz, String fieldName) {
-		if (Object.class.getName().equals(clazz.getName())) {
-			return null;
-		}
-		Field[] declaredFields = clazz.getDeclaredFields();
-		for (Field field : declaredFields) {
-			if (field.getName().equals(fieldName)) {
-				return field;
-			}
-		}
-
-		Class<?> superClass = clazz.getSuperclass();
-		if (superClass != null) {// 简单的递归一下
-			return getClassField(superClass, fieldName);
-		}
-		return null;
 	}
 
 	public static void main(String[] args) throws Exception {
 		
-		System.out.println(Long.class);
-		System.out.println(long.class);
-		System.out.println(Long.class.getName());
-		
-		Field f = getClassField(VideoInfo.class, "Name");
-		System.out.println(f);
-		System.out.println(f.getType());
-		
-//		initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
+		new EnvCfgCenter().initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
 		
 //		initialConfigData("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
 	}

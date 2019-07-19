@@ -9,31 +9,31 @@ public class WorkstationMsg implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String Name;
+	private String name;
 	
-	private String Code;
+	private String code;
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		this.Name = name;
+		this.name = name;
 	}
 
 	public String getCode() {
-		return Code;
+		return code;
 	}
 
 	public void setCode(String code) {
-		this.Code = code;
+		this.code = code;
 	}
 
 	@Override
 	public String toString() {
 		return "WorkstationMsg{" +
-				"Name='" + Name + '\'' +
-				", Code='" + Code + '\'' +
+				"name='" + name + '\'' +
+				", code='" + code + '\'' +
 				'}';
 	}
 }

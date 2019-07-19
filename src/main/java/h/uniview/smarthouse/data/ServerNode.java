@@ -9,53 +9,53 @@ public class ServerNode implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String Name;
+	private String name;
 	
-	private String IP;
+	private String iP;
 	
-	private int Port;
+	private int port;
 	
-	private String Mess;
+	private String mess;
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
-	public String getIP() {
-		return IP;
+	public String getiP() {
+		return iP;
 	}
 
-	public void setIP(String IP) {
-		this.IP = IP;
+	public void setiP(String iP) {
+		this.iP = iP;
 	}
 
 	public int getPort() {
-		return Port;
+		return port;
 	}
 
 	public void setPort(int port) {
-		Port = port;
+		this.port = port;
 	}
 
 	public String getMess() {
-		return Mess;
+		return mess;
 	}
 
 	public void setMess(String mess) {
-		Mess = mess;
+		this.mess = mess;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ServerNode{" +
-				"Name='" + Name + '\'' +
-				", IP='" + IP + '\'' +
-				", Port='" + Port + '\'' +
-				", Mess='" + Mess + '\'' +
+				"name='" + name + '\'' +
+				", iP='" + iP + '\'' +
+				", port=" + port +
+				", mess='" + mess + '\'' +
 				'}';
 	}
 }

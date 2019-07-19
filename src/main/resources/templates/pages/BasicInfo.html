@@ -55,18 +55,18 @@
            <div class="form-group row">
             <label  class="col-sm-2 col-form-label text-right">站点名称:</label>
             <div class="col-sm-10 input-group-sm">
-              <input type="text" class="form-control" placeholder="站点名称">
+              <input type="text" class="form-control" placeholder="站点名称" id="bi_ws_name"/>
             </div>
           </div>
           <div class="form-group row">
             <label for="input-22" class="col-sm-2 col-form-label text-right">站点编号:</label>
             <div class="col-sm-10 input-group-sm">
-              <input type="text" class="form-control" placeholder="001">
+              <input type="text" class="form-control" placeholder="001" id="bi_ws_code"/>
             </div>
           </div>
         </form>
       </div>
-      <div class="col-lg-2"><button type="button" class="btn btn-primary"> 保存</button></div>
+      <div class="col-lg-2"><button type="button" class="btn btn-primary" id="bi_ws_update"> 保存</button></div>
     </div>
   </div>
 </div>
@@ -80,18 +80,18 @@
        <div class="form-group row">
         <label  class="col-sm-2 col-form-label text-right">配置信息文件路径:</label>
         <div class="col-sm-10 input-group-sm">
-          <input type="text" class="form-control" placeholder="">
+          <input type="text" class="form-control" placeholder="" id="bi_cfg_lf_dir" />
         </div>
       </div>
       <div class="form-group row">
         <label for="input-22" class="col-sm-2 col-form-label text-right">环境数据文件路径:</label>
         <div class="col-sm-10 input-group-sm">
-          <input type="text" class="form-control" placeholder="">
+          <input type="text" class="form-control" placeholder="" id="bi_cfg_env_dir" />
         </div>
       </div>
     </form>
   </div>
-  <div class="col-lg-2"><button type="button" class="btn btn-primary"> 保存</button></div>
+  <div class="col-lg-2"><button type="button" class="btn btn-primary" id="bi_cfg_update1"> 保存</button></div>
 </div>
 </div>
 </div>
@@ -105,37 +105,31 @@
        <div class="form-group row">
         <label  class="col-sm-2 col-form-label text-right">室外图像采集路径:</label>
         <div class="col-sm-10 input-group-sm">
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" id="bi_pt_dir" />
         </div>
       </div>
       <div class="form-group row">
         <label for="input-22" class="col-sm-2 col-form-label text-right">室外图像归档:</label>
         <div class="col-sm-10 input-group-sm">
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" id="bi_pt_hs_dir" />
         </div>
       </div>
       <div class="form-group row">
         <label for="input-22" class="col-sm-2 col-form-label text-right">视频监控截图路径:</label>
         <div class="col-sm-10 input-group-sm">
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" id="bi_ve_pt_dir" />
         </div>
       </div>
       <div class="form-group row">
         <label for="input-22" class="col-sm-2 col-form-label text-right">视频监控录像路径:</label>
         <div class="col-sm-10 input-group-sm">
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" id="bi_ve_ve_dir" />
         </div>
       </div>
       <div class="form-group row">
         <label for="input-22" class="col-sm-2 col-form-label text-right">移动侦截图路径:</label>
         <div class="col-sm-10 input-group-sm">
-          <input type="text" class="form-control">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="input-22" class="col-sm-2 col-form-label text-right">硬盘录像机使用率:</label>
-        <div class="col-sm-10 input-group-sm">
-          <input type="text" class="form-control">
+          <input type="text" class="form-control"  id="bi_pt_mt_dir" />/>
         </div>
       </div>
     </form>
@@ -167,13 +161,16 @@ function showBasicInfo() {
   	$.ajax({
     	type: "post",
     	contentType: "application/json;charset=UTF-8",
-    	url: "/smart-house/device/list",
+    	url: "/smart-house/device/show",
     	data: JSON.stringify(reqParam),
     	dataType: "json",
     	success: function (r) {
       		if (r.code === 0) {
-        		alert(JSON.stringify(r.msg));
-        		handleListRender(r.msg.list);
+        		alert(JSON.stringify(r));
+        		var workStation = r.workStation;
+        		#("#bi_ws_name").val(workStation.name);
+                #("#bi_ws_code").val(workStation.code);
+        		var cfgInfo = r.cfgInfo;
 			} else {
 		        alert(r.msg);
 		    }
@@ -186,20 +183,8 @@ function showBasicInfo() {
    
 function handleListRender(rlistdata) {
 	var hstr = "";
-	$.each(rlistdata,function(n,v) {
-		hstr += "<tr>";
-		hstr += "<td>"+v.name+"</td>";
-		hstr += "<td>"+v.status+"</td>";
-		hstr += "<td>"+v.workModel+"</td>";
-		hstr += "<td>"+v.ip+"</td>";
-		hstr += "<td>"+v.port+"</td>";
-		hstr += "<td>"+v.typeName+"</td>";
-		hstr += "<td>"+v.mess+"</td>";
-		hstr += "</tr>";
-	});
-	$("#example tbody").html(hstr);
 }
-listDevice();
+showBasicInfo();
 </script>
 </body>
 </html>

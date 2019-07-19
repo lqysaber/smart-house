@@ -9,90 +9,90 @@ public class CameraInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String Type;
-	private String TypeName;
-	private String Name;
-	private String Status;
-	private String WorkModel;
-	private String IP;
-	private String Port;
-	private String Mess;
+	private String type;
+	private String typeName;
+	private String name;
+	private String status;
+	private String workModel;
+	private String iP;
+	private String port;
+	private String mess;
 
 	public String getType() {
-		return Type;
+		return type;
 	}
 
 	public void setType(String type) {
-		Type = type;
+		this.type = type;
 	}
 
 	public String getTypeName() {
-		return TypeName;
+		return typeName;
 	}
 
 	public void setTypeName(String typeName) {
-		TypeName = typeName;
+		this.typeName = typeName;
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public String getStatus() {
-		return Status;
+		return status;
 	}
 
 	public void setStatus(String status) {
-		Status = status;
+		this.status = status;
 	}
 
 	public String getWorkModel() {
-		return WorkModel;
+		return workModel;
 	}
 
 	public void setWorkModel(String workModel) {
-		WorkModel = workModel;
+		this.workModel = workModel;
 	}
 
-	public String getIP() {
-		return IP;
+	public String getiP() {
+		return iP;
 	}
 
-	public void setIP(String IP) {
-		this.IP = IP;
+	public void setiP(String iP) {
+		this.iP = iP;
 	}
 
 	public String getPort() {
-		return Port;
+		return port;
 	}
 
 	public void setPort(String port) {
-		Port = port;
+		this.port = port;
 	}
 
 	public String getMess() {
-		return Mess;
+		return mess;
 	}
 
 	public void setMess(String mess) {
-		Mess = mess;
+		this.mess = mess;
 	}
 
 	@Override
 	public String toString() {
 		return "CameraInfo{" +
-				"Type='" + Type + '\'' +
-				", TypeName='" + TypeName + '\'' +
-				", Name='" + Name + '\'' +
-				", Status='" + Status + '\'' +
-				", WorkModel='" + WorkModel + '\'' +
-				", IP='" + IP + '\'' +
-				", Port='" + Port + '\'' +
-				", Mess='" + Mess + '\'' +
+				"type='" + type + '\'' +
+				", typeName='" + typeName + '\'' +
+				", name='" + name + '\'' +
+				", status='" + status + '\'' +
+				", workModel='" + workModel + '\'' +
+				", iP='" + iP + '\'' +
+				", port='" + port + '\'' +
+				", mess='" + mess + '\'' +
 				'}';
 	}
 }

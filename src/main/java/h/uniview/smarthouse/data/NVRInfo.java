@@ -9,51 +9,51 @@ public class NVRInfo extends CameraInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String LoginName;
-	private String LoginPwd;
-	private String ChannelSum;
-	private String HardDiskUsage;
+	private String loginName;
+	private String loginPwd;
+	private String channelSum;
+	private String hardDiskUsage;
 
 	public String getLoginName() {
-		return LoginName;
+		return loginName;
 	}
 
 	public void setLoginName(String loginName) {
-		LoginName = loginName;
+		this.loginName = loginName;
 	}
 
 	public String getLoginPwd() {
-		return LoginPwd;
+		return loginPwd;
 	}
 
 	public void setLoginPwd(String loginPwd) {
-		LoginPwd = loginPwd;
+		this.loginPwd = loginPwd;
 	}
 
 	public String getChannelSum() {
-		return ChannelSum;
+		return channelSum;
 	}
 
 	public void setChannelSum(String channelSum) {
-		ChannelSum = channelSum;
+		this.channelSum = channelSum;
 	}
 
 	public String getHardDiskUsage() {
-		return HardDiskUsage;
+		return hardDiskUsage;
 	}
 
 	public void setHardDiskUsage(String hardDiskUsage) {
-		HardDiskUsage = hardDiskUsage;
+		this.hardDiskUsage = hardDiskUsage;
 	}
 
 	@Override
 	public String toString() {
 		return "NVRInfo{" +
-				"LoginName='" + LoginName + '\'' +
-				", LoginPwd='" + LoginPwd + '\'' +
-				", ChannelSum='" + ChannelSum + '\'' +
-				", HardDiskUsage='" + HardDiskUsage + '\'' +
-				", CameraInfo='" + super.toString() + '\'' +
+				"loginName='" + loginName + '\'' +
+				", loginPwd='" + loginPwd + '\'' +
+				", channelSum='" + channelSum + '\'' +
+				", hardDiskUsage='" + hardDiskUsage + '\'' +
+				", " + super.toString() +
 				'}';
 	}
 }
