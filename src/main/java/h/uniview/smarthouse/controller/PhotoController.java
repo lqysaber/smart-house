@@ -1,9 +1,11 @@
 package h.uniview.smarthouse.controller;
 
+import h.uniview.smarthouse.data.PropCenter;
 import h.uniview.smarthouse.form.PhotoForm;
 import h.uniview.smarthouse.utils.FileUtils;
 import h.uniview.smarthouse.utils.PageUtils;
 import h.uniview.smarthouse.utils.R;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,10 @@ import java.util.List;
 
 @RestController
 public class PhotoController extends BaseController {
-	
+
+    @Autowired
+    PropCenter propCenter;
+
 	String path = "C:\\Users\\HugoLi\\Downloads\\子骏\\入册\\";
 	@RequestMapping(value = "/photo/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody

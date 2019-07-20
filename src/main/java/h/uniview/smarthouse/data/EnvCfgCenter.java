@@ -1,7 +1,6 @@
 package h.uniview.smarthouse.data;
 
-import h.uniview.smarthouse.utils.Constant.ConfigEnvType;
-import org.apache.commons.beanutils.BeanUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -164,13 +163,13 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		Iterator<?> it = element.elementIterator();
 		while (it.hasNext()) {
 			Element tmp = (Element) it.next();
-			map.put(lowerFirst(tmp.getName()), emptyStr(tmp.getTextTrim()));
+			map.put(lowerFirst(convertNodeName(tmp.getName())), emptyStr(tmp.getTextTrim()));
 		}
 
 		Iterator<?> attrIT = element.attributeIterator();
 		while (attrIT.hasNext()) {
 			Attribute tmp = (Attribute) attrIT.next();
-			map.put(lowerFirst(tmp.getName()), emptyStr(tmp.getValue()));
+			map.put(lowerFirst(convertNodeName(tmp.getName())), emptyStr(tmp.getValue()));
 		}
 
 		return mapToBean(map, clazz);
@@ -201,11 +200,13 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 	}
 
 	public static <T> T mapToBean(Map<String, String> map, Class<T> clazz) throws Exception {
-		T obj = clazz.newInstance();
 		if (null == map || map.isEmpty()) {
-			return obj;
+			return null;
 		}
-		BeanUtils.populate(obj, map);
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		T obj = objectMapper.convertValue(map, clazz);
+
 		return obj;
 	}
 
@@ -241,7 +242,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		env.setConfigEnvDir("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
 
 		CameraInfo o = new CameraInfo();
-		o.setIP("192.169.2.2");
+		o.setIp("192.169.2.2");
 		o.setMess("mark");
 		o.setName("test.li");
 		o.setPort("6379");
@@ -249,9 +250,9 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		o.setType("photo 222222");
 		
 //		env.crateNode(o, ConfigEnvType.CAMERA.getValue());
-		env.deleteNode(ConfigEnvType.CAMERA.getValue(), 2);
+//		env.deleteNode(ConfigEnvType.CAMERA.getValue(), 2);
 
-//		new EnvCfgCenter().initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
+		new EnvCfgCenter().initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
 
 //		new EnvCfgCenter().initialConfigData("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
 	}
@@ -288,6 +289,13 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 	public void run(String... args) throws Exception {
 		this.configEnvDir = propCenter.getConfigDir();
 		this.initialConfigData(configEnvDir);
+	}
+
+	public static String convertNodeName(String name) {
+		if("IP".equals(name)) {
+			return "Ip";
+		}
+		return name;
 	}
 
 }

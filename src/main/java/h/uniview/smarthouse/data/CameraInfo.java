@@ -9,12 +9,12 @@ public class CameraInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String type;
-	private String typeName;
+	private String type = "";
+	private String typeName = "";
 	private String name;
 	private String status;
 	private String workModel;
-	private String iP;
+	private String ip;
 	private String port;
 	private String mess;
 
@@ -58,12 +58,12 @@ public class CameraInfo implements Serializable {
 		this.workModel = workModel;
 	}
 
-	public String getIP() {
-		return iP;
+	public String getIp() {
+		return ip;
 	}
 
-	public void setIP(String iP) {
-		this.iP = iP;
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public String getPort() {
@@ -90,7 +90,7 @@ public class CameraInfo implements Serializable {
 				", name='" + name + '\'' +
 				", status='" + status + '\'' +
 				", workModel='" + workModel + '\'' +
-				", iP='" + iP + '\'' +
+				", ip='" + ip + '\'' +
 				", port='" + port + '\'' +
 				", mess='" + mess + '\'' +
 				'}';

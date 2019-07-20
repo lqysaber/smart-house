@@ -53,7 +53,7 @@
     <div class="locaName"><i class="fa fa-pie-chart"></i><label>数据上传信息配置</label></div>
     <div class="Lpush"><button data-toggle="modal" data-target="#largesizemodaladd"><i class="fa fa-plus"></i></button></div>
     <div class="col-lg-12 net_con">
-      <table class="table table-bordered table-sm" id="_nt_ctrl_table">
+      <table class="table table-bordered table-sm" id="_nt_server_table">
         <thead>
         <tr>
           <th scope="col">设备名称</th>
@@ -64,37 +64,17 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">测试服务器</th>
-          <td>192.168.1.12</td>
-          <td>80</td>
-          <td>@</td>
-          <td>
-            <button  data-toggle="modal" data-target="#largesizemodal"><i class="fa fa-edit"></i></button>
-            <button><i class="fa fa-trash-o"></i></button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">省中心站</th>
-          <td>192.168.1.12</td>
-          <td>80</td>
-          <td></td>
-          <td>
-            <button data-toggle="modal" data-target="#largesizemodal"><i class="fa fa-edit"></i></button>
-            <button><i class="fa fa-trash-o"></i></button>
-          </td>
-        </tr>
-
         </tbody>
       </table>
     </div>
   </div>
+
   <!-- 监控设备信息配置-->
   <div class="row BasCon">
     <div class="locaName"><i class="fa fa-video-camera"></i><label>监控设备信息配置</label></div>
     <div class="Lpush"><button  data-toggle="modal" data-target="#Deviceadd"><i class="fa fa-plus"></i></button></div>
     <div class="col-lg-12 net_con">
-      <table class="table table-bordered table-sm">
+      <table class="table table-bordered table-sm" id="_nt_video_table">
         <thead>
         <tr>
           <th scope="col">设备名称</th>
@@ -106,29 +86,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">NVR</th>
-          <td></td>
-          <td>192.168.1.12</td>
-          <td>80</td>
-          <td>硬盘录像机</td>
-          <td>
-            <button  data-toggle="modal" data-target="#Device"><i class="fa fa-edit"></i></button>
-            <button><i class="fa fa-trash-o"></i></button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">宇视1号球机</th>
-          <td></td>
-          <td>192.168.1.12</td>
-          <td>80</td>
-          <td>室内监控球机</td>
-          <td>
-            <button  data-toggle="modal" data-target="#Device"><i class="fa fa-edit"></i></button>
-            <button><i class="fa fa-trash-o"></i></button>
-          </td>
-        </tr>
-
         </tbody>
       </table>
     </div>
@@ -138,7 +95,7 @@
     <div class="locaName"><i class="fa fa-photo"></i><label>能见度相机信息配置</label></div>
     <div class="Lpush"><button  data-toggle="modal" data-target="#largesizemodaladd"><i class="fa fa-plus"></i></button></div>
     <div class="col-lg-12 net_con">
-      <table class="table table-bordered table-sm">
+      <table class="table table-bordered table-sm" id="_nt_camera_table">
         <thead>
         <tr>
           <th scope="col">设备名称</th>
@@ -150,18 +107,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">1号机</th>
-          <td>在线</td>
-          <td>192.168.1.12</td>
-          <td>80</td>
-          <td>能见度工业相机</td>
-          <td>
-            <button  data-toggle="modal" data-target="#largesizemodal"><i class="fa fa-edit"></i></button>
-            <button><i class="fa fa-trash-o"></i></button>
-          </td>
-        </tr>
-
         </tbody>
       </table>
     </div>
@@ -451,7 +396,9 @@
       success: function (r) {
         if (r.code === 0) {
           // alert(JSON.stringify(r));
-          this.handleServerNodeRender(r.server);
+          handleServerNodeRender(r.server);
+          handleCameraNodeRender(r.camera);
+          handleVideoNodeRender(r.video);
         } else {
           alert(r.msg);
         }
@@ -465,47 +412,51 @@
   function handleServerNodeRender(rlistdata) {
     var hstr = "";
     $.each(rlistdata,function(n,v) {
-      hstr += "<tr>";
-      hstr += "<td>"+v.name+"</td>";
-      hstr += "<td>"+v.status+"</td>";
-      hstr += "<td>"+v.workModel+"</td>";
-      hstr += "<td>"+v.iP+"</td>";
-      hstr += "<td>"+v.port+"</td>";
-      hstr += "<td>"+v.typeName+"</td>";
-      hstr += "<td>"+v.mess+"</td>";
-      hstr += "</tr>";
+      hstr += "<tr>" +
+          "<th scope=\"row\">"+v.name+"</th>" +
+          "<td>"+v.ip+"</td>" +
+          "<td>"+v.port+"</td>" +
+          "<td>"+v.mess+"</td>" +
+          "<td>" +
+          "<button  data-toggle=\"modal\" data-target=\"#largesizemodal\"><i class=\"fa fa-edit\"></i></button>" +
+          "<button><i class=\"fa fa-trash-o\"></i></button>" +
+          "</td></tr>";
     });
-    $("#_nt_ctrl_table tbody").html(hstr);
+    $("#_nt_server_table tbody").html(hstr);
   }
 
   function handleCameraNodeRender(rlistdata) {
     var hstr = "";
     $.each(rlistdata, function (n, v) {
-      hstr += "<tr>";
-      hstr += "<td>" + v.name + "</td>";
-      hstr += "<td>" + v.status + "</td>";
-      hstr += "<td>" + v.workModel + "</td>";
-      hstr += "<td>" + v.iP + "</td>";
-      hstr += "<td>" + v.port + "</td>";
-      hstr += "<td>" + v.typeName + "</td>";
-      hstr += "<td>" + v.mess + "</td>";
-      hstr += "</tr>";
+      hstr += "<tr>" +
+              "<th scope=\"row\">"+v.name+"</th>" +
+              "<td>"+v.status+"</td>" +
+              "<td>"+v.ip+"</td>" +
+              "<td>"+v.port+"</td>" +
+              "<td>"+v.mess+"</td>" +
+              "<td>" +
+              "<button  data-toggle=\"modal\" data-target=\"#largesizemodal\"><i class=\"fa fa-edit\"></i></button>" +
+              "<button><i class=\"fa fa-trash-o\"></i></button>" +
+              "</td></tr>";
     });
+    $("#_nt_camera_table tbody").html(hstr);
   }
 
   function handleVideoNodeRender(rlistdata) {
     var hstr = "";
     $.each(rlistdata, function (n, v) {
-      hstr += "<tr>";
-      hstr += "<td>" + v.name + "</td>";
-      hstr += "<td>" + v.status + "</td>";
-      hstr += "<td>" + v.workModel + "</td>";
-      hstr += "<td>" + v.iP + "</td>";
-      hstr += "<td>" + v.port + "</td>";
-      hstr += "<td>" + v.typeName + "</td>";
-      hstr += "<td>" + v.mess + "</td>";
-      hstr += "</tr>";
+      hstr += "<tr>" +
+              "<th scope=\"row\">"+v.name+"</th>" +
+              "<td>"+""+"</td>" +
+              "<td>"+v.ip+"</td>" +
+              "<td>"+v.port+"</td>" +
+              "<td>"+v.typeName+"</td>" +
+              "<td>" +
+              "<button  data-toggle=\"modal\" data-target=\"#Device\"><i class=\"fa fa-edit\"></i></button>" +
+              "<button><i class=\"fa fa-trash-o\"></i></button>" +
+              "</td></tr>";
     });
+    $("#_nt_video_table tbody").html(hstr);
   }
   deviceControl();
 </script>

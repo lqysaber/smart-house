@@ -70,7 +70,7 @@ public class DeviceController extends BaseController {
             result.addAll(envCenter.getNvrInfoList());
             result.addAll(envCenter.getVideoInfoList());
 
-            r.put("control", result);
+            r.put("video", result);
             return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
@@ -124,5 +124,5 @@ public class DeviceController extends BaseController {
             return R.error(e.getMessage());
         }
     }
-	
+
 }

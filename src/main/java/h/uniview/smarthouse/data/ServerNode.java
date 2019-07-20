@@ -11,7 +11,7 @@ public class ServerNode implements Serializable {
 
 	private String name;
 	
-	private String iP;
+	private String ip;
 	
 	private int port;
 	
@@ -25,12 +25,12 @@ public class ServerNode implements Serializable {
 		this.name = name;
 	}
 
-	public String getIP() {
-		return iP;
+	public String getIp() {
+		return ip;
 	}
 
-	public void setIP(String iP) {
-		this.iP = iP;
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 	public int getPort() {
@@ -53,7 +53,7 @@ public class ServerNode implements Serializable {
 	public String toString() {
 		return "ServerNode{" +
 				"name='" + name + '\'' +
-				", iP='" + iP + '\'' +
+				", ip='" + ip + '\'' +
 				", port=" + port +
 				", mess='" + mess + '\'' +
 				'}';
