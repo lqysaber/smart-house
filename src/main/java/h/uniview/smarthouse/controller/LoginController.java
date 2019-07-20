@@ -1,10 +1,12 @@
 package h.uniview.smarthouse.controller;
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import h.uniview.smarthouse.data.PropCenter;
+import h.uniview.smarthouse.data.UserXMLCenter;
+import h.uniview.smarthouse.entity.UserEntity;
+import h.uniview.smarthouse.service.UserService;
+import h.uniview.smarthouse.utils.MD5Utils;
+import h.uniview.smarthouse.utils.R;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +17,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import h.uniview.smarthouse.data.PropCenter;
-import h.uniview.smarthouse.entity.UserEntity;
-import h.uniview.smarthouse.service.UserService;
-import h.uniview.smarthouse.utils.MD5Utils;
-import h.uniview.smarthouse.utils.R;
 
 @Controller
 public class LoginController extends BaseController {
@@ -34,6 +30,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserXMLCenter userXMLCenter;
 
     @GetMapping("/login")
     public String login() {
@@ -56,6 +55,33 @@ public class LoginController extends BaseController {
             return R.error(e.getMessage());
         } catch (AuthenticationException e) {
             return R.error("认证失败！");
+        }
+    }
+
+    @PostMapping("/user/update/password")
+    @ResponseBody
+    public R updatePassword(String username, String oldPwd, String newPwd, String cfmPwd) {
+        try {
+            UserEntity user = getCurrentUser();
+            if(!username.equals(user.getUsername())) {
+                return R.error("System Error.");
+            }
+
+            String password = MD5Utils.encrypt(username.toLowerCase(), oldPwd);
+            if(!password.equals(user.getPassword())) {
+                return R.error("Raw password is error.");
+            }
+
+            if(!newPwd.equals(cfmPwd)) {
+                return R.error("New password is not same with confirm password.");
+            }
+            String newPassword = MD5Utils.encrypt(user.getUsername().toLowerCase(), newPwd);
+            userXMLCenter.updatePassword(username, newPassword);
+            user.setPassword(newPassword);
+
+            return R.ok();
+        } catch (Exception e) {
+            return R.error(e.getMessage());
         }
     }
 

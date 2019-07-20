@@ -1,9 +1,9 @@
 package h.uniview.smarthouse.data;
 
-import java.io.Serializable;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.Serializable;
 
 @Configuration
 @ConfigurationProperties(prefix = "smart-house")
@@ -19,6 +19,7 @@ public class PropCenter implements Serializable {
 	private String timeFormat = "yyyy-MM-dd HH:mm:ss";
 	
 	private String configDir;
+	private String userDir;
 
 	public ShiroProperties getShiro() {
 		return shiro;
@@ -44,4 +45,11 @@ public class PropCenter implements Serializable {
 		this.configDir = configDir;
 	}
 
+	public String getUserDir() {
+		return userDir;
+	}
+
+	public void setUserDir(String userDir) {
+		this.userDir = userDir;
+	}
 }

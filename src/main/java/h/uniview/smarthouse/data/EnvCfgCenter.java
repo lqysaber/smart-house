@@ -23,7 +23,7 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 
 @Service
-@Order(1)
+@Order(2)
 public class EnvCfgCenter implements CommandLineRunner, Serializable {
 
 	@Autowired
