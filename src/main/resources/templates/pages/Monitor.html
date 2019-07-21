@@ -35,21 +35,21 @@
                 <button class="butD" id="turnDN"><i class="fa fa-caret-down"></i></button>
                 <button class="butE" id="turnSTOP"><i class="fa fa-circle"></i></button>
               </div>
-              <div class="Cos_r">
+              <div class="Cos_r" id="_plugin_trl_cursor">
                 <div class="COr">
                   <label>焦距:</label>
                   <div>
-                    <span class="fa fa-plus-circle"></span>
-                    <input type="text" placeholder="1">
-                    <span class="fa fa-minus-circle"></span>
+                    <a id="FOCUS_N" onclick="Index.cursorOperation('FOCUS_N');"><span class="fa fa-plus-circle"></span></a>
+                    <input type="text" placeholder="1" value="0" id="_plugin_focus_size"/>
+                    <a id="FOCUS_F" onclick="Index.cursorOperation('FOCUS_F');"><span class="fa fa-minus-circle"></span></a>
                   </div>
                 </div>
                 <div class="COr">
                   <label>焦点:</label>
                   <div>
-                    <span class="fa fa-plus-circle"></span>
-                    <input type="text" placeholder="1">
-                    <span class="fa fa-minus-circle"></span>
+                    <a id="ZOOM_O" onclick="Index.cursorOperation('ZOOM_O');"><span class="fa fa-plus-circle"></span></a>
+                    <input type="text" placeholder="1" value="0" id="_plugin_zoom_size"/>
+                    <a id="ZOOM_I" onclick="Index.cursorOperation('ZOOM_I');"><span class="fa fa-minus-circle"></span></a>
                   </div>
                 </div>
                 <div class="COr">
@@ -100,6 +100,7 @@
 </div>
 
 <div data-th-replace="common/javascriptfile.html" ></div>
+<script data-th-src="@{/assets/index.js}"></script>
 <script data-th-inline="javascript">
   function loadVideoCtrlList() {
     var reqParam = {};

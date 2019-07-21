@@ -1,4 +1,4 @@
-var Index = function ($) {
+var PB = function ($) {
     var mainClass = Class.extend({
         recordlivename: 0,
         videotypejsonMap: [],      //视频类型对象数组
@@ -79,23 +79,12 @@ var Index = function ($) {
                 _this.rendersdkviewwindow(4);
             });
 
-            // $("#_plugin_ctrl_list a").bind("click", function (e) {
-            //     // var id = e.target.id;
-            //     _this.selectedDevChannel(1);
-            //     // _this.startVideo();
-            // });
-
             $("#_plugin_trl_presetul button").bind("click", function (e) {
                 var id = e.target.id;
                 _this.presetOperation(id);
 
             });
 
-            // $("#_plugin_trl_cursor a").bind("click", function (e) {
-            //     var id = e.target.id;
-            //     _this.cursorOperation(id);
-            //
-            // });
         },
 
         selectedDevChannel: function(channelId, winObj, type) {
@@ -112,94 +101,6 @@ var Index = function ($) {
                 $("#_plugin_trl_presetul button").attr("disabled", false);
             }
         },
-
-        /*********************************云台相关********************************/
-        presetOperation: function (id) {
-            debugger;
-            var ptzcontrolcmd;
-            switch (id) {
-                case "turnNW":
-                    ptzcontrolcmd = PtzCmd.LEFTUP;
-                    break;
-                case "turnUP":
-                    ptzcontrolcmd = PtzCmd.TILTUP;
-                    break;
-                case "turnNE":
-                    ptzcontrolcmd = PtzCmd.RIGHTUP;
-                    break;
-                case "turnL":
-                    ptzcontrolcmd = PtzCmd.PANLEFT;
-                    break;
-                case "turnSTOP":
-                    ptzcontrolcmd = PtzCmd.ALLSTOP;
-                    break;
-                case "turnR":
-                    ptzcontrolcmd = PtzCmd.PANRIGHT;
-                    break;
-                case "turnSW":
-                    ptzcontrolcmd = PtzCmd.LEFTDOWN;
-                    break;
-                case "turnDN":
-                    ptzcontrolcmd = PtzCmd.TILTDOWN;
-                    break;
-                case "turnSE":
-                    ptzcontrolcmd = PtzCmd.RIGHTDOWN;
-                    break;
-            }
-            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 5);
-            if (0 != retcode) {
-                var msg = $.lang.tip["tippresetturnfail"];
-                var icon = TIPS_TYPE.FAIL;
-                $MB.n_warning(msg, icon);
-                return ;
-            }
-            this.startVideo();
-        },
-
-        cursorOperation: function (id) {
-            debugger;
-            // var _focus_size = Number($("#_plugin_focus_size").val());
-            // var _zoom_size = Number($("#_plugin_zoom_size").val());
-            var ptzcontrolcmd;
-            var ptzcontrolcmd1;
-            switch (id) {
-                case "FOCUS_N":
-                    ptzcontrolcmd = PtzCmd.FOCUS_N;
-                    // ptzcontrolcmd1 = PtzCmd.FOCUS_NS;
-                    // $("#_plugin_focus_size").val(_focus_size+1);
-                    break;
-                case "FOCUS_F":
-                    // ptzcontrolcmd = PtzCmd.FOCUS_NS;
-                    ptzcontrolcmd = PtzCmd.FOCUS_F;
-                    // ptzcontrolcmd1 = PtzCmd.FOCUS_FS;
-                    // $("#_plugin_focus_size").val(_focus_size-1);
-                    break;
-                case "ZOOM_I":
-                    // ptzcontrolcmd = PtzCmd.FOCUS_F;
-                    ptzcontrolcmd = PtzCmd.ZOOM_I;
-                    // ptzcontrolcmd1 = PtzCmd.ZOOM_IS;
-                    break;
-                case "ZOOM_O":
-                    // ptzcontrolcmd = PtzCmd.FOCUS_FS;
-                    ptzcontrolcmd = PtzCmd.ZOOM_O;
-                    // ptzcontrolcmd1 = PtzCmd.ZOOM_OS;
-                    // break;
-            }
-            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 2);
-            // var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), _focus_size, 5);
-            if (0 != retcode) {
-                $MB.n_warning(id + "," + ptzcontrolcmd +" is error");
-                return ;
-            }
-            // var retcode1 = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd1, 5);
-            // if(0 != retcode1) {
-            //     $MB.n_warning(id + ",s:" + ptzcontrolcmd1 +" is error");
-            // }
-            this.startVideo();
-        },
-
 
         /*************************************** test login  **********************************/
         testlogin: function() {
