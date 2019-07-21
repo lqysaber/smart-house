@@ -37,7 +37,25 @@ var PtzCmd = {
     LEFTDOWN: 0x0704,       // 左下
     RIGHTUP: 0x0802,        // 右上
     RIGHTDOWN: 0x0804,      // 右下
-    ALLSTOP: 0x0901         // 全停命令字
+    ALLSTOP: 0x0901,        // 全停命令字
+
+    FOCUS_NS: 0x0201,       // 近聚集停止 Focus near stop
+
+    FOCUS_N: 0x0202,        // 近聚集 Focus near
+
+    FOCUS_FS: 0x0203,       // 远聚集停止 Focus far stop
+
+    FOCUS_F: 0x0204,        // 远聚集 Focus far
+
+    ZOOM_IS: 0x0301,        // 放大停止 Zoom in stop
+
+    ZOOM_I: 0x0302,        // 放大 Zoom in
+
+    ZOOM_OS: 0x0303,       // 缩小停止 Zoom out stop
+
+    ZOOM_O: 0x0304         // 缩小 Zoom out
+
+
 };
 
 var PresetCmd = {

@@ -26,7 +26,7 @@
   </style>
 
 </head>
-<body onbeforeunload="Index.destory_activex();">
+<body onbeforeunload="PB.destory_activex();">
 <!-- Start wrapper-->
 <div id="wrapper" class="PlayB">
   <div class="row Monitor">
@@ -74,8 +74,8 @@
 <div data-th-replace="common/javascriptfile.html"></div>
 <!--Bootstrap Datepicker Js-->
 <script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
-
-<script>
+<script data-th-src="@{/assets/playback.js}"></script>
+<script data-th-inline="javascript">
   $( function() {
     $("#inline-datepicker").datepicker({
       autoclose: true,
@@ -85,7 +85,34 @@
       /*日期格式*/
       format:"yyyy-mm-dd"
     });
-  })
+  });
+  function loadVideoCtrlList() {
+    var reqParam = {};
+    $.ajax({
+      type: "post",
+      contentType: "application/json;charset=UTF-8",
+      url: "/smart-house/video/list",
+      data: JSON.stringify(reqParam),
+      dataType: "json",
+      success: function (r) {
+        if (r.code === 0) {
+          var hstr = "";
+          $.each(r.msg,function(n,v) {
+            hstr += "<a class='list-group-item' onclick='Index.selectedDevChannel("+v.channelID+", this, "+v.type+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
+          });
+          $("#_plugin_ctrl_list").html(hstr);
+        } else {
+          alert(r.msg);
+        }
+      },
+      error: function (XMLhttpRequest, textStatus, errorThrown) {
+        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+      }
+    });
+  }
+
+  loadVideoCtrlList();
+
 </script>
 </body>
 </html>
