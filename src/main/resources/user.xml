@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<UserList>
+  <User id="admin">
+    <Username>admin</Username>
+    <Password>7fb738044170bc43f17b97a02608a059</Password>
+  </User>
+  <User id="hugo">
+    <Username>hugo</Username>
+    <Password>a73a6d5f8d561795b5192b2152702c29</Password>
+  </User>
+  <User id="test">
+    <Username>test</Username>
+    <Password>61bfd7fd46be3ad7c96e66366c5d00a2</Password>
+  </User>
+</UserList>
