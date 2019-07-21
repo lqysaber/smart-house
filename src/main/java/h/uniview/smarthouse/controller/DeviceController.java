@@ -125,4 +125,14 @@ public class DeviceController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "/video/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public R listVideo() {
+        try {
+            return R.ok(envCenter.getVideoInfoList());
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+
 }

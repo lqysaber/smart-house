@@ -51,7 +51,8 @@ var Index = function ($) {
                 icon = TIPS_TYPE.SUCCEED;
             }
             this.initPagebtn();
-            $MB.n_warning(msg);
+            // $MB.n_warning(msg);
+            this.msgtipshow(msg, icon);
         },
 
         initPagebtn: function () {
@@ -78,9 +79,76 @@ var Index = function ($) {
                 _this.rendersdkviewwindow(4);
             });
 
-            $("#channel_list_ws").on("click", function () {
-                _this.getChannellist();
+            $("#_plugin_ctrl_list a").bind("click", function (e) {
+                // var id = e.target.id;
+                _this.selectedDevChannel(1);
+                // _this.startVideo();
             });
+
+            $("#_plugin_trl_presetul button").bind("click", function (e) {
+                var id = e.target.id;
+                _this.presetOperation(id);
+
+            });
+        },
+
+        selectedDevChannel: function(channelId, winObj, type) {
+            debugger;
+            $("#_plugin_ctrl_list a").removeClass("active");
+            $(winObj).addClass("active");
+            $("#DevchannelID").val(channelId);
+            this.startVideo();
+
+            if(type != 2) {
+                // disable cloud controller
+                $("#_plugin_trl_presetul button").attr("disabled", true);
+            } else {
+                $("#_plugin_trl_presetul button").attr("disabled", false);
+            }
+        },
+
+        /*********************************云台相关********************************/
+        presetOperation: function (id) {
+            debugger;
+            var ptzcontrolcmd;
+            switch (id) {
+                case "turnNW":
+                    ptzcontrolcmd = PtzCmd.LEFTUP;
+                    break;
+                case "turnUP":
+                    ptzcontrolcmd = PtzCmd.TILTUP;
+                    break;
+                case "turnNE":
+                    ptzcontrolcmd = PtzCmd.RIGHTUP;
+                    break;
+                case "turnL":
+                    ptzcontrolcmd = PtzCmd.PANLEFT;
+                    break;
+                case "turnSTOP":
+                    ptzcontrolcmd = PtzCmd.ALLSTOP;
+                    break;
+                case "turnR":
+                    ptzcontrolcmd = PtzCmd.PANRIGHT;
+                    break;
+                case "turnSW":
+                    ptzcontrolcmd = PtzCmd.LEFTDOWN;
+                    break;
+                case "turnDN":
+                    ptzcontrolcmd = PtzCmd.TILTDOWN;
+                    break;
+                case "turnSE":
+                    ptzcontrolcmd = PtzCmd.RIGHTDOWN;
+                    break;
+            }
+            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 5);
+            if (0 != retcode) {
+                var msg = $.lang.tip["tippresetturnfail"];
+                var icon = TIPS_TYPE.FAIL;
+                this.msgtipshow(msg, icon);
+                return ;
+            }
+            this.startVideo();
         },
 
         /*************************************** test login  **********************************/
@@ -102,6 +170,24 @@ var Index = function ($) {
             };
             var loginJsonstring = JSON.stringify(loginJsonMap);
             this.login(loginJsonstring);
+
+            var SDKRet;
+            if (this.devicetype == deviceTypestr.IPC || this.devicetype == deviceTypestr.NVR) {
+                SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
+                if (SDKRet == -1) {
+                    this.msgtipshow($.lang.tip["getlocallistfail"], TIPS_TYPE.FAIL);
+                    return;
+                }
+            } else if (this.devicetype == deviceTypestr.EVMS) {
+                SDKRet = top.sdk_viewer.execFunction("NETDEV_FindDevChnList", this.DeviceHandle, 0, 0);
+                if (SDKRet == -1) {
+                    this.msgtipshow($.lang.tip["getlocallistfail"], TIPS_TYPE.FAIL);
+                    return;
+                } else {
+                    this.EVMSjsonMap = [];
+                    this.getevmsdevicelist(SDKRet);
+                }
+            }
 
         },
 
@@ -134,148 +220,8 @@ var Index = function ($) {
                 this.DeviceHandle = result.UserID;
                 msg = $.lang.tip["tiploginsuc"];
                 icon = TIPS_TYPE.SUCCEED;
-                // $("#playerContainer").css("height", this.ocxHeight);
-                //屏蔽云登录
-                // $("#cloudLogin").attr("disabled", true);
             }
             $MB.n_warning(msg);
-        },
-
-        //获取通道列表
-        getChannellist: function () {
-            debugger;
-            var SDKRet;
-            if (this.devicetype == deviceTypestr.IPC || this.devicetype == deviceTypestr.NVR) {
-                SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
-                if (SDKRet == -1) {
-                    $MB.n_warning($.lang.tip["getlocallistfail"], TIPS_TYPE.FAIL);
-                    return;
-                }
-            } else if (this.devicetype == deviceTypestr.EVMS) {
-                SDKRet = top.sdk_viewer.execFunction("NETDEV_FindDevChnList", this.DeviceHandle, 0, 0);
-                if (SDKRet == -1) {
-                    $MB.n_warning($.lang.tip["getlocallistfail"], TIPS_TYPE.FAIL);
-                    return;
-                } else {
-                    this.EVMSjsonMap = [];
-                    // this.getevmsdevicelist(SDKRet);
-                }
-            }
-            var msg, icon;
-            var tableHeight;
-            if (SDKRet) {
-                var str = '<table id="girdTable"></table>';
-                $("#girdtableDiv").html(str);
-                var jsonMap = JSON.parse(SDKRet);
-                var dataMap = Utils.objectClone(jsonMap);
-                for (var i = 0; i < dataMap["VideoChlList"]; i++) {
-                    // for (var key in dataMap["VideoChlList"][i]) {
-                    //     if (key == "bPtzSupported") {
-                    //
-                    //     }
-                    // }
-                }
-                var tableDatas;
-                var gridSetting;
-                var colmodelwidth = "80px";
-                if (this.devicetype == deviceTypestr.IPC || this.devicetype == deviceTypestr.NVR) {
-                    tableDatas = jsonMap["VideoChlList"];
-                    if (this.devicetype == deviceTypestr.IPC) {
-                        tableHeight = 300;
-                    } else if (this.devicetype == deviceTypestr.NVR) {
-                        tableHeight = 300;
-                    }
-                    gridSetting = {
-                        datatype: "local",
-                        width: 1200,
-                        height: tableHeight,
-                        colNames: [
-                            "是否支持云台",
-                            "通道ID",
-                            "设备类型",
-                            "端口号",
-                            "流个数",
-                            // "IP地址类型",
-                            // "通道类型",
-                            "通道状态",
-                            // "视频输入制式",
-                            "通道名称",
-                            "设备型号",
-                            "IP地址"
-                        ],
-                        colModel: [
-                            {name: "bPtzSupported", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "dwChannelID", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "dwDeviceType", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "dwPort", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "dwStreamNum", align: "center", width: colmodelwidth, sortable: false},
-                            // {name: "enAddressType", align: "center", width: colmodelwidth, sortable: false},
-                            // {name: "enChannelType", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "enStatus", align: "center", width: colmodelwidth, sortable: false},
-                            // {name: "enVideoFormat", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "szChnName", align: "center", sortable: false},
-                            {name: "szDeviceModel", align: "center", sortable: false},
-                            {name: "szIPAddr", align: "center", sortable: false}
-                        ]
-                    };
-                } else {
-                    tableDatas = this.EVMSjsonMap;
-                    gridSetting = {
-                        datatype: "local",
-                        width: 1200,
-                        height: 300,
-                        colNames: [
-                            "通道名称",
-                            "是否支持云台",
-                            "支持最大流个数",
-                            "通道ID",
-                            "通道状态"
-                        ],
-                        colModel: [
-                            {name: "szChnName", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "bSupportPTZ", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "dwMaxStream", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "dwChannelID", align: "center", width: colmodelwidth, sortable: false},
-                            {name: "dwChnStatus", align: "center", width: colmodelwidth, sortable: false}
-                        ]
-                    };
-                }
-                msg = $.lang.tip["getlocallistsuc"];
-                icon = TIPS_TYPE.SUCCEED;
-            } else {
-                msg = $.lang.tip["getlocallistfail"];
-                icon = TIPS_TYPE.FAIL;
-            }
-            if (!tableDatas) {
-                return;
-            }
-            this.createTable(gridSetting, tableDatas, "girdTable");
-            $MB.n_warning(msg, icon);
-        },
-
-        //创建表格
-        createTable: function (gridSetting, data, girdid) {
-            var $grid = $("#" + girdid);
-            if (girdid == "girdTable") {
-                this.localchalisttable = $grid;
-            }
-            if (girdid == "querytable") {
-                this.localquerytable = $grid;
-            }
-            if (girdid == "clouddevgirdTable") {
-                this.clouddevlisttable = $grid;
-            }
-
-            if (girdid == "clouddevchllisttable") {
-                this.clouddevchllisttable = $grid;
-            }
-
-            $grid.jqGrid(gridSetting);
-            $grid.jqGrid(gridSetting);
-            $grid.jqGrid("clearGridData");
-            for (var i = 0; i < data.length; i++) {
-                $grid.jqGrid('addRowData', i + 1, data[i]);
-            }
         },
 
         loginOut: function () {
@@ -287,6 +233,65 @@ var Index = function ($) {
                 this.DeviceHandle = -1;
                 this.n_warning($.lang.tip["userlogoutSuc"], TIPS_TYPE.SUCCEED);}
         },
+
+        /*************************************** 实况相关 Begin **********************************/
+        //播放视频
+        startVideo: function () {
+            debugger;
+            var msg;
+            var icon;
+            var channelValue = Number($("#DevchannelID").val());
+            if (channelValue == "") {
+
+            }
+            var dataMap = {
+                dwChannelID: channelValue,
+                dwStreamType: LiveStream.LIVE_STREAM_INDEX_MAIN,
+                dwLinkMode: Protocal.TRANSPROTOCAL_RTPTCP,
+                dwFluency: 0
+            };
+            var jsonStr = JSON.stringify(dataMap);
+            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            //将窗口与流保存下来
+            var obj = {
+                streamtype: videostreamtype.live,
+                screenNum: ResourceId
+            };
+
+            this.videotypejsonMap[ResourceId] = obj;
+
+            top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
+            var openretcode = top.sdk_viewer.execFunction("NETDEV_RealPlay", parseInt(ResourceId), this.DeviceHandle, jsonStr);
+            if (0 != openretcode) {
+                msg = $.lang.tip["tipstartvideofail"];
+                icon = TIPS_TYPE.FAIL;
+                $MB.n_warning(msg);
+            } else {
+                msg = $.lang.tip["tipstartvideosuc"];
+                icon = TIPS_TYPE.SUCCEED;
+                $MB.n_success(msg);
+            }
+
+        },
+
+        //关闭视频
+        stopVideo: function () {
+            var msg;
+            var icon;
+            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            this.videotypejsonMap[ResourceId] = null;
+            var retcode = top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
+            if (0 != retcode) {
+                msg = $.lang.tip["tipstopvideofail"];
+                icon = TIPS_TYPE.FAIL;
+            } else {
+                msg = $.lang.tip ["tipstopvideosuc"];
+                icon = TIPS_TYPE.SUCCEED;
+            }
+            $MB.n_success(msg);
+        },
+        /******************************* 实况相关 END ***************************/
+
 
         /**************************清理SDK并关闭线程********************/
         destory_activex: function () {
@@ -306,9 +311,10 @@ var Index = function ($) {
             $('body,html').animate({'scrollTop': t - 10}, 100);
             $('body,html').animate({'scrollTop': t + 10}, 100);
         },
-        //清除表格
-        destoryTable: function (id) {
-            $.jgrid.gridDestroy("#" + id);
+        //提示信息
+        msgtipshow: function (msg, icon) {
+            debugger;
+            MSG.msgbox.show(msg, icon, 3000, 61, "errormsg");
         }
     });
     return new mainClass();
