@@ -119,7 +119,10 @@ public class DeviceController extends BaseController {
             ObjectMapper objectMapper = new ObjectMapper();
             CameraInfo cameraNode = objectMapper.convertValue(cameraForm, CameraInfo.class);
             envCenter.crateNode(cameraNode, Constant.ConfigEnvType.CAMERA.getValue());
-            return R.ok();
+
+            R r = R.ok();
+            r.put("camera", envCenter.getServerNodeList());
+            return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
         }
