@@ -129,9 +129,9 @@ public class DeviceController extends BaseController {
     @ResponseBody
     public R deleteCameraNode(String cursor) {
         try {
-            envCenter.deleteNode(Constant.ConfigEnvType.SERVERNODE.getValue(), Integer.parseInt(cursor));
+            envCenter.deleteNode(Constant.ConfigEnvType.CAMERA.getValue(), Integer.parseInt(cursor));
             R r = R.ok();
-            r.put("server", envCenter.getServerNodeList());
+            r.put("camera", envCenter.getCameraInfoList());
             return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
