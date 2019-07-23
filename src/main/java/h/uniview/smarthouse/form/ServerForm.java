@@ -53,5 +53,15 @@ public class ServerForm implements Serializable {
 	public void setMess(String mess) {
 		this.mess = mess;
 	}
+
+	private Integer cursor;
+
+	public Integer getCursor() {
+		return null == cursor ? 0 : cursor.intValue();
+	}
+
+	public void setCursor(Integer cursor) {
+		this.cursor = cursor;
+	}
 	
 }

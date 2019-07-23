@@ -3,7 +3,7 @@ package h.uniview.smarthouse.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import h.uniview.smarthouse.data.CameraInfo;
 import h.uniview.smarthouse.data.EnvCfgCenter;
-import h.uniview.smarthouse.data.ServerNode;
+import h.uniview.smarthouse.data.ServerNodeInfo;
 import h.uniview.smarthouse.form.CameraForm;
 import h.uniview.smarthouse.form.ServerForm;
 import h.uniview.smarthouse.utils.Constant;
@@ -85,9 +85,25 @@ public class DeviceController extends BaseController {
         }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            ServerNode serverNode = objectMapper.convertValue(serverForm, ServerNode.class);
+            ServerNodeInfo serverNode = objectMapper.convertValue(serverForm, ServerNodeInfo.class);
             envCenter.crateNode(serverNode, Constant.ConfigEnvType.SERVERNODE.getValue());
-            return R.ok();
+            
+            R r = R.ok();
+            r.put("server", envCenter.getServerNodeList());
+            return r;
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+    
+    @RequestMapping(value = "/device/server/del")
+    @ResponseBody
+    public R deleteServerNode(String cursor) {
+        try {
+            envCenter.deleteNode(Constant.ConfigEnvType.SERVERNODE.getValue(), Integer.parseInt(cursor));
+            R r = R.ok();
+            r.put("server", envCenter.getServerNodeList());
+            return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
         }
@@ -104,6 +120,19 @@ public class DeviceController extends BaseController {
             CameraInfo cameraNode = objectMapper.convertValue(cameraForm, CameraInfo.class);
             envCenter.crateNode(cameraNode, Constant.ConfigEnvType.CAMERA.getValue());
             return R.ok();
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+    
+    @RequestMapping(value = "/device/camera/del")
+    @ResponseBody
+    public R deleteCameraNode(String cursor) {
+        try {
+            envCenter.deleteNode(Constant.ConfigEnvType.SERVERNODE.getValue(), Integer.parseInt(cursor));
+            R r = R.ok();
+            r.put("server", envCenter.getServerNodeList());
+            return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
         }

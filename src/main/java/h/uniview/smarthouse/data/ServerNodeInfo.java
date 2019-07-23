@@ -2,7 +2,10 @@ package h.uniview.smarthouse.data;
 
 import java.io.Serializable;
 
-public class ServerNode implements Serializable {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true) 
+public class ServerNodeInfo implements Serializable {
 	
 	/**
 	 * 

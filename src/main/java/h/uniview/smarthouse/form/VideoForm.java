@@ -2,21 +2,58 @@ package h.uniview.smarthouse.form;
 
 import java.io.Serializable;
 
-public class CameraForm implements Serializable {
+public class VideoForm implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private String loginName;
+	private String loginPwd;
+	private String channelID;
+	private String hardDiskUsage;
 	
-	private String type;
-	private String typeName;
+	private String type = "";
+	private String typeName = "";
 	private String name;
 	private String status;
 	private String workModel;
 	private String ip;
 	private String port;
 	private String mess;
+
+	public String getLoginName() {
+		return loginName;
+	}
+
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+
+	public String getLoginPwd() {
+		return loginPwd;
+	}
+
+	public void setLoginPwd(String loginPwd) {
+		this.loginPwd = loginPwd;
+	}
+
+	public String getChannelID() {
+		return channelID;
+	}
+
+	public void setChannelID(String channelID) {
+		this.channelID = channelID;
+	}
+
+	public String getHardDiskUsage() {
+		return hardDiskUsage;
+	}
+
+	public void setHardDiskUsage(String hardDiskUsage) {
+		this.hardDiskUsage = hardDiskUsage;
+	}
 
 	public String getType() {
 		return type;
@@ -84,19 +121,14 @@ public class CameraForm implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CameraForm{" +
-				"type='" + type + '\'' +
-				", typeName='" + typeName + '\'' +
-				", name='" + name + '\'' +
-				", status='" + status + '\'' +
-				", workModel='" + workModel + '\'' +
-				", iP='" + ip + '\'' +
-				", port='" + port + '\'' +
-				", mess='" + mess + '\'' +
+		return "VideoInfo{" +
+				"loginName='" + loginName + '\'' +
+				", loginPwd='" + loginPwd + '\'' +
+				", channelID='" + channelID + '\'' +
+				", hardDiskUsage='" + hardDiskUsage + '\'' +
 				'}';
 	}
 	
-
 	private Integer cursor;
 
 	public Integer getCursor() {
@@ -106,5 +138,4 @@ public class CameraForm implements Serializable {
 	public void setCursor(Integer cursor) {
 		this.cursor = cursor;
 	}
-	
 }

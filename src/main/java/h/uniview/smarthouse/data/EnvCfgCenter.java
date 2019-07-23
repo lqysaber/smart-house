@@ -1,6 +1,9 @@
 package h.uniview.smarthouse.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import h.uniview.smarthouse.utils.Constant.ConfigEnvType;
+
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -41,28 +44,55 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 
 	private ConfigMsg configMsg = new ConfigMsg();
 
-	private List<ServerNode> serverNodeList = new ArrayList<ServerNode>();
+	private List<ServerNodeInfo> serverNodeList = new ArrayList<ServerNodeInfo>();
 	private List<CameraInfo> cameraInfoList = new ArrayList<CameraInfo>();
 	private List<NVRInfo> nvrInfoList = new ArrayList<NVRInfo>();
 	private List<VideoNodeInfo> videoInfoList = new ArrayList<VideoNodeInfo>();
 
-	public void upadteNode(String pattern, Object object) throws Exception {
+	public synchronized void upadteNode(String pattern, int cursor, Object object) throws Exception {
 		File url = new File(configEnvDir);
 		// 获取一个Document对象
 		SAXReader saxReader = new SAXReader();
 		Document doc = saxReader.read(url);
 
-		// 获取id为1的节点下的name元素
-		Node name = doc.selectSingleNode("/persons/person[@id = '1']/name[1]");
-		name.setText("这里是修改的id为1的节点下的name元素值");
-
+		Element element = (Element) doc.selectSingleNode(pattern+"["+cursor+"]");
+		
+		Class clazz = object.getClass();
+		List<Field> fieldList = listField(clazz);
+		fieldList.forEach(f -> {
+			// 添加值到节点中
+			try {
+				Object o = getFieldValue(f, object);
+				String nodeName = "ip".equals(f.getName())? "IP" : upperFirst(f.getName());
+				element.element(nodeName).setText(null == o ? "" : o.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		
 		// 注意：XML文件是被加载到内存中 修改也是在内存中 ==》因此需要将内存中的数据同步到磁盘中
 		XMLWriter writer = new XMLWriter(new FileWriter(url));// 将内存数据关联给一个字符输出流
 		writer.write(doc);
 		writer.close();
+		
+		if(clazz.equals(ServerNodeInfo.class)) {
+			serverNodeList.add((ServerNodeInfo) object);
+		} else if (clazz.equals(WorkstationMsg.class)) {
+			workstationMsg = (WorkstationMsg) object;
+		} else if (clazz.equals(ConfigMsg.class)) {
+			configMsg = (ConfigMsg) object;
+		} if(clazz.equals(CameraInfo.class)) {
+			cameraInfoList.add((CameraInfo) object);
+		} else if(clazz.equals(VideoNodeInfo.class)) {
+			videoInfoList.add((VideoNodeInfo) object);
+		} else if(clazz.equals(NVRInfo.class)) {
+			nvrInfoList.add((NVRInfo) object);
+		} else {
+			// do nothing..
+		}
 	}
 
-	public void crateNode(Object object, String pattern) throws Exception {
+	public synchronized void crateNode(Object object, String pattern) throws Exception {
 		File url = new File(configEnvDir);
 		// 获取一个Document对象
 		SAXReader saxReader = new SAXReader();
@@ -91,6 +121,20 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		XMLWriter writer = new XMLWriter(new FileWriter(url), format);// 构造一个具有良好输出格式的XML输出对象
 		writer.write(doc);
 		writer.close();
+		
+//		initialConfigData(this.configEnvDir);
+		if(clazz.equals(ServerNodeInfo.class)) {
+			serverNodeList.add((ServerNodeInfo) object);
+		} else if(clazz.equals(CameraInfo.class)) {
+			cameraInfoList.add((CameraInfo) object);
+		} else if(clazz.equals(VideoNodeInfo.class)) {
+			videoInfoList.add((VideoNodeInfo) object);
+		} else if(clazz.equals(NVRInfo.class)) {
+			nvrInfoList.add((NVRInfo) object);
+		} else {
+			// do nothing..
+		}
+		
 	}
 	
 	public static Object getFieldValue(Field field, Object o) throws Exception {
@@ -99,7 +143,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		return method.invoke(o, new Object[] {});
 	}
 
-	public void deleteNode(String pattern, int cursor) throws Exception {
+	public synchronized void deleteNode(String pattern, int cursor) throws Exception {
 		File url = new File(configEnvDir);
 		// 获取一个Document对象
 		SAXReader reader = new SAXReader();
@@ -114,6 +158,8 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		writer = new XMLWriter(new FileWriter(url), format);
 		writer.write(doc);
 		writer.close();
+		
+		initialConfigData(this.configEnvDir);
 	}
 
 	public void initialConfigData(String configPath) throws Exception {
@@ -122,38 +168,46 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		SAXReader saxReader = new SAXReader();
 		Document doc = saxReader.read(url);
 
-		workstationMsg = convert2Object((Element) doc.selectSingleNode("/Configuration/WorkstationMsg"), WorkstationMsg.class);
+		workstationMsg = convert2Object((Element) doc.selectSingleNode(ConfigEnvType.WROKSTATION.getValue()), WorkstationMsg.class);
 		System.out.println(workstationMsg);
 
-		configMsg = convert2Object((Element) doc.selectSingleNode("/Configuration/ConfigMsg"), ConfigMsg.class);
+		configMsg = convert2Object((Element) doc.selectSingleNode(ConfigEnvType.CONFIGDATA.getValue()), ConfigMsg.class);
 		System.out.println(configMsg);
 
-		List<?> list = doc.selectNodes("/Configuration/DevMsg/CameraMsg/CameraInfo");
+		List<?> list = doc.selectNodes(ConfigEnvType.CAMERA.getValue());
 		Iterator<?> it = list.iterator();
+		List<CameraInfo> tmalist = new ArrayList<CameraInfo>();
 		while (it.hasNext()) {
-			cameraInfoList.add(convert2Object((Element) it.next(), CameraInfo.class));
+			tmalist.add(convert2Object((Element) it.next(), CameraInfo.class));
 		}
+		cameraInfoList = tmalist;
 		System.out.println(cameraInfoList);
 
-		list = doc.selectNodes("/Configuration/DevMsg/NVRMSG/NVRInfo");
+		list = doc.selectNodes(ConfigEnvType.NVR.getValue());
 		it = list.iterator();
+		List<NVRInfo> nvrlist = new ArrayList<NVRInfo>();
 		while (it.hasNext()) {
-			nvrInfoList.add(convert2Object((Element) it.next(), NVRInfo.class));
+			nvrlist.add(convert2Object((Element) it.next(), NVRInfo.class));
 		}
+		nvrInfoList = nvrlist;
 		System.out.println(nvrInfoList);
 
-		list = doc.selectNodes("/Configuration/DevMsg/VideoMsg/VideoNodeInfo");
+		list = doc.selectNodes(ConfigEnvType.VIDEO.getValue());
 		it = list.iterator();
+		List<VideoNodeInfo> tvnilist = new ArrayList<VideoNodeInfo>();
 		while (it.hasNext()) {
-			videoInfoList.add(convert2Object((Element) it.next(), VideoNodeInfo.class));
+			tvnilist.add(convert2Object((Element) it.next(), VideoNodeInfo.class));
 		}
+		videoInfoList = tvnilist;
 		System.out.println(videoInfoList);
 
-		list = doc.selectNodes("/Configuration/ServerMsg/ServerNodeInfo");
+		list = doc.selectNodes(ConfigEnvType.SERVERNODE.getValue());
 		it = list.iterator();
+		List<ServerNodeInfo> tsnilist = new ArrayList<ServerNodeInfo>();
 		while (it.hasNext()) {
-			serverNodeList.add(convert2Object((Element) it.next(), ServerNode.class));
+			tsnilist.add(convert2Object((Element) it.next(), ServerNodeInfo.class));
 		}
+		serverNodeList = tsnilist;
 		System.out.println(serverNodeList);
 	}
 
@@ -252,9 +306,9 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 //		env.crateNode(o, ConfigEnvType.CAMERA.getValue());
 //		env.deleteNode(ConfigEnvType.CAMERA.getValue(), 2);
 
-		new EnvCfgCenter().initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
+//		new EnvCfgCenter().initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
 
-//		new EnvCfgCenter().initialConfigData("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
+		new EnvCfgCenter().initialConfigData("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
 	}
 
 	public ConfigMsg getConfigMsg() {
@@ -269,7 +323,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		return cameraInfoList;
 	}
 
-	public List<ServerNode> getServerNodeList() {
+	public List<ServerNodeInfo> getServerNodeList() {
 		return serverNodeList;
 	}
 

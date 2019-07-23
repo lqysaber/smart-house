@@ -7,38 +7,12 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>基本信息操作</title>
-    <!--favicon-->
-    <link rel="icon" th:href="@{/assets/images/favicon.ico}" type="image/x-icon">
-    <!--Select Plugins-->
-    <link data-th-href="@{/assets/plugins/select2/css/select2.min.css}" rel="stylesheet" type="text/css"/>
-    <!--inputtags-->
-    <link data-th-href="@{/assets/plugins/inputtags/css/bootstrap-tagsinput.css}" rel="stylesheet" type="text/css"/>
-    <!--multi select-->
-    <link data-th-href="@{/assets/plugins/jquery-multi-select/multi-select.css}" rel="stylesheet" type="text/css">
-    <!--Bootstrap Datepicker-->
-    <link data-th-href="@{/assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css}" rel="stylesheet" type="text/css">
-    <!--Touchspin-->
-    <link data-th-href="@{/assets/plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.css}" rel="stylesheet" type="text/css">
-    <!-- simplebar CSS-->
-    <link data-th-href="@{/assets/plugins/simplebar/css/simplebar.css}" rel="stylesheet" type="text/css"/>
-    <!-- Bootstrap core CSS-->
-    <link data-th-href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
-    <!-- animate CSS-->
-    <link data-th-href="@{/assets/css/animate.css}" rel="stylesheet" type="text/css"/>
-    <!-- Icons CSS-->
-    <link data-th-href="@{/assets/css/icons.css}" rel="stylesheet" type="text/css"/>
-    <!-- Sidebar CSS-->
-    <link data-th-href="@{/assets/css/sidebar-menu.css}" rel="stylesheet" type="text/css"/>
-    <!-- Custom Style-->
-    <link data-th-href="@{/assets/css/app-style.css}" rel="stylesheet" type="text/css"/>
-    <!-- 2019/7/9-->
-    <link data-th-href="@{/assets/css/style.css}" rel="stylesheet" type="text/css"/>
-
+    <div data-th-replace="common/cssmng.html"></div>
     <!--Data Tables -->
     <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
     <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css}" rel="stylesheet" type="text/css">
     <style type="text/css">
-
+		
     </style>
 </head>
 
@@ -134,40 +108,31 @@
       </div>
     </form>
   </div>
-  <div class="col-lg-2"><button type="button" class="btn btn-primary" id="bi_ws_update2" /> 保存</button></div>
+  <div class="col-lg-2"><button type="button" class="btn btn-primary" id="bi_cfg_update2" /> 保存</button></div>
 </div>
 </div>
 </div>
 
 </div>
-<!-- Bootstrap core JavaScript-->
-<script data-th-src="@{/assets/js/jquery.min.js}"></script>
-<script data-th-src="@{/assets/js/popper.min.js}"></script>
-<script data-th-src="@{/assets/js/bootstrap.min.js}"></script>
-<!-- simplebar js -->
-<script data-th-src="@{/assets/plugins/simplebar/js/simplebar.js}"></script>
-<!-- sidebar-menu js -->
-<script data-th-src="@{/assets/js/sidebar-menu.js}"></script>
-<!-- Custom scripts -->
-<script data-th-src="@{/assets/js/app-script.js}"></script>
-<script data-th-src="@{/assets/js/political_WeCall.js}"></script>
-<!--Data Tables js-->
-<script data-th-src="@{/assets/plugins/bootstrap-datatable/js/jquery.dataTables.min.js}"></script>
-<script data-th-src="@{/assets/plugins/bootstrap-datatable/js/dataTables.bootstrap4.min.js}"></script>
-<script data-th-src="@{/assets/plugins/bootstrap-datatable/js/dataTables.buttons.min.js}"></script>
+<div data-th-replace="common/jsmng.html"></div>
 <script>
 $(document).ready(function(){
 	$("#bi_ws_update").on("click", function() {
-		var reqParam = {"name":$("#bi_ws_name").val(),"code": $("#bi_ws_code").val()};
+		var reqParam = {
+			"name": $("#bi_ws_name").val(),
+			"code": $("#bi_ws_code").val(),
+			"cursor": "1"
+		};
+		alert(JSON.stringify(reqParam));
 	  	$.ajax({
 	    	type: "post",
 	    	contentType: "application/json;charset=UTF-8",
-	    	url: "/smart-house/device/list",
+	    	url: "/smart-house/device/workstation/update",
 	    	data: JSON.stringify(reqParam),
 	    	dataType: "json",
 	    	success: function (r) {
 	      		if (r.code === 0) {
-	        		handleListRender(r.msg.list);
+	        		alert("operation success.");
 				} else {
 			        alert(r.msg);
 			    }
@@ -175,15 +140,46 @@ $(document).ready(function(){
 	    	error: function (XMLhttpRequest, textStatus, errorThrown) {
 	      		alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
 	    	}
-		});
+		});	
 	});
 	$("#bi_cfg_update1").on("click", function() {
-			
+		updateConfigData();
 	});
-	$("#bi_ws_update2").on("click", function() {
-		
+	$("#bi_cfg_update2").on("click", function() {
+		updateConfigData();
 	});
 });
+
+function updateConfigData() {
+	var reqParam = {
+		"locationFile": $("#bi_cfg_lf_dir").val(),
+		"environmentalFile": $("#bi_cfg_env_dir").val(),
+		"cameraOriginalCatalog": $("#bi_pt_dir").val(),
+		"cameraManageCatalog": $("#bi_pt_hs_dir").val(),
+		"videoScreenshotCatalog": $("#bi_ve_pt_dir").val(),
+		"videoVideotapeCatalog": $("#bi_ve_ve_dir").val(),
+		"videoVmdalarmCatalog": $("#bi_pt_mt_dir").val(),
+		"cursor": "1"
+	};
+	alert(JSON.stringify(reqParam));
+  	$.ajax({
+    	type: "post",
+    	contentType: "application/json;charset=UTF-8",
+    	url: "/smart-house/device/config/update",
+    	data: JSON.stringify(reqParam),
+    	dataType: "json",
+    	success: function (r) {
+      		if (r.code === 0) {
+        		alert("operation success.");
+			} else {
+		        alert(r.msg);
+		    }
+    	},
+    	error: function (XMLhttpRequest, textStatus, errorThrown) {
+      		alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+    	}
+	});	
+}
 
 function showBasicInfo() {
 	var reqParam = {};

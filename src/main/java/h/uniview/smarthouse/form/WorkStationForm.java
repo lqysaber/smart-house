@@ -33,4 +33,19 @@ public class WorkStationForm implements Serializable {
 		this.code = code;
 	}
 	
+	@NotNull
+	private Integer cursor;
+
+	public Integer getCursor() {
+		return null == cursor ? 0 : cursor.intValue();
+	}
+
+	public void setCursor(Integer cursor) {
+		this.cursor = cursor;
+	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
 }

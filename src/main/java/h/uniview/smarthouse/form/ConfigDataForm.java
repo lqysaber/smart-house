@@ -12,6 +12,12 @@ public class ConfigDataForm implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull
+	private String locationFile;
+	
+	@NotNull
+	private String environmentalFile;
+	
+	@NotNull
 	private String cameraOriginalCatalog;// 相机拍摄原始文件存储位置C:\Users\Administrator\Desktop\
 	
 	@NotNull
@@ -25,6 +31,22 @@ public class ConfigDataForm implements Serializable {
 	
 	@NotNull
 	private String videoVmdalarmCatalog;// 视频移动侦测警报截图存储位置C:\Users\Administrator\Desktop\
+	
+	public String getLocationFile() {
+		return locationFile;
+	}
+
+	public void setLocationFile(String locationFile) {
+		this.locationFile = locationFile;
+	}
+
+	public String getEnvironmentalFile() {
+		return environmentalFile;
+	}
+
+	public void setEnvironmentalFile(String environmentalFile) {
+		this.environmentalFile = environmentalFile;
+	}
 
 	public String getCameraOriginalCatalog() {
 		return cameraOriginalCatalog;
@@ -65,5 +87,17 @@ public class ConfigDataForm implements Serializable {
 	public void setVideoVmdalarmCatalog(String videoVmdalarmCatalog) {
 		this.videoVmdalarmCatalog = videoVmdalarmCatalog;
 	}
+	
+	@NotNull
+	private Integer cursor;
+
+	public Integer getCursor() {
+		return null == cursor ? 0 : cursor.intValue();
+	}
+
+	public void setCursor(Integer cursor) {
+		this.cursor = cursor;
+	}
+	
 	
 }
