@@ -154,6 +154,17 @@
       }
       return uri;
   }
+
+  function switchHtmlRender(id, r) {
+    switch (id) {
+      case "serverNode":
+        handleServerNodeRender(r.server);
+        break;
+      case "cameraNode":
+        handleCameraNodeRender(r.camera);
+        break;
+    }
+  }
   
   function deleteNode(id, cursor) {
 	  $.ajax({
@@ -165,7 +176,7 @@
         dataType: "json",
         success: function (r) {
             if (r.code === 0) {
-                
+              switchHtmlRender(id, r)
             } else {
                 alert(r.msg);
             }
