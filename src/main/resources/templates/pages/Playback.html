@@ -37,12 +37,13 @@
 
           <div class="Line">
             <label>历史视频:</label>
-            <div id="inline-datepicker"></div>
+            <div id="_inline_datepicker_plugin" ></div>
+            <input type="hidden" id="_history_date_time_start" />
           </div>
 
           <div class="Location">
             <label>回放时间点定位:</label>
-            <div id="inline-datepicker"></div>
+            <!--<div id="inline-datepicker"></div>-->
             <div class="input-group">
               <input type="text" class="form-control">：
               <input type="text" class="form-control">：
@@ -50,6 +51,8 @@
               <button type="button" class="btn btn-primary waves-effect waves-light m-1">确认</button>
             </div>
           </div>
+
+          <div id="querytablediv"></div>
         </div>
 
         <div class="col-lg-10 col-md-8 model_Right">
@@ -77,13 +80,16 @@
 <script data-th-src="@{/assets/playback.js}"></script>
 <script data-th-inline="javascript">
   $( function() {
-    $("#inline-datepicker").datepicker({
+    $("#_inline_datepicker_plugin").datepicker({
       autoclose: true,
       todayHighlight: true,
       /*汉化*/
       language: "zh-CN",
       /*日期格式*/
       format:"yyyy-mm-dd"
+    });
+    $('#_inline_datepicker_plugin').on('changeDate', function() {
+      $('#_history_date_time_start').val($('#_inline_datepicker_plugin').datepicker('getFormattedDate'));
     });
   });
   function loadVideoCtrlList() {

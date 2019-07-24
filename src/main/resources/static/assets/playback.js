@@ -85,7 +85,7 @@ var PB = function ($) {
             $("#_plugin_ctrl_list a").removeClass("active");
             $(winObj).addClass("active");
             $("#DevchannelID").val(channelId);
-            this.startVideo();
+            this.commonQuery();
 
             if(type != 2) {
                 // disable cloud controller
@@ -175,23 +175,21 @@ var PB = function ($) {
                 return;
             } else {
                 this.DeviceHandle = -1;
-                this.n_warning($.lang.tip["userlogoutSuc"], TIPS_TYPE.SUCCEED);}
+                $MB.n_warning($.lang.tip["userlogoutSuc"], TIPS_TYPE.SUCCEED);}
         },
 
         /******************************* 查询相关 *********************************/
-        queryclick: function () {
-            WdatePicker({
-                dateFmt: 'yyyy-MM-dd HH:mm:ss'
-            })
-        },
-
         commonQuery: function () {
-            var BeginTime = $("#startQuerytime").val();
-            var EndTime = $("#endQuerytime").val();
-            if (BeginTime == "" || EndTime == "") {
-                this.msgtipshow($.lang.tip["tipinputsearchtime"], TIPS_TYPE.CONFIRM);
+            var selectedDateStr = $("#_history_date_time_start").val();
+
+            alert(selectedDateStr);
+            if (selectedDateStr == "") {
+                $MB.n_warning($.lang.tip["tipinputsearchtime"]);
                 return;
             }
+            var BeginTime =  selectedDateStr+ " 0:0:0";
+            var EndTime = selectedDateStr + " 23:59:59";
+
             BeginTime = BeginTime.replace(/-/g, "/");
             EndTime = EndTime.replace(/-/g, "/");
             var vBeginTime = (new Date(BeginTime).getTime()) / 1000;
@@ -205,13 +203,16 @@ var PB = function ($) {
                 tEndTime: vEndTime
             };
             var jsonStr = JSON.stringify(dataMap);
+
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindFile", this.DeviceHandle, jsonStr);
             if (-1 != SDKRet) {
+                alert(JSON.stringify(SDKRet));
                 this.queryHandle = SDKRet;
-                this.msgtipshow("Find OK!Please Click 'Find All' button to Get File", TIPS_TYPE.SUCCEED);
+                // $MB.n_success("Find OK!Please Click 'Find All' button to Get File");
+                this.findall();
             }
             else {
-                this.msgtipshow("Not find", TIPS_TYPE.CONFIRM);
+                $MB.n_warning("Not find");
             }
         },
 
@@ -222,6 +223,7 @@ var PB = function ($) {
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindNextFile", this.queryHandle);
             if (-1 != SDKRet) {
                 result = JSON.parse(SDKRet);
+                alert(JSON.stringify(result));
                 tBeginTime = this.changeMStoDate(result["tBeginTime"] * 1000);
                 tEndTime = this.changeMStoDate(result["tEndTime"] * 1000);
                 var dateobj = {
@@ -232,7 +234,7 @@ var PB = function ($) {
                 this.findall();
             } else {
                 if (this.queryjsonMap.length == 0) {
-                    this.msgtipshow("Not find", TIPS_TYPE.CONFIRM);
+                    $MB.n_warning("Not find");
                 } else {
                     this.createQuerytable();
                     this.closefind();
@@ -243,22 +245,14 @@ var PB = function ($) {
         createQuerytable: function () {
             var str = '<table id="querytable" class="querytable"></table>';
             $("#querytablediv").html(str);
-            var width = Number($("#queryBtn").width());
-            //创建查询结果表格
-            var querygridSetting = {
-                datatype: "local",
-                width: width,
-                height: 100,
-                colNames: [
-                    "开始时间",
-                    "结束时间"
-                ],
-                colModel: [
-                    {name: "tBeginTime", align: "center", width: 80, sortable: false},
-                    {name: "tEndTime", align: "center", width: 80, sortable: false},
-                ]
-            };
-            this.createTable(querygridSetting, this.queryjsonMap, "querytable");
+            var hstr = "";
+            $.each(this.queryjsonMap,function(n,v) {
+                hstr += "<tr>";
+                hstr += "<td>"+v.tBeginTime+"</td>";
+                hstr += "<td>"+v.tEndTime+"</td>";
+                hstr += "</tr>";
+            });
+            $("#querytable").html(hstr);
         },
 
         changeMStoDate: function (ms) {
@@ -282,7 +276,7 @@ var PB = function ($) {
                 alert(jsonStr);
             }
             else {
-                this.msgtipshow("Not find", TIPS_TYPE.CONFIRM);
+                this.n_warning("Not find");
             }
         },
 
@@ -301,7 +295,7 @@ var PB = function ($) {
                 icon = TIPS_TYPE.FAIL;
 
             }
-            this.msgtipshow(msg, icon);
+            this.n_warning(msg);
         },
 
         playbackbytime: function () {
@@ -309,7 +303,7 @@ var PB = function ($) {
             var BeginTime = $("#startQuerytime").val();
             var EndTime = $("#endQuerytime").val();
             if (BeginTime == "" || EndTime == "") {
-                this.msgtipshow($.lang.tip["tipinputsearchtime"], TIPS_TYPE.CONFIRM);
+                $MB.n_warning($.lang.tip["tipinputsearchtime"]);
                 return;
             }
             BeginTime = BeginTime.replace(/-/g, "/");
@@ -335,7 +329,7 @@ var PB = function ($) {
             top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
             var retcode = top.sdk_viewer.execFunction("NETDEV_PlayBack", parseInt(ResourceId), this.DeviceHandle, jsonStr);
             if (-1 == retcode) {
-                this.msgtipshow("playback fail", TIPS_TYPE.FAIL);
+                this.n_warning("playback fail");
             }
         },
 
@@ -344,7 +338,7 @@ var PB = function ($) {
             this.videotypejsonMap[ResourceId] = null;
             var retcode = top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
             if (0 != retcode) {
-                this.msgtipshow("stop fail", TIPS_TYPE.FAIL);
+                this.n_warning("stop fail");
             }
         },
 
@@ -364,7 +358,7 @@ var PB = function ($) {
                 $("#getprogresstime").val(showplaytime);
             }
             else {
-                this.msgtipshow("Not find", TIPS_TYPE.FAIL);
+                this.n_warning("Not find");
             }
         },
 
@@ -385,9 +379,9 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_SETPLAYTIME, jsonStr);
             if (-1 == SDKRet) {
-                this.msgtipshow("Set Play Time Fail", TIPS_TYPE.FAIL);
+                this.n_warning("Set Play Time Fail");
             } else {
-                this.msgtipshow("Set play Time Success", TIPS_TYPE.SUCCEED);
+                this.n_warning("Set play Time Success");
             }
         },
         resumeProgress: function () {
@@ -399,7 +393,7 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_RESUME, jsonStr);
             if (-1 == SDKRet) {
-                this.msgtipshow("Resume Fail", TIPS_TYPE.FAIL);
+                this.n_warning("Resume Fail");
             }
         },
 
@@ -412,7 +406,7 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_PAUSE, jsonStr);
             if (-1 == SDKRet) {
-                this.msgtipshow("Pause fail", TIPS_TYPE.FAIL);
+                this.n_warning("Pause fail");
             }
         },
 
