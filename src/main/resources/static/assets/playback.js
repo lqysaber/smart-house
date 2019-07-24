@@ -52,7 +52,6 @@ var PB = function ($) {
             }
             this.initPagebtn();
             $MB.n_warning(msg);
-            // this.msgtipshow(msg, icon);
         },
 
         initPagebtn: function () {
@@ -77,12 +76,6 @@ var PB = function ($) {
 
             $("#uniview_ctrl_win4").on("click", function () {
                 _this.rendersdkviewwindow(4);
-            });
-
-            $("#_plugin_trl_presetul button").bind("click", function (e) {
-                var id = e.target.id;
-                _this.presetOperation(id);
-
             });
 
         },
@@ -185,64 +178,248 @@ var PB = function ($) {
                 this.n_warning($.lang.tip["userlogoutSuc"], TIPS_TYPE.SUCCEED);}
         },
 
-        /*************************************** 实况相关 Begin **********************************/
-        //播放视频
-        startVideo: function () {
+        /******************************* 查询相关 *********************************/
+        queryclick: function () {
+            WdatePicker({
+                dateFmt: 'yyyy-MM-dd HH:mm:ss'
+            })
+        },
+
+        commonQuery: function () {
+            var BeginTime = $("#startQuerytime").val();
+            var EndTime = $("#endQuerytime").val();
+            if (BeginTime == "" || EndTime == "") {
+                this.msgtipshow($.lang.tip["tipinputsearchtime"], TIPS_TYPE.CONFIRM);
+                return;
+            }
+            BeginTime = BeginTime.replace(/-/g, "/");
+            EndTime = EndTime.replace(/-/g, "/");
+            var vBeginTime = (new Date(BeginTime).getTime()) / 1000;
+            var vEndTime = (new Date(EndTime).getTime()) / 1000;
+            var channelID = $("#DevchannelID").val();
+            var dataMap = {
+                szFileName: 0,
+                dwChannelID: channelID,
+                dwFileType: EventType.ALL,
+                tBeginTime: vBeginTime,
+                tEndTime: vEndTime
+            };
+            var jsonStr = JSON.stringify(dataMap);
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindFile", this.DeviceHandle, jsonStr);
+            if (-1 != SDKRet) {
+                this.queryHandle = SDKRet;
+                this.msgtipshow("Find OK!Please Click 'Find All' button to Get File", TIPS_TYPE.SUCCEED);
+            }
+            else {
+                this.msgtipshow("Not find", TIPS_TYPE.CONFIRM);
+            }
+        },
+
+        findall: function () {
+            var result;
+            var tBeginTime;
+            var tEndTime;
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindNextFile", this.queryHandle);
+            if (-1 != SDKRet) {
+                result = JSON.parse(SDKRet);
+                tBeginTime = this.changeMStoDate(result["tBeginTime"] * 1000);
+                tEndTime = this.changeMStoDate(result["tEndTime"] * 1000);
+                var dateobj = {
+                    tBeginTime: tBeginTime,
+                    tEndTime: tEndTime
+                };
+                this.queryjsonMap.push(dateobj);
+                this.findall();
+            } else {
+                if (this.queryjsonMap.length == 0) {
+                    this.msgtipshow("Not find", TIPS_TYPE.CONFIRM);
+                } else {
+                    this.createQuerytable();
+                    this.closefind();
+                }
+            }
+        },
+
+        createQuerytable: function () {
+            var str = '<table id="querytable" class="querytable"></table>';
+            $("#querytablediv").html(str);
+            var width = Number($("#queryBtn").width());
+            //创建查询结果表格
+            var querygridSetting = {
+                datatype: "local",
+                width: width,
+                height: 100,
+                colNames: [
+                    "开始时间",
+                    "结束时间"
+                ],
+                colModel: [
+                    {name: "tBeginTime", align: "center", width: 80, sortable: false},
+                    {name: "tEndTime", align: "center", width: 80, sortable: false},
+                ]
+            };
+            this.createTable(querygridSetting, this.queryjsonMap, "querytable");
+        },
+
+        changeMStoDate: function (ms) {
+            var datedata = new Date(ms);
+            // return datedata;
+            return datedata.toLocaleString();
+        },
+
+        findNextfile: function () {
             debugger;
-            var msg;
-            var icon;
-            var channelValue = Number($("#DevchannelID").val());
-            if (channelValue == "") {
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindNextFile", this.queryHandle);
+            if (-1 != SDKRet) {
+                var result = JSON.parse(SDKRet);
+                this.PlayBackBeginTime = result.tBeginTime;
+                this.PlayBackEndTime = result.tEndTime;
+                var dataMap = {
+                    BeginTime: this.getLocalTime(this.PlayBackBeginTime),
+                    EndTime: this.getLocalTime(this.PlayBackEndTime)
+                };
+                var jsonStr = JSON.stringify(dataMap);
+                alert(jsonStr);
+            }
+            else {
+                this.msgtipshow("Not find", TIPS_TYPE.CONFIRM);
+            }
+        },
+
+        getLocalTime: function (nS) {
+            return new Date(parseInt(nS) * 1000).toLocaleString().substr(0, 17)
+        },
+
+        closefind: function () {
+            var msg, icon;
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindClose", this.queryHandle);
+            if (-1 != SDKRet) {
+                msg = "Find Success";
+                icon = TIPS_TYPE.SUCCEED;
+            } else {
+                msg = "Find Fail";
+                icon = TIPS_TYPE.FAIL;
 
             }
+            this.msgtipshow(msg, icon);
+        },
+
+        playbackbytime: function () {
+            debugger;
+            var BeginTime = $("#startQuerytime").val();
+            var EndTime = $("#endQuerytime").val();
+            if (BeginTime == "" || EndTime == "") {
+                this.msgtipshow($.lang.tip["tipinputsearchtime"], TIPS_TYPE.CONFIRM);
+                return;
+            }
+            BeginTime = BeginTime.replace(/-/g, "/");
+            EndTime = EndTime.replace(/-/g, "/");
+            var vBeginTime = (new Date(BeginTime).getTime()) / 1000;
+            var vEndTime = (new Date(EndTime).getTime()) / 1000;
+            var channelID = $("#DevchannelID").val();
             var dataMap = {
-                dwChannelID: channelValue,
-                dwStreamType: LiveStream.LIVE_STREAM_INDEX_MAIN,
+                dwChannelID: channelID,
+                tBeginTime: vBeginTime,
+                tEndTime: vEndTime,
                 dwLinkMode: Protocal.TRANSPROTOCAL_RTPTCP,
-                dwFluency: 0
+                dwFileType: EventType.ALL,
+                dwPlaySpeed: 9
             };
             var jsonStr = JSON.stringify(dataMap);
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            //将窗口与流保存下来
             var obj = {
-                streamtype: videostreamtype.live,
+                streamtype: videostreamtype.playback,
                 screenNum: ResourceId
             };
-
             this.videotypejsonMap[ResourceId] = obj;
-
-            top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
-            var openretcode = top.sdk_viewer.execFunction("NETDEV_RealPlay", parseInt(ResourceId), this.DeviceHandle, jsonStr);
-            if (0 != openretcode) {
-                msg = $.lang.tip["tipstartvideofail"];
-                icon = TIPS_TYPE.FAIL;
-                $MB.n_warning(msg);
-            } else {
-                msg = $.lang.tip["tipstartvideosuc"];
-                icon = TIPS_TYPE.SUCCEED;
-                $MB.n_success(msg);
+            top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
+            var retcode = top.sdk_viewer.execFunction("NETDEV_PlayBack", parseInt(ResourceId), this.DeviceHandle, jsonStr);
+            if (-1 == retcode) {
+                this.msgtipshow("playback fail", TIPS_TYPE.FAIL);
             }
-
         },
 
-        //关闭视频
-        stopVideo: function () {
-            var msg;
-            var icon;
+        stopplayback: function () {
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
             this.videotypejsonMap[ResourceId] = null;
-            var retcode = top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
+            var retcode = top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
             if (0 != retcode) {
-                msg = $.lang.tip["tipstopvideofail"];
-                icon = TIPS_TYPE.FAIL;
-            } else {
-                msg = $.lang.tip ["tipstopvideosuc"];
-                icon = TIPS_TYPE.SUCCEED;
+                this.msgtipshow("stop fail", TIPS_TYPE.FAIL);
             }
-            $MB.n_success(msg);
         },
-        /******************************* 实况相关 END ***************************/
 
+        GetProgress: function () {
+            debugger;
+            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            var dataMap = {
+                pulTime: 0,
+                pulSpeed: 0
+            };
+            var jsonStr = JSON.stringify(dataMap);
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_GETPLAYTIME, jsonStr);
+            if (-1 != SDKRet) {
+                var result = JSON.parse(SDKRet);
+                var PlayTime = result.PlayTime;
+                var showplaytime = this.changeMStoDate(PlayTime * 1000);
+                $("#getprogresstime").val(showplaytime);
+            }
+            else {
+                this.msgtipshow("Not find", TIPS_TYPE.FAIL);
+            }
+        },
+
+        SetProgress: function () {
+            debugger;
+            var setprogresstime = $("#setprogresstime").val();
+            if (setprogresstime == "") {
+                this.msgtipshow($.lang.tip["tipinputsearchtime"], TIPS_TYPE.CONFIRM);
+                return;
+            }
+            setprogresstime = setprogresstime.replace(/-/g, "/");
+            var pullTime = parseInt((new Date(setprogresstime).getTime()) / 1000);
+            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            var dataMap = {
+                pulTime: pullTime,
+                pulSpeed: 20
+            };
+            var jsonStr = JSON.stringify(dataMap);
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_SETPLAYTIME, jsonStr);
+            if (-1 == SDKRet) {
+                this.msgtipshow("Set Play Time Fail", TIPS_TYPE.FAIL);
+            } else {
+                this.msgtipshow("Set play Time Success", TIPS_TYPE.SUCCEED);
+            }
+        },
+        resumeProgress: function () {
+            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            var dataMap = {
+                pulTime: 0,
+                pulSpeed: 0
+            };
+            var jsonStr = JSON.stringify(dataMap);
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_RESUME, jsonStr);
+            if (-1 == SDKRet) {
+                this.msgtipshow("Resume Fail", TIPS_TYPE.FAIL);
+            }
+        },
+
+        Pauseprogress: function () {
+            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            var dataMap = {
+                pulTime: 0,
+                pulSpeed: 0
+            };
+            var jsonStr = JSON.stringify(dataMap);
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_PAUSE, jsonStr);
+            if (-1 == SDKRet) {
+                this.msgtipshow("Pause fail", TIPS_TYPE.FAIL);
+            }
+        },
+
+        /**************************停止播放单路回放流*******************/
+        stoponeplaybackvideo: function (id) {
+            top.sdk_viewer.execFunction("NETDEV_StopPlayback", id);
+        },
 
         /**************************清理SDK并关闭线程********************/
         destory_activex: function () {

@@ -2,7 +2,9 @@ package h.uniview.smarthouse.form;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 public class ServerForm implements Serializable {
 
@@ -11,13 +13,14 @@ public class ServerForm implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@NotNull
+	@NotEmpty(message = "服务名称不能为空")
 	private String name;
 	
-	@NotNull
+	@NotEmpty(message = "ip地址不为能为空")
 	private String ip;
 	
-	@NotNull
+	@Min(value = 1, message = "端口不能小于1")
+	@Max(value = 65535, message = "端口不能大于65535")
 	private int port;
 	
 	private String mess;

@@ -1,6 +1,10 @@
 package h.uniview.smarthouse.exception;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.ExpiredSessionException;
@@ -42,6 +46,13 @@ public class RRExceptionHandler {
 		logger.error(e.getMessage(), e);
 		return R.error(404, "路径不存在，请检查路径是否正确");
 	}
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+    public R handleConstraintViolationException(ConstraintViolationException ex) throws IOException {
+        String msg = ex.getMessage();
+        String[] msgs = msg.split(": ");
+        return R.error(500, msgs[msgs.length-1]);
+    }
 
 //	@ExceptionHandler(DuplicateKeyException.class)
 //	public R handleDuplicateKeyException(DuplicateKeyException e){

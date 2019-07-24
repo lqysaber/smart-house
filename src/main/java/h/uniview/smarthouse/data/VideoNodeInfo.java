@@ -2,6 +2,9 @@ package h.uniview.smarthouse.data;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true) 
 public class VideoNodeInfo extends CameraInfo implements Serializable {
 
 	/**

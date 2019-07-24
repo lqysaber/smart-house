@@ -4,14 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import h.uniview.smarthouse.data.CameraInfo;
 import h.uniview.smarthouse.data.EnvCfgCenter;
 import h.uniview.smarthouse.data.ServerNodeInfo;
+import h.uniview.smarthouse.data.VideoNodeInfo;
 import h.uniview.smarthouse.form.CameraForm;
 import h.uniview.smarthouse.form.ServerForm;
+import h.uniview.smarthouse.form.VideoForm;
 import h.uniview.smarthouse.utils.Constant;
 import h.uniview.smarthouse.utils.PageUtils;
 import h.uniview.smarthouse.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Validated
 @RestController
 public class DeviceController extends BaseController {
 	
@@ -67,7 +71,7 @@ public class DeviceController extends BaseController {
             r.put("camera", envCenter.getCameraInfoList());
 
             List<CameraInfo> result = new ArrayList<CameraInfo>();
-            result.addAll(envCenter.getNvrInfoList());
+//            result.addAll(envCenter.getNvrInfoList());
             result.addAll(envCenter.getVideoInfoList());
 
             r.put("video", result);
@@ -143,19 +147,35 @@ public class DeviceController extends BaseController {
 
     @RequestMapping(value = "/device/video/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public R createVideo(@RequestBody @Valid CameraForm cameraForm, BindingResult bindingResult) {
+    public R createVideo(@RequestBody @Valid VideoForm videoForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            CameraInfo cameraNode = objectMapper.convertValue(cameraForm, CameraInfo.class);
-            envCenter.crateNode(cameraNode, Constant.ConfigEnvType.CAMERA.getValue());
-            return R.ok();
+            VideoNodeInfo object = objectMapper.convertValue(videoForm, VideoNodeInfo.class);
+            envCenter.crateNode(object, Constant.ConfigEnvType.VIDEO.getValue());
+            R r = R.ok();
+            r.put("video", envCenter.getVideoInfoList());
+            return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
         }
     }
+    
+    @RequestMapping(value = "/device/video/del")
+    @ResponseBody
+    public R deleteVideoNode(String cursor) {
+        try {
+            envCenter.deleteNode(Constant.ConfigEnvType.VIDEO.getValue(), Integer.parseInt(cursor));
+            R r = R.ok();
+            r.put("video", envCenter.getVideoInfoList());
+            return r;
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+
 
     @RequestMapping(value = "/video/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody

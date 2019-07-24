@@ -2,6 +2,7 @@ package h.uniview.smarthouse.form;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class ConfigDataForm implements Serializable {
@@ -11,25 +12,25 @@ public class ConfigDataForm implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@NotNull
+	@NotEmpty
 	private String locationFile;
 	
-	@NotNull
+	@NotEmpty
 	private String environmentalFile;
 	
-	@NotNull
+	@NotEmpty
 	private String cameraOriginalCatalog;// 相机拍摄原始文件存储位置C:\Users\Administrator\Desktop\
 	
-	@NotNull
+	@NotEmpty
 	private String cameraManageCatalog;// 相机拍摄后加工处理的文件存储位置C:\Users\Administrator\Desktop\
 	
-	@NotNull
+	@NotEmpty
 	private String videoScreenshotCatalog;// 视频快照截图存储位置C:\Users\Administrator\Desktop\
 	
-	@NotNull
+	@NotEmpty
 	private String videoVideotapeCatalog; // 视频录像存储位置C:\Users\Administrator\Desktop\
 	
-	@NotNull
+	@NotEmpty
 	private String videoVmdalarmCatalog;// 视频移动侦测警报截图存储位置C:\Users\Administrator\Desktop\
 	
 	public String getLocationFile() {

@@ -98,7 +98,7 @@
         if (r.code === 0) {
           var hstr = "";
           $.each(r.msg,function(n,v) {
-            hstr += "<a class='list-group-item' onclick='Index.selectedDevChannel("+v.channelID+", this, "+v.type+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
+            hstr += "<a class='list-group-item' onclick='PB.selectedDevChannel("+v.channelID+", this, "+v.type+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
           });
           $("#_plugin_ctrl_list").html(hstr);
         } else {
