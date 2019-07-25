@@ -238,6 +238,7 @@ var PB = function ($) {
                 } else {
                     this.createQuerytable();
                     this.closefind();
+                    this.playbackbytime();
                 }
             }
         },
@@ -273,10 +274,10 @@ var PB = function ($) {
                     EndTime: this.getLocalTime(this.PlayBackEndTime)
                 };
                 var jsonStr = JSON.stringify(dataMap);
-                alert(jsonStr);
+                // alert(jsonStr);
             }
             else {
-                this.n_warning("Not find");
+                $MB.n_warning("Not find");
             }
         },
 
@@ -295,17 +296,14 @@ var PB = function ($) {
                 icon = TIPS_TYPE.FAIL;
 
             }
-            this.n_warning(msg);
+            $MB.n_warning(msg);
         },
 
         playbackbytime: function () {
             debugger;
-            var BeginTime = $("#startQuerytime").val();
-            var EndTime = $("#endQuerytime").val();
-            if (BeginTime == "" || EndTime == "") {
-                $MB.n_warning($.lang.tip["tipinputsearchtime"]);
-                return;
-            }
+            var selectedDateStr = $("#_history_date_time_start").val();
+            var BeginTime =  selectedDateStr+ " 0:0:0";
+            var EndTime = selectedDateStr + " 23:59:59";
             BeginTime = BeginTime.replace(/-/g, "/");
             EndTime = EndTime.replace(/-/g, "/");
             var vBeginTime = (new Date(BeginTime).getTime()) / 1000;
@@ -319,6 +317,7 @@ var PB = function ($) {
                 dwFileType: EventType.ALL,
                 dwPlaySpeed: 9
             };
+
             var jsonStr = JSON.stringify(dataMap);
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
             var obj = {
@@ -329,7 +328,7 @@ var PB = function ($) {
             top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
             var retcode = top.sdk_viewer.execFunction("NETDEV_PlayBack", parseInt(ResourceId), this.DeviceHandle, jsonStr);
             if (-1 == retcode) {
-                this.n_warning("playback fail");
+                $MB.n_warning("playback fail");
             }
         },
 
@@ -338,7 +337,7 @@ var PB = function ($) {
             this.videotypejsonMap[ResourceId] = null;
             var retcode = top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
             if (0 != retcode) {
-                this.n_warning("stop fail");
+                $MB.n_warning("stop fail");
             }
         },
 
@@ -358,7 +357,7 @@ var PB = function ($) {
                 $("#getprogresstime").val(showplaytime);
             }
             else {
-                this.n_warning("Not find");
+                $MB.n_warning("Not find");
             }
         },
 
@@ -379,9 +378,9 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_SETPLAYTIME, jsonStr);
             if (-1 == SDKRet) {
-                this.n_warning("Set Play Time Fail");
+                $MB.n_warning("Set Play Time Fail");
             } else {
-                this.n_warning("Set play Time Success");
+                $MB.n_warning("Set play Time Success");
             }
         },
         resumeProgress: function () {
@@ -393,7 +392,7 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_RESUME, jsonStr);
             if (-1 == SDKRet) {
-                this.n_warning("Resume Fail");
+                $MB.n_warning("Resume Fail");
             }
         },
 
@@ -406,7 +405,7 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_PAUSE, jsonStr);
             if (-1 == SDKRet) {
-                this.n_warning("Pause fail");
+                $MB.n_warning("Pause fail");
             }
         },
 
