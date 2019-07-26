@@ -41,17 +41,13 @@ var PB = function ($) {
         initPage: function () {
             debugger;
             video.initOcx();
-            var msg, icon;
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {
-                msg = $.lang.tip["tipinitOcxfail"];
-                icon = TIPS_TYPE.FAIL;
+            	$MB.n_warning($.lang.tip["tipinitOcxfail"]);
             } else {
-                msg = $.lang.tip["tipinitOcxsuc"];
-                icon = TIPS_TYPE.SUCCEED;
+                $MB.n_success($.lang.tip["tipinitOcxsuc"]);
             }
             this.initPagebtn();
-            $MB.n_warning(msg);
         },
 
         initPagebtn: function () {
@@ -77,7 +73,6 @@ var PB = function ($) {
             $("#uniview_ctrl_win4").on("click", function () {
                 _this.rendersdkviewwindow(4);
             });
-
         },
 
         selectedDevChannel: function(channelId, winObj, type) {
@@ -86,13 +81,6 @@ var PB = function ($) {
             $(winObj).addClass("active");
             $("#DevchannelID").val(channelId);
             this.commonQuery();
-
-            if(type != 2) {
-                // disable cloud controller
-                $("#_plugin_trl_presetul button").attr("disabled", true);
-            } else {
-                $("#_plugin_trl_presetul button").attr("disabled", false);
-            }
         },
 
         /*************************************** test login  **********************************/
@@ -115,22 +103,14 @@ var PB = function ($) {
             var loginJsonstring = JSON.stringify(loginJsonMap);
             this.login(loginJsonstring);
 
-            var SDKRet;
             if (this.devicetype == deviceTypestr.IPC || this.devicetype == deviceTypestr.NVR) {
-                SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
+            	var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
                 if (SDKRet == -1) {
-                    $MB.n_warning($.lang.tip["getlocallistfail"], TIPS_TYPE.FAIL);
+                    $MB.n_warning($.lang.tip["getlocallistfail"]);
                     return;
                 }
-            } else if (this.devicetype == deviceTypestr.EVMS) {
-                SDKRet = top.sdk_viewer.execFunction("NETDEV_FindDevChnList", this.DeviceHandle, 0, 0);
-                if (SDKRet == -1) {
-                    $MB.n_warning($.lang.tip["getlocallistfail"], TIPS_TYPE.FAIL);
-                    return;
-                } else {
-                    this.EVMSjsonMap = [];
-                    // this.getevmsdevicelist(SDKRet);
-                }
+            } else {
+                 //TODO do nothing ..
             }
 
         },
@@ -141,12 +121,8 @@ var PB = function ($) {
             this.initOcxWindownum = num;
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {
-                msg = $.lang.tip["tipinitOcxfail"];
-                icon = TIPS_TYPE.FAIL;
-            } else {
-                msg = $.lang.tip["tipinitOcxsuc"];
-                icon = TIPS_TYPE.SUCCEED;
-            }
+            	 $MB.n_warning($.lang.tip["tipinitOcxfail"]);
+            } 
         },
 
         /*************************************** 本地登录 相关 **********************************/
@@ -154,35 +130,28 @@ var PB = function ($) {
         login: function (data) {
             debugger;
             var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_Login"], data);
-            var msg;
-            var icon;
             if (-1 == SDKRet) {
-                msg = $.lang.tip["tiploginfail"];
-                icon = TIPS_TYPE.FAIL;
+            	$MB.n_warning($.lang.tip["tiploginfail"]);
             } else {
                 var result = JSON.parse(SDKRet);
                 this.DeviceHandle = result.UserID;
-                msg = $.lang.tip["tiploginsuc"];
-                icon = TIPS_TYPE.SUCCEED;
+                $MB.n_success($.lang.tip["tiploginsuc"]);
             }
-            $MB.n_warning(msg);
         },
 
         loginOut: function () {
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_Logout", this.DeviceHandle);
             if (SDKRet == -1) {
-                $MB.n_warning($.lang.tip["userlogoutFail"], TIPS_TYPE.FAIL);
+                $MB.n_warning($.lang.tip["userlogoutFail"]);
                 return;
             } else {
                 this.DeviceHandle = -1;
-                $MB.n_warning($.lang.tip["userlogoutSuc"], TIPS_TYPE.SUCCEED);}
+                $MB.n_warning($.lang.tip["userlogoutSuc"]);}
         },
 
         /******************************* 查询相关 *********************************/
         commonQuery: function () {
             var selectedDateStr = $("#_history_date_time_start").val();
-
-            alert(selectedDateStr);
             if (selectedDateStr == "") {
                 $MB.n_warning($.lang.tip["tipinputsearchtime"]);
                 return;
@@ -206,9 +175,7 @@ var PB = function ($) {
 
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindFile", this.DeviceHandle, jsonStr);
             if (-1 != SDKRet) {
-                alert(JSON.stringify(SDKRet));
                 this.queryHandle = SDKRet;
-                // $MB.n_success("Find OK!Please Click 'Find All' button to Get File");
                 this.findall();
             }
             else {
@@ -223,7 +190,6 @@ var PB = function ($) {
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindNextFile", this.queryHandle);
             if (-1 != SDKRet) {
                 result = JSON.parse(SDKRet);
-                alert(JSON.stringify(result));
                 tBeginTime = this.changeMStoDate(result["tBeginTime"] * 1000);
                 tEndTime = this.changeMStoDate(result["tEndTime"] * 1000);
                 var dateobj = {
@@ -244,8 +210,7 @@ var PB = function ($) {
         },
 
         createQuerytable: function () {
-            var str = '<table id="querytable" class="querytable"></table>';
-            $("#querytablediv").html(str);
+            $("#querytablediv").html('<table id="querytable" class="querytable"></table>');
             var hstr = "";
             $.each(this.queryjsonMap,function(n,v) {
                 hstr += "<tr>";
@@ -258,10 +223,9 @@ var PB = function ($) {
 
         changeMStoDate: function (ms) {
             var datedata = new Date(ms);
-            // return datedata;
             return datedata.toLocaleString();
         },
-
+        
         findNextfile: function () {
             debugger;
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindNextFile", this.queryHandle);
@@ -274,7 +238,6 @@ var PB = function ($) {
                     EndTime: this.getLocalTime(this.PlayBackEndTime)
                 };
                 var jsonStr = JSON.stringify(dataMap);
-                // alert(jsonStr);
             }
             else {
                 $MB.n_warning("Not find");
@@ -286,15 +249,12 @@ var PB = function ($) {
         },
 
         closefind: function () {
-            var msg, icon;
+            var msg;
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindClose", this.queryHandle);
             if (-1 != SDKRet) {
                 msg = "Find Success";
-                icon = TIPS_TYPE.SUCCEED;
             } else {
                 msg = "Find Fail";
-                icon = TIPS_TYPE.FAIL;
-
             }
             $MB.n_warning(msg);
         },
@@ -365,7 +325,7 @@ var PB = function ($) {
             debugger;
             var setprogresstime = $("#setprogresstime").val();
             if (setprogresstime == "") {
-                this.msgtipshow($.lang.tip["tipinputsearchtime"], TIPS_TYPE.CONFIRM);
+            	$MB.n_warning($.lang.tip["tipinputsearchtime"]);
                 return;
             }
             setprogresstime = setprogresstime.replace(/-/g, "/");
