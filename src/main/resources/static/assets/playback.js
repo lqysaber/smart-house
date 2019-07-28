@@ -153,6 +153,7 @@ var PB = function ($) {
         commonQuery: function () {
             var selectedDateStr = $("#_history_date_time_start").val();
             if (selectedDateStr == "") {
+                $('#_inline_datepicker_plugin').datepicker('setDate', new Date());
                 $MB.n_warning($.lang.tip["tipinputsearchtime"]);
                 return;
             }
@@ -164,6 +165,10 @@ var PB = function ($) {
             var vBeginTime = (new Date(BeginTime).getTime()) / 1000;
             var vEndTime = (new Date(EndTime).getTime()) / 1000;
             var channelID = $("#DevchannelID").val();
+            if (channelID == "") {
+                $MB.n_warning("Please Select the Monitor");
+                return;
+            }
             var dataMap = {
                 szFileName: 0,
                 dwChannelID: channelID,

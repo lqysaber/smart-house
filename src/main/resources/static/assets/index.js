@@ -41,18 +41,13 @@ var Index = function ($) {
         initPage: function () {
             debugger;
             video.initOcx();
-            var msg, icon;
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {
-                msg = $.lang.tip["tipinitOcxfail"];
-                icon = TIPS_TYPE.FAIL;
+                $MB.n_warning($.lang.tip["tipinitOcxfail"]);
             } else {
-                msg = $.lang.tip["tipinitOcxsuc"];
-                icon = TIPS_TYPE.SUCCEED;
+                $MB.n_success($.lang.tip["tipinitOcxsuc"]);
             }
             this.initPagebtn();
-            $MB.n_warning(msg);
-            // this.msgtipshow(msg, icon);
         },
 
         initPagebtn: function () {
@@ -78,12 +73,6 @@ var Index = function ($) {
             $("#uniview_ctrl_win4").on("click", function () {
                 _this.rendersdkviewwindow(4);
             });
-
-            // $("#_plugin_ctrl_list a").bind("click", function (e) {
-            //     // var id = e.target.id;
-            //     _this.selectedDevChannel(1);
-            //     // _this.startVideo();
-            // });
 
             $("#_plugin_trl_presetul button").bind("click", function (e) {
                 var id = e.target.id;
@@ -147,11 +136,9 @@ var Index = function ($) {
                     break;
             }
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 5);
+            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 3);
             if (0 != retcode) {
-                var msg = $.lang.tip["tippresetturnfail"];
-                var icon = TIPS_TYPE.FAIL;
-                $MB.n_warning(msg, icon);
+                $MB.n_warning($.lang.tip["tippresetturnfail"]);
                 return ;
             }
             this.startVideo();
@@ -187,7 +174,7 @@ var Index = function ($) {
                     // break;
             }
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 2);
+            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 5);
             // var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), _focus_size, 5);
             if (0 != retcode) {
                 $MB.n_warning(id + "," + ptzcontrolcmd +" is error");
@@ -225,13 +212,13 @@ var Index = function ($) {
             if (this.devicetype == deviceTypestr.IPC || this.devicetype == deviceTypestr.NVR) {
                 SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
                 if (SDKRet == -1) {
-                    $MB.n_warning($.lang.tip["getlocallistfail"], TIPS_TYPE.FAIL);
+                    $MB.n_warning($.lang.tip["getlocallistfail"]);
                     return;
                 }
             } else if (this.devicetype == deviceTypestr.EVMS) {
                 SDKRet = top.sdk_viewer.execFunction("NETDEV_FindDevChnList", this.DeviceHandle, 0, 0);
                 if (SDKRet == -1) {
-                    $MB.n_warning($.lang.tip["getlocallistfail"], TIPS_TYPE.FAIL);
+                    $MB.n_warning($.lang.tip["getlocallistfail"]);
                     return;
                 } else {
                     this.EVMSjsonMap = [];
@@ -247,11 +234,7 @@ var Index = function ($) {
             this.initOcxWindownum = num;
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {
-                msg = $.lang.tip["tipinitOcxfail"];
-                icon = TIPS_TYPE.FAIL;
-            } else {
-                msg = $.lang.tip["tipinitOcxsuc"];
-                icon = TIPS_TYPE.SUCCEED;
+                $MB.n_warning($.lang.tip["tipinitOcxfail"]);
             }
         },
 
@@ -261,38 +244,34 @@ var Index = function ($) {
             debugger;
             var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_Login"], data);
             var msg;
-            var icon;
             if (-1 == SDKRet) {
-                msg = $.lang.tip["tiploginfail"];
-                icon = TIPS_TYPE.FAIL;
+                $MB.n_warning($.lang.tip["tiploginfail"]);
             } else {
                 var result = JSON.parse(SDKRet);
                 this.DeviceHandle = result.UserID;
-                msg = $.lang.tip["tiploginsuc"];
-                icon = TIPS_TYPE.SUCCEED;
+                $MB.n_success($.lang.tip["tiploginsuc"]);
             }
-            $MB.n_warning(msg);
         },
 
         loginOut: function () {
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_Logout", this.DeviceHandle);
             if (SDKRet == -1) {
-                $MB.n_warning($.lang.tip["userlogoutFail"], TIPS_TYPE.FAIL);
+                $MB.n_warning($.lang.tip["userlogoutFail"]);
                 return;
             } else {
                 this.DeviceHandle = -1;
-                this.n_warning($.lang.tip["userlogoutSuc"], TIPS_TYPE.SUCCEED);}
+                this.n_warning($.lang.tip["userlogoutSuc"]);
+            }
         },
 
         /*************************************** 实况相关 Begin **********************************/
         //播放视频
         startVideo: function () {
             debugger;
-            var msg;
-            var icon;
             var channelValue = Number($("#DevchannelID").val());
             if (channelValue == "") {
-
+                $MB.n_warning("please select the monitor");
+                return;
             }
             var dataMap = {
                 dwChannelID: channelValue,
@@ -308,37 +287,37 @@ var Index = function ($) {
                 screenNum: ResourceId
             };
 
-            this.videotypejsonMap[ResourceId] = obj;
+            var closeRetcode = this.stopVideo();
+            if(0 != closeRetcode) {
+                $MB.n_warning($.lang.tip["tipstopvideofail"]+",channelId:"+channelValue);
+                return;
+            }
 
-            top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
             var openretcode = top.sdk_viewer.execFunction("NETDEV_RealPlay", parseInt(ResourceId), this.DeviceHandle, jsonStr);
             if (0 != openretcode) {
-                msg = $.lang.tip["tipstartvideofail"];
-                icon = TIPS_TYPE.FAIL;
-                $MB.n_warning(msg);
+                $MB.n_warning($.lang.tip["tipstartvideofail"]);
             } else {
-                msg = $.lang.tip["tipstartvideosuc"];
-                icon = TIPS_TYPE.SUCCEED;
-                $MB.n_success(msg);
+                this.videotypejsonMap[ResourceId] = obj;
+                $MB.n_success($.lang.tip["tipstartvideosuc"]);
             }
 
         },
 
         //关闭视频
         stopVideo: function () {
-            var msg;
-            var icon;
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            this.videotypejsonMap[ResourceId] = null;
+            var videoObj = this.videotypejsonMap[ResourceId];
+            if(null == videoObj) {
+                return 0;
+            }
             var retcode = top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
             if (0 != retcode) {
-                msg = $.lang.tip["tipstopvideofail"];
-                icon = TIPS_TYPE.FAIL;
+                // $MB.n_warning($.lang.tip["tipstopvideofail"]);
             } else {
-                msg = $.lang.tip ["tipstopvideosuc"];
-                icon = TIPS_TYPE.SUCCEED;
+                this.videotypejsonMap[ResourceId] = null;
+                // $MB.n_success($.lang.tip ["tipstopvideosuc"]);
             }
-            $MB.n_success(msg);
+            return retcode;
         },
         /******************************* 实况相关 END ***************************/
 

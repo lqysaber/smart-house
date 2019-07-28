@@ -1,6 +1,6 @@
 package h.uniview.smarthouse.controller;
 
-import h.uniview.smarthouse.data.PropCenter;
+import h.uniview.smarthouse.data.EnvCfgCenter;
 import h.uniview.smarthouse.form.PhotoForm;
 import h.uniview.smarthouse.utils.FileUtils;
 import h.uniview.smarthouse.utils.PageUtils;
@@ -19,9 +19,15 @@ import java.util.List;
 public class PhotoController extends BaseController {
 
     @Autowired
-    PropCenter propCenter;
+    EnvCfgCenter envCfgCenter;
 
 	String path = "C:\\Users\\HugoLi\\Downloads\\子骏\\入册\\";
+
+	private String getPhotoPath() {
+	    String tmp = envCfgCenter.getConfigMsg().getCameraManageCatalog();
+	    return new File(tmp).exists()? tmp : path;
+    }
+
 	@RequestMapping(value = "/photo/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public R list(@RequestBody @Valid PhotoForm photoForm, BindingResult bindingResult) {
@@ -30,7 +36,7 @@ public class PhotoController extends BaseController {
         }
 		
         try {
-            List<String> result = FileUtils.listFile(path);
+            List<String> result = FileUtils.listFile(getPhotoPath());
             PageUtils pg = new PageUtils(result, photoForm.getPageSize(), photoForm.getCurrPage());
             return R.ok(pg);
         } catch (Exception e) {
@@ -44,7 +50,7 @@ public class PhotoController extends BaseController {
      */
     @RequestMapping("/showPic/{fileName}")
     public void showPicture(@PathVariable("fileName") String fileName,  HttpServletResponse response){
-        File imgFile = new File(path+fileName);
+        File imgFile = new File(getPhotoPath()+fileName);
         responseFile(response, imgFile);
     }
 
@@ -57,7 +63,7 @@ public class PhotoController extends BaseController {
     public void downloadPicture(@PathVariable("fileName") String fileName, HttpServletResponse response){
         // 设置下载的响应头信息
         response.setHeader("Content-Disposition", "attachment;fileName=" + "headPic.jpg");
-        File imgFile = new File(path+fileName);
+        File imgFile = new File(getPhotoPath()+fileName);
         responseFile(response, imgFile);
     }
 

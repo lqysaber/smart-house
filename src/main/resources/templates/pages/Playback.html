@@ -90,6 +90,7 @@
     });
     $('#_inline_datepicker_plugin').on('changeDate', function() {
       $('#_history_date_time_start').val($('#_inline_datepicker_plugin').datepicker('getFormattedDate'));
+      PB.commonQuery();
     });
   });
   function loadVideoCtrlList() {

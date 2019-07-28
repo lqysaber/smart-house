@@ -27,6 +27,7 @@
             <div class="Line">
               <label>历史视频:</label>
               <div id="inline-datepicker"></div>
+              <input type="hidden" id="_history_date_time_start" />
             </div>
           </div>
           <div class="col-lg-10 model_Right">
@@ -94,35 +95,40 @@
   <!--<script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datetimepicker.zh-CN.js}"></script>-->
 <script>
   $(function() {
-      $("#inline-datepicker").datepicker({
-          autoclose: true,
-          todayHighlight: true,
-          /*汉化*/
-          language: "zh-CN",
-          /*日期格式*/
-          format:"yyyy-mm-dd"
-      });
+    $("#inline-datepicker").datepicker({
+      autoclose: true,
+      todayHighlight: true,
+      /*汉化*/
+      language: "zh-CN",
+      /*日期格式*/
+      format:"yyyy-mm-dd"
+    });
+    $("#inline-datepicker").on('changeDate', function() {
+      $("#_history_date_time_start").val($("#inline-datepicker").datepicker("getFormattedDate"));
+      listPhoto();
+    });
+
   });
-  
+
   function previewPage() {
-	  var currPage = Number($("#visibility_currpage").val().trim());
-	  if(currPage - 1 < 1) {
-		  alert("亲，前方高能，已无数据展示，请知；");
-		  return;
-	  }
-	  $("#visibility_currpage").val(currPage-1);
-	  listPhoto();
+    var currPage = Number($("#visibility_currpage").val().trim());
+    if(currPage - 1 < 1) {
+      alert("亲，前方高能，已无数据展示，请知；");
+      return;
+    }
+    $("#visibility_currpage").val(currPage-1);
+    listPhoto();
   }
-  
+
   function nextPage() {
-	  var currPage = Number($("#visibility_currpage").val().trim());
-	  var totalPage = Number($("#visibility_total_page").val().trim());
-	  if(currPage +1 > totalPage) {
-		  alert("亲，后方高能，已无数据展示，请知；");
-		  return;
-	  }
-	  $("#visibility_currpage").val(currPage + 1);
-	  listPhoto();
+    var currPage = Number($("#visibility_currpage").val().trim());
+    var totalPage = Number($("#visibility_total_page").val().trim());
+    if(currPage +1 > totalPage) {
+      alert("亲，后方高能，已无数据展示，请知；");
+      return;
+    }
+    $("#visibility_currpage").val(currPage + 1);
+    listPhoto();
   }
 
   function switchPhotoWin(pageSize, htmlId, winObj) {
@@ -144,10 +150,11 @@
     var pageSize = $("#visibility_pagesize").val().trim();
     var currPage = $("#visibility_currpage").val().trim();
     var reqParam = {
-      "queryDate": "2019-07-16",
+      "queryDate": $("#_history_date_time_start").val(),
       "pageSize": pageSize,
       "currPage": currPage
     };
+    // alert(JSON.stringify(reqParam));
     $.ajax({
       type: "post",
       contentType: "application/json;charset=UTF-8",
@@ -169,38 +176,39 @@
       }
     });
   }
-  
+
   function handleListRender(rlistdata) {
-	  
-	  var hstr = "<div class='row'>";
-	  var tabId = $("#visibility_tab").val().trim();
-	  if(tabId === "#tabe-10") {
-		  $.each(rlistdata,function(n,value){
-			  hstr += "<div class='col-md-12 col-xs-12 mRimg mRimgA'>";
-			  hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
-			  hstr += "</div>";
-          });
-	  } else if (tabId === "#tabe-11") {
-		  $.each(rlistdata,function(n,value){
-			  hstr += "<div class='col-md-6 col-xs-6 mRimg'>";
-			  hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
-			  hstr += "</div>";
-          });
-	  } else if (tabId === "#tabe-12") {
-		  $.each(rlistdata,function(n,value){
-			  hstr += "<div class='col-md-4 col-xs-4 mRimg mRimgB'>";
-			  hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
-			  hstr += "</div>";
-          });
-	  }
-	  hstr += "<i class='fa fa-chevron-circle-left ileft' onclick='previewPage();'></i>";
-	  hstr += "<i class='fa fa-chevron-circle-right iRight' onclick='nextPage();'></i>";
-	  hstr += "</div>";
-	  
-	  $(tabId).html(hstr);
+
+    var hstr = "<div class='row'>";
+    var tabId = $("#visibility_tab").val().trim();
+    if(tabId === "#tabe-10") {
+      $.each(rlistdata,function(n,value){
+        hstr += "<div class='col-md-12 col-xs-12 mRimg mRimgA'>";
+        hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+        hstr += "</div>";
+      });
+    } else if (tabId === "#tabe-11") {
+      $.each(rlistdata,function(n,value){
+        hstr += "<div class='col-md-6 col-xs-6 mRimg'>";
+        hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+        hstr += "</div>";
+      });
+    } else if (tabId === "#tabe-12") {
+      $.each(rlistdata,function(n,value){
+        hstr += "<div class='col-md-4 col-xs-4 mRimg mRimgB'>";
+        hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+        hstr += "</div>";
+      });
+    }
+    hstr += "<i class='fa fa-chevron-circle-left ileft' onclick='previewPage();'></i>";
+    hstr += "<i class='fa fa-chevron-circle-right iRight' onclick='nextPage();'></i>";
+    hstr += "</div>";
+
+    $(tabId).html(hstr);
   }
 
   listPhoto();
+
 </script>
 
 
