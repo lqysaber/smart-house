@@ -97,8 +97,10 @@ var Index = function ($) {
             if(type != 2) {
                 // disable cloud controller
                 $("#_plugin_trl_presetul button").attr("disabled", true);
+                $("#_plugin_trl_cursor button").attr("disabled", true);
             } else {
                 $("#_plugin_trl_presetul button").attr("disabled", false);
+                $("#_plugin_trl_cursor button").attr("disabled", false);
             }
         },
 
@@ -136,7 +138,7 @@ var Index = function ($) {
                     break;
             }
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 3);
+            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 2);
             if (0 != retcode) {
                 $MB.n_warning($.lang.tip["tippresetturnfail"]);
                 return ;
@@ -146,44 +148,27 @@ var Index = function ($) {
 
         cursorOperation: function (id) {
             debugger;
-            // var _focus_size = Number($("#_plugin_focus_size").val());
-            // var _zoom_size = Number($("#_plugin_zoom_size").val());
             var ptzcontrolcmd;
-            var ptzcontrolcmd1;
             switch (id) {
                 case "FOCUS_N":
                     ptzcontrolcmd = PtzCmd.FOCUS_N;
-                    // ptzcontrolcmd1 = PtzCmd.FOCUS_NS;
-                    // $("#_plugin_focus_size").val(_focus_size+1);
                     break;
                 case "FOCUS_F":
-                    // ptzcontrolcmd = PtzCmd.FOCUS_NS;
                     ptzcontrolcmd = PtzCmd.FOCUS_F;
-                    // ptzcontrolcmd1 = PtzCmd.FOCUS_FS;
-                    // $("#_plugin_focus_size").val(_focus_size-1);
                     break;
                 case "ZOOM_I":
-                    // ptzcontrolcmd = PtzCmd.FOCUS_F;
                     ptzcontrolcmd = PtzCmd.ZOOM_I;
-                    // ptzcontrolcmd1 = PtzCmd.ZOOM_IS;
                     break;
                 case "ZOOM_O":
-                    // ptzcontrolcmd = PtzCmd.FOCUS_FS;
                     ptzcontrolcmd = PtzCmd.ZOOM_O;
-                    // ptzcontrolcmd1 = PtzCmd.ZOOM_OS;
-                    // break;
+                    break;
             }
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 5);
-            // var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), _focus_size, 5);
+            var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 2);
             if (0 != retcode) {
                 $MB.n_warning(id + "," + ptzcontrolcmd +" is error");
                 return ;
             }
-            // var retcode1 = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd1, 5);
-            // if(0 != retcode1) {
-            //     $MB.n_warning(id + ",s:" + ptzcontrolcmd1 +" is error");
-            // }
             this.startVideo();
         },
 

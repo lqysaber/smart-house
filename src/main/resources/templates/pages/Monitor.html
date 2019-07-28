@@ -12,6 +12,12 @@
     .row{
       margin:0;
     }
+    #_plugin_trl_cursor button {
+      border:0;
+      background:0;
+      margin:0;
+      padding:0;
+    }
   </style>
 </head>
 
@@ -39,17 +45,17 @@
                 <div class="COr">
                   <label>焦距:</label>
                   <div>
-                    <a id="FOCUS_N" onclick="Index.cursorOperation('FOCUS_N');"><span class="fa fa-plus-circle"></span></a>
+                    <button id="FOCUS_N" onclick="Index.cursorOperation('FOCUS_N');"><span class="fa fa-plus-circle"></span></button>
                     <input type="text" placeholder="1" value="0" id="_plugin_focus_size"/>
-                    <a id="FOCUS_F" onclick="Index.cursorOperation('FOCUS_F');"><span class="fa fa-minus-circle"></span></a>
+                    <button id="FOCUS_F" onclick="Index.cursorOperation('FOCUS_F');"><span class="fa fa-minus-circle"></span></button>
                   </div>
                 </div>
                 <div class="COr">
                   <label>焦点:</label>
                   <div>
-                    <a id="ZOOM_O" onclick="Index.cursorOperation('ZOOM_O');"><span class="fa fa-plus-circle"></span></a>
+                    <button id="ZOOM_O" onclick="Index.cursorOperation('ZOOM_O');"><span class="fa fa-plus-circle"></span></button>
                     <input type="text" placeholder="1" value="0" id="_plugin_zoom_size"/>
-                    <a id="ZOOM_I" onclick="Index.cursorOperation('ZOOM_I');"><span class="fa fa-minus-circle"></span></a>
+                    <button id="ZOOM_I" onclick="Index.cursorOperation('ZOOM_I');"><span class="fa fa-minus-circle"></span></button>
                   </div>
                 </div>
                 <div class="COr">
