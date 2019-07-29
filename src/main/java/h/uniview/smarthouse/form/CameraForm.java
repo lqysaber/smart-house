@@ -1,5 +1,6 @@
 package h.uniview.smarthouse.form;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -17,6 +18,7 @@ public class CameraForm implements Serializable {
 
 	@Min(value = 1, message = "请选择正确的设备类型")
 	@Max(value = 4, message = "请选择正确的设备类型")
+	@Digits(integer = 1, fraction = 0)
 	private String type;
 
 	private String typeName;

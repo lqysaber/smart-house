@@ -1,15 +1,12 @@
 package h.uniview.smarthouse.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import h.uniview.smarthouse.data.CameraInfo;
-import h.uniview.smarthouse.data.EnvCfgCenter;
-import h.uniview.smarthouse.data.ServerNodeInfo;
-import h.uniview.smarthouse.data.VideoNodeInfo;
+import h.uniview.smarthouse.data.*;
 import h.uniview.smarthouse.form.CameraForm;
+import h.uniview.smarthouse.form.NVRForm;
 import h.uniview.smarthouse.form.ServerForm;
 import h.uniview.smarthouse.form.VideoForm;
 import h.uniview.smarthouse.utils.Constant;
-import h.uniview.smarthouse.utils.PageUtils;
 import h.uniview.smarthouse.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -37,8 +34,8 @@ public class DeviceController extends BaseController {
         	result.addAll(envCenter.getNvrInfoList());
         	result.addAll(envCenter.getVideoInfoList());
         	
-            PageUtils pg = new PageUtils(result, result.size(), 10, 1);
-            return R.ok(pg);
+//            PageUtils pg = new PageUtils(result, result.size(), 10, 1);
+            return R.ok(result);
         } catch (Exception e) {
             return R.error(e.getMessage());
         }
@@ -157,6 +154,24 @@ public class DeviceController extends BaseController {
             return R.error(e.getMessage());
         }
     }
+
+    @RequestMapping(value = "/device/nvr/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public R createNVR(@Validated @RequestBody NVRForm form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return R.error(handleError(bindingResult));
+        }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            NVRInfo object = objectMapper.convertValue(form, NVRInfo.class);
+            envCenter.crateNode(object, Constant.ConfigEnvType.NVR.getValue());
+            R r = R.ok();
+            r.put("video", envCenter.getVideoInfoList());
+            return r;
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
     
     @RequestMapping(value = "/device/video/del")
     @ResponseBody
@@ -177,6 +192,16 @@ public class DeviceController extends BaseController {
     public R listVideo() {
         try {
             return R.ok(envCenter.getVideoInfoList());
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/nvr/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public R loginNVR() {
+        try {
+            return R.ok(envCenter.getNvrInfoList().get(0));
         } catch (Exception e) {
             return R.error(e.getMessage());
         }

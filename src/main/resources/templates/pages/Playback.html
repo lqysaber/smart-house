@@ -105,7 +105,7 @@
         if (r.code === 0) {
           var hstr = "";
           $.each(r.msg,function(n,v) {
-            hstr += "<a class='list-group-item' onclick='PB.selectedDevChannel("+v.channelID+", this, "+v.type+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
+            hstr += "<a class='list-group-item' onclick='PB.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
           });
           $("#_plugin_ctrl_list").html(hstr);
         } else {
@@ -118,7 +118,31 @@
     });
   }
 
+  function loginPlugin() {
+    var reqParam = {};
+    $.ajax({
+      type: "post",
+      contentType: "application/json;charset=UTF-8",
+      url: "/smart-house/nvr/login",
+      data: JSON.stringify(reqParam),
+      dataType: "json",
+      success: function (r) {
+        if (r.code === 0) {
+          var rt = r.msg;
+          PB.loginnvr(rt.ip, rt.port, rt.loginName, rt.loginPwd);
+        } else {
+          alert(r.msg);
+        }
+      },
+      error: function (XMLhttpRequest, textStatus, errorThrown) {
+        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+      }
+    });
+  }
+
   loadVideoCtrlList();
+
+  loginPlugin();
 
 </script>
 </body>

@@ -21,7 +21,7 @@ public class PhotoController extends BaseController {
     @Autowired
     EnvCfgCenter envCfgCenter;
 
-	String path = "C:\\Users\\HugoLi\\Downloads\\子骏\\入册\\";
+	String path = "C:/Users/HugoLi/Downloads/子骏/入册/";
 
 	private String getPhotoPath() {
 	    String tmp = envCfgCenter.getConfigMsg().getCameraManageCatalog();

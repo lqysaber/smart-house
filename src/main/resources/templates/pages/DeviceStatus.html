@@ -81,7 +81,7 @@ function listDevice() {
     	dataType: "json",
     	success: function (r) {
       		if (r.code === 0) {
-        		handleListRender(r.msg.list);
+        		handleListRender(r.msg);
         		var table = $('#example').DataTable( {
         			lengthChange: false,
         			bFilter: false, //搜索栏 

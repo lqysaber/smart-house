@@ -161,7 +161,7 @@
     $.each(rlistdata, function (n, v) {
       hstr += "<tr>" +
               "<th scope=\"row\">"+v.name+"</th>" +
-              "<td>"+""+"</td>" +
+              "<td>"+v.channelID+"</td>" +
               "<td>"+v.ip+"</td>" +
               "<td>"+v.port+"</td>" +
               "<td>"+v.typeName+"</td>" +
@@ -311,18 +311,46 @@
   });
 
   $("#_plugin_modal_video_info_btn_add").on("click", function() {
-    var reqParam = {
-      "name": $("#_plugin_modal_video_info_add_name").val(),
-      "ip": $("#_plugin_modal_video_info_add_ip").val(),
-      "port": $("#_plugin_modal_video_info_add_port").val(),
-      "status": $("#_plugin_modal_video_info_add_status").val(),
-      "workModel": $("#_plugin_modal_video_info_add_workModel").val(),
-      "mess": $("#_plugin_modal_video_info_add_mess").val()
-    };
+
+    var reqParam, _duri;
+    var dtype = $("#_plugin_modal_video_info_add_type").val();
+    if("2" == dtype) {
+      _duri = "/smart-house/device/nvr/add";
+      reqParam = {
+        "name":      $("#_plugin_modal_video_info_add_name").val(),
+        "ip":        $("#_plugin_modal_video_info_add_ip").val(),
+        "port":      $("#_plugin_modal_video_info_add_port").val(),
+        "status":    $("#_plugin_modal_video_info_add_status").val(),
+        "workModel": $("#_plugin_modal_video_info_add_workModel").val(),
+        "mess":      $("#_plugin_modal_video_info_add_mess").val(),
+        "type":      dtype,
+        "loginName": $("#_plugin_modal_video_info_add_loginName").val(),
+        "loginPwd":  $("#_plugin_modal_video_info_add_loginPwd").val(),
+        "hardDiskUsage": "55%",
+        "channelSum":$("#_plugin_modal_video_info_add_channelSum").val()
+      };
+    } else {
+      _duri = "/smart-house/device/video/add";
+      reqParam = {
+        "name":      $("#_plugin_modal_video_info_add_name").val(),
+        "ip":        $("#_plugin_modal_video_info_add_ip").val(),
+        "port":      $("#_plugin_modal_video_info_add_port").val(),
+        "status":    $("#_plugin_modal_video_info_add_status").val(),
+        "workModel": $("#_plugin_modal_video_info_add_workModel").val(),
+        "mess":      $("#_plugin_modal_video_info_add_mess").val(),
+        "type":      dtype,
+        "loginName": $("#_plugin_modal_video_info_add_loginName").val(),
+        "loginPwd":  $("#_plugin_modal_video_info_add_loginPwd").val(),
+        "channelID": $("#_plugin_modal_video_info_add_channelId").val(),
+        "cloudControl": "1"
+      };
+    }
+    alert(JSON.stringify(reqParam));
+
     $.ajax({
       type: "post",
       contentType: "application/json;charset=UTF-8",
-      url: "/smart-house/device/video/add",
+      url: _duri,
       data: JSON.stringify(reqParam),
       dataType: "json",
       success: function (r) {

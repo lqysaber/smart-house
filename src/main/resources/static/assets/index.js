@@ -36,7 +36,7 @@ var Index = function ($) {
             this.initPage();
             this.initData();
             this.initEvent();
-            this.testlogin();
+            // this.testlogin();
         },
         initPage: function () {
             debugger;
@@ -52,6 +52,9 @@ var Index = function ($) {
 
         initPagebtn: function () {
             debugger;
+            // disable cloud controller
+            $("#_plugin_trl_presetul button").attr("disabled", true);
+            $("#_plugin_trl_cursor button").attr("disabled", true);
         },
 
         initloginoutbtn: function () {
@@ -94,13 +97,13 @@ var Index = function ($) {
             $("#DevchannelID").val(channelId);
             this.startVideo();
 
-            if(type != 2) {
+            if(type == 1) {
+                $("#_plugin_trl_presetul button").attr("disabled", false);
+                $("#_plugin_trl_cursor button").attr("disabled", false);
+            } else {
                 // disable cloud controller
                 $("#_plugin_trl_presetul button").attr("disabled", true);
                 $("#_plugin_trl_cursor button").attr("disabled", true);
-            } else {
-                $("#_plugin_trl_presetul button").attr("disabled", false);
-                $("#_plugin_trl_cursor button").attr("disabled", false);
             }
         },
 
@@ -176,10 +179,15 @@ var Index = function ($) {
         /*************************************** test login  **********************************/
         testlogin: function() {
             debugger;
-            this.ip = "192.168.1.130";
-            this.port = 80;
-            this.username = "admin";
-            this.password = "123456";
+            this.loginnvr("192.168.1.130", 80, "admin", "123456");
+        },
+
+        loginnvr: function(_ip, _port, _username, _password) {
+            debugger;
+            this.ip = _ip;
+            this.port = _port;
+            this.username = _username;
+            this.password = _password;
             this.protocol = "0";
             this.devicetype = 101;
             var loginJsonMap = {
@@ -200,17 +208,9 @@ var Index = function ($) {
                     $MB.n_warning($.lang.tip["getlocallistfail"]);
                     return;
                 }
-            } else if (this.devicetype == deviceTypestr.EVMS) {
-                SDKRet = top.sdk_viewer.execFunction("NETDEV_FindDevChnList", this.DeviceHandle, 0, 0);
-                if (SDKRet == -1) {
-                    $MB.n_warning($.lang.tip["getlocallistfail"]);
-                    return;
-                } else {
-                    this.EVMSjsonMap = [];
-                    // this.getevmsdevicelist(SDKRet);
-                }
+            } else {
+                $MB.n_warning("Please contact the administrator.");
             }
-
         },
 
         /*************************************** show multi windows  **********************************/

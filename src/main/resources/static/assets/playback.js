@@ -36,7 +36,7 @@ var PB = function ($) {
             this.initPage();
             this.initData();
             this.initEvent();
-            this.testlogin();
+            // this.testlogin();
         },
         initPage: function () {
             debugger;
@@ -86,10 +86,15 @@ var PB = function ($) {
         /*************************************** test login  **********************************/
         testlogin: function() {
             debugger;
-            this.ip = "192.168.1.130";
-            this.port = 80;
-            this.username = "admin";
-            this.password = "123456";
+            this.loginnvr("192.168.1.130", 80, "admin", "123456");
+        },
+
+        loginnvr: function(_ip, _port, _username, _password) {
+            debugger;
+            this.ip = _ip;
+            this.port = _port;
+            this.username = _username;
+            this.password = _password;
             this.protocol = "0";
             this.devicetype = 101;
             var loginJsonMap = {
@@ -103,16 +108,16 @@ var PB = function ($) {
             var loginJsonstring = JSON.stringify(loginJsonMap);
             this.login(loginJsonstring);
 
+            var SDKRet;
             if (this.devicetype == deviceTypestr.IPC || this.devicetype == deviceTypestr.NVR) {
-            	var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
+                SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
                 if (SDKRet == -1) {
                     $MB.n_warning($.lang.tip["getlocallistfail"]);
                     return;
                 }
             } else {
-                 //TODO do nothing ..
+                $MB.n_warning("Please contact the administrator.");
             }
-
         },
 
         /*************************************** show multi windows  **********************************/
