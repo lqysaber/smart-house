@@ -290,27 +290,6 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 	    return fieldList;
 	}
 
-	public static void main(String[] args) throws Exception {
-		
-		EnvCfgCenter env = new EnvCfgCenter();
-		env.setConfigEnvDir("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
-
-		CameraInfo o = new CameraInfo();
-		o.setIp("192.169.2.2");
-		o.setMess("mark");
-		o.setName("test.li");
-		o.setPort("6379");
-		o.setStatus("working");
-		o.setType("photo 222222");
-		
-//		env.crateNode(o, ConfigEnvType.CAMERA.getValue());
-//		env.deleteNode(ConfigEnvType.CAMERA.getValue(), 2);
-
-//		new EnvCfgCenter().initialConfigData("D:\\Application\\hugo-git-ws\\smart-house\\src\\main\\resources\\uniview.xml");
-
-		new EnvCfgCenter().initialConfigData("D:\\Users\\CN092227\\git\\smart-house\\src\\main\\resources\\uniview.xml");
-	}
-
 	public ConfigMsg getConfigMsg() {
 		return configMsg;
 	}

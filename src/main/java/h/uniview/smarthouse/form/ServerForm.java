@@ -1,10 +1,9 @@
 package h.uniview.smarthouse.form;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
 public class ServerForm implements Serializable {
 
@@ -21,7 +20,7 @@ public class ServerForm implements Serializable {
 	
 	@Min(value = 1, message = "端口不能小于1")
 	@Max(value = 65535, message = "端口不能大于65535")
-	private int port;
+	private String port;
 	
 	private String mess;
 
@@ -41,11 +40,11 @@ public class ServerForm implements Serializable {
 		this.ip = ip;
 	}
 
-	public int getPort() {
+	public String getPort() {
 		return port;
 	}
 
-	public void setPort(int port) {
+	public void setPort(String port) {
 		this.port = port;
 	}
 

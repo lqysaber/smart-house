@@ -139,6 +139,40 @@
     $("#_nt_server_table tbody").html(hstr);
   }
 
+  function handleCameraNodeRender(rlistdata) {
+    var hstr = "";
+    $.each(rlistdata, function (n, v) {
+      hstr += "<tr>" +
+              "<th scope=\"row\">"+v.name+"</th>" +
+              "<td>"+v.status+"</td>" +
+              "<td>"+v.ip+"</td>" +
+              "<td>"+v.port+"</td>" +
+              "<td>"+v.typeName+"</td>" +
+              "<td>" +
+              "<button data-toggle=\"modal\" data-target=\"#_plugin_modal_camera_info_edit\"><i class=\"fa fa-edit\"></i></button>" +
+              "<button onclick=\"deleteNode('cameraNode',"+n+");\"><i class=\"fa fa-trash-o\"></i></button>" +
+              "</td></tr>";
+    });
+    $("#_nt_camera_table tbody").html(hstr);
+  }
+
+  function handleVideoNodeRender(rlistdata) {
+    var hstr = "";
+    $.each(rlistdata, function (n, v) {
+      hstr += "<tr>" +
+              "<th scope=\"row\">"+v.name+"</th>" +
+              "<td>"+""+"</td>" +
+              "<td>"+v.ip+"</td>" +
+              "<td>"+v.port+"</td>" +
+              "<td>"+v.typeName+"</td>" +
+              "<td>" +
+              "<button data-toggle=\"modal\" data-target=\"#_plugin_modal_video_info_edit\"><i class=\"fa fa-edit\"></i></button>" +
+              "<button onclick=\"deleteNode('videoNode',"+n+");\"><i class=\"fa fa-trash-o\"></i></button>" +
+              "</td></tr>";
+    });
+    $("#_nt_video_table tbody").html(hstr);
+  }
+
   deviceControl();
   
   function switchUri(id) {
@@ -227,23 +261,6 @@
     });
   });
   
-  function handleCameraNodeRender(rlistdata) {
-    var hstr = "";
-    $.each(rlistdata, function (n, v) {
-      hstr += "<tr>" +
-              "<th scope=\"row\">"+v.name+"</th>" +
-              "<td>"+v.status+"</td>" +
-              "<td>"+v.ip+"</td>" +
-              "<td>"+v.port+"</td>" +
-              "<td>"+v.mess+"</td>" +
-              "<td>" +
-              "<button data-toggle=\"modal\" data-target=\"#_plugin_modal_camera_info_edit\"><i class=\"fa fa-edit\"></i></button>" +
-              "<button onclick=\"deleteNode('cameraNode',"+n+");\"><i class=\"fa fa-trash-o\"></i></button>" +
-              "</td></tr>";
-    });
-    $("#_nt_camera_table tbody").html(hstr);
-  }
-
   $("#_plugin_modal_camera_info_add").on("show.bs.modal", function () {
     $("#_plugin_modal_camera_info_add input[type='text']").val("");
     $("#_plugin_modal_camera_info_add_mess").val("");
@@ -260,6 +277,7 @@
       "port": $("#_plugin_modal_camera_info_add_port").val(),
       "status": $("#_plugin_modal_camera_info_add_status").val(),
       "workModel": $("#_plugin_modal_camera_info_add_workModel").val(),
+      "type": "1",
       "mess": $("#_plugin_modal_camera_info_add_mess").val()
     };
     $.ajax({
@@ -283,29 +301,12 @@
     });
   });
 
-  function handleVideoNodeRender(rlistdata) {
-    var hstr = "";
-    $.each(rlistdata, function (n, v) {
-      hstr += "<tr>" +
-              "<th scope=\"row\">"+v.name+"</th>" +
-              "<td>"+""+"</td>" +
-              "<td>"+v.ip+"</td>" +
-              "<td>"+v.port+"</td>" +
-              "<td>"+v.typeName+"</td>" +
-              "<td>" +
-              "<button data-toggle=\"modal\" data-target=\"#_plugin_modal_video_info_edit\"><i class=\"fa fa-edit\"></i></button>" +
-              "<button onclick=\"deleteNode('videoNode',"+n+");\"><i class=\"fa fa-trash-o\"></i></button>" +
-              "</td></tr>";
-    });
-    $("#_nt_video_table tbody").html(hstr);
-  }
-	  
   $("#_plugin_modal_video_info_add").on("show.bs.modal", function () {
     $("#_plugin_modal_video_info_add input[type='text']").val("");
     $("#_plugin_modal_video_info_add_mess").val("");
   });
 
-  $("#_plugin_modal_camera_info_edit").on("show.bs.modal", function () {
+  $("#_plugin_modal_video_info_edit").on("show.bs.modal", function () {
     // 执行一些动作...
   });
 

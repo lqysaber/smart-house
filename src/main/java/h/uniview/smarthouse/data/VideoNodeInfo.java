@@ -1,8 +1,8 @@
 package h.uniview.smarthouse.data;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true) 
 public class VideoNodeInfo extends CameraInfo implements Serializable {
@@ -15,7 +15,7 @@ public class VideoNodeInfo extends CameraInfo implements Serializable {
 	private String loginName;
 	private String loginPwd;
 	private String channelID;
-	private String hardDiskUsage;
+	private int cloudControl;
 
 	public String getLoginName() {
 		return loginName;
@@ -41,12 +41,12 @@ public class VideoNodeInfo extends CameraInfo implements Serializable {
 		this.channelID = channelID;
 	}
 
-	public String getHardDiskUsage() {
-		return hardDiskUsage;
+	public int getCloudControl() {
+		return cloudControl;
 	}
 
-	public void setHardDiskUsage(String hardDiskUsage) {
-		this.hardDiskUsage = hardDiskUsage;
+	public void setCloudControl(int cloudControl) {
+		this.cloudControl = cloudControl;
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class VideoNodeInfo extends CameraInfo implements Serializable {
 				"loginName='" + loginName + '\'' +
 				", loginPwd='" + loginPwd + '\'' +
 				", channelID='" + channelID + '\'' +
-				", hardDiskUsage='" + hardDiskUsage + '\'' +
+				", cloudControl='" + cloudControl + '\'' +
 				'}';
 	}
 }

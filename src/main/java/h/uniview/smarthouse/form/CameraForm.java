@@ -1,5 +1,8 @@
 package h.uniview.smarthouse.form;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 public class CameraForm implements Serializable {
@@ -9,13 +12,27 @@ public class CameraForm implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String type;
-	private String typeName;
+	@NotEmpty(message = "设备名称不能为空")
 	private String name;
+
+	@Min(value = 1, message = "请选择正确的设备类型")
+	@Max(value = 4, message = "请选择正确的设备类型")
+	private String type;
+
+	private String typeName;
+
+	@NotEmpty(message = "在线状态不能为空")
 	private String status;
+
 	private String workModel;
+
+	@NotEmpty(message = "IP不能为空")
 	private String ip;
+
+	@Min(value = 1, message = "端口不能小于1")
+	@Max(value = 65535, message = "端口不能大于65535")
 	private String port;
+
 	private String mess;
 
 	public String getType() {
@@ -26,9 +43,7 @@ public class CameraForm implements Serializable {
 		this.type = type;
 	}
 
-	public String getTypeName() {
-		return typeName;
-	}
+	public String getTypeName() { return typeName; }
 
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
@@ -90,7 +105,7 @@ public class CameraForm implements Serializable {
 				", name='" + name + '\'' +
 				", status='" + status + '\'' +
 				", workModel='" + workModel + '\'' +
-				", iP='" + ip + '\'' +
+				", ip='" + ip + '\'' +
 				", port='" + port + '\'' +
 				", mess='" + mess + '\'' +
 				'}';

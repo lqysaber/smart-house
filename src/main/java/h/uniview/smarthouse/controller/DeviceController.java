@@ -15,18 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Validated
 @RestController
 public class DeviceController extends BaseController {
 	
@@ -81,9 +76,9 @@ public class DeviceController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/device/server/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/device/server/add", method = RequestMethod.POST)
     @ResponseBody
-    public R createServerNode(@RequestBody @Valid ServerForm serverForm, BindingResult bindingResult) {
+    public R createServerNode(@Validated @RequestBody ServerForm serverForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }
@@ -115,7 +110,7 @@ public class DeviceController extends BaseController {
 
     @RequestMapping(value = "/device/camera/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public R createCamerNode(@RequestBody @Valid CameraForm cameraForm, BindingResult bindingResult) {
+    public R createCamerNode(@Validated @RequestBody CameraForm cameraForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }
@@ -147,7 +142,7 @@ public class DeviceController extends BaseController {
 
     @RequestMapping(value = "/device/video/add", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public R createVideo(@RequestBody @Valid VideoForm videoForm, BindingResult bindingResult) {
+    public R createVideo(@Validated @RequestBody VideoForm videoForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }

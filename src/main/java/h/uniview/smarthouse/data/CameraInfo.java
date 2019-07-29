@@ -1,6 +1,8 @@
 package h.uniview.smarthouse.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import h.uniview.smarthouse.utils.Constant;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
@@ -12,9 +14,9 @@ public class CameraInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String type = "";
-	private String typeName = "";
 	private String name;
+	private String type = Constant.DeviceType.CAMERA.getValue();
+	private String typeName;
 	private String status;
 	private String workModel;
 	private String ip;
@@ -27,13 +29,15 @@ public class CameraInfo implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
+		this.typeName = Constant.deviceStatus.get(type);
 	}
 
-	public String getTypeName() {
-		return typeName;
-	}
+	public String getTypeName() { return typeName; }
 
 	public void setTypeName(String typeName) {
+		if(StringUtils.isEmpty(typeName)) {
+			return;
+		}
 		this.typeName = typeName;
 	}
 
