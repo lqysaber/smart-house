@@ -1,40 +1,22 @@
 package h.uniview.smarthouse.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import h.uniview.smarthouse.data.*;
+import h.uniview.smarthouse.exception.RRException;
+import h.uniview.smarthouse.form.*;
+import h.uniview.smarthouse.utils.Constant.ConfigEnvType;
+import h.uniview.smarthouse.utils.Constant.DeviceType;
+import h.uniview.smarthouse.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import h.uniview.smarthouse.data.CameraInfo;
-import h.uniview.smarthouse.data.ConfigMsg;
-import h.uniview.smarthouse.data.EnvCfgCenter;
-import h.uniview.smarthouse.data.NVRInfo;
-import h.uniview.smarthouse.data.ServerNodeInfo;
-import h.uniview.smarthouse.data.VideoNodeInfo;
-import h.uniview.smarthouse.data.WorkstationMsg;
-import h.uniview.smarthouse.exception.RRException;
-import h.uniview.smarthouse.form.CameraForm;
-import h.uniview.smarthouse.form.ConfigDataForm;
-import h.uniview.smarthouse.form.DeviceForm;
-import h.uniview.smarthouse.form.ServerForm;
-import h.uniview.smarthouse.form.VideoForm;
-import h.uniview.smarthouse.form.WorkStationForm;
-import h.uniview.smarthouse.utils.Constant.ConfigEnvType;
-import h.uniview.smarthouse.utils.Constant.DeviceType;
-import h.uniview.smarthouse.utils.Constant;
-import h.uniview.smarthouse.utils.R;
+import javax.validation.Valid;
 
 @Controller
 public class PageController extends BaseController {
@@ -49,7 +31,7 @@ public class PageController extends BaseController {
 	
 	@RequestMapping(value = "/device/workstation/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public R updateWorkstation(@RequestBody @Valid WorkStationForm form, BindingResult bindingResult) {
+    public R updateWorkstation(@Valid @RequestBody WorkStationForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }
@@ -65,7 +47,7 @@ public class PageController extends BaseController {
 
     @RequestMapping(value = "/device/config/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public R updateConfigData(@RequestBody @Valid ConfigDataForm form, BindingResult bindingResult) {
+    public R updateConfigData(@Valid @RequestBody ConfigDataForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }
@@ -81,7 +63,7 @@ public class PageController extends BaseController {
 
     @RequestMapping(value = "/device/camera/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public R updateCamera(@RequestBody @Valid CameraForm form, BindingResult bindingResult) {
+    public R updateCamera(@Valid @RequestBody CameraForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }
@@ -97,7 +79,7 @@ public class PageController extends BaseController {
     
     @RequestMapping(value = "/device/video/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public R updateVideo(@RequestBody @Valid VideoForm form, BindingResult bindingResult) {
+    public R updateVideo(@Valid @RequestBody VideoForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }

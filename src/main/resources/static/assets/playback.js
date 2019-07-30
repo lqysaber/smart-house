@@ -1,16 +1,8 @@
 var PB = function ($) {
     var mainClass = Class.extend({
-        recordlivename: 0,
         videotypejsonMap: [],      //视频类型对象数组
-        livevideojsonMap: [],      //实况流对象数组
-        playbackvideojsonMap: [],  //回放流对象数组
         initOcxWindownum: 1,       //控件默认开启窗口个数
         ocxHeight: "400px",        //控件默认高度
-        islocallogin: false,       //是否本地登录标志位
-        iscloudlogin: false,       //是否云端登录标志位
-        EVMSjsonMap: [],           //一体机下加载的所有设备集合
-        cloudEVMSjsonMap: [],      //云端一体机下加载的所有设备集合
-        CLOUDjsonMap: [],          //云端所有设备
         queryjsonMap: [],          //查询结果集合
         ip: null,
         port: null,
@@ -18,19 +10,11 @@ var PB = function ($) {
         password: null,
         protocol: null,
         devicetype: null,
-        clouddevicetype: null,
         channelList: null,
-        localchalisttable: null,     //局域网通道表格对象
-        localquerytable: null,       //查询视频录像表格对象
-        clouddevlisttable: null,     //云账号登录设备列表表格对象
-        clouddevchllisttable: null,  //云账号登录设备通道列表表格对象
         DeviceHandle: null,          //登录设备的凭证ID
-        cloudDeviceHadle: null,      //云账号设备handle
-        CloudHandle: null,           //云登录账号凭证ID
         queryHandle: null,           //查询所需凭证ID
         PlayBackBeginTime: null,     //回放开始时间标志位
         PlayBackEndTime: null,       //回放结束时间标志位
-        DownLoadHandle: null,        //文件下载时间标志位
         init: function () {
             this.destory_activex();
             this.initPage();
@@ -156,10 +140,11 @@ var PB = function ($) {
 
         /******************************* 查询相关 *********************************/
         commonQuery: function () {
+            debugger;
             var selectedDateStr = $("#_history_date_time_start").val();
             if (selectedDateStr == "") {
                 $('#_inline_datepicker_plugin').datepicker('setDate', new Date());
-                $MB.n_warning($.lang.tip["tipinputsearchtime"]);
+                // $MB.n_warning($.lang.tip["tipinputsearchtime"]);
                 return;
             }
             var BeginTime =  selectedDateStr+ " 0:0:0";
@@ -187,6 +172,25 @@ var PB = function ($) {
             if (-1 != SDKRet) {
                 this.queryHandle = SDKRet;
                 this.findall();
+                var _videoModule = new Object({
+                    _channel_id : null,
+                    _video_date: null,
+                    _video_map : [],
+                    _initData : function (_d_channel_id, _d_video_date){
+                        this._channel_id = _d_channel_id;
+                        this._video_date = _d_video_date;
+                    },
+                    _setVideoMap: function (_d_video_map) {
+                        this._video_map = _d_video_map;
+                    }
+                });
+                _videoModule._initData(channelID, selectedDateStr);
+                _videoModule._setVideoMap(this.queryjsonMap);
+                this.queryjsonMap = [];
+
+                this.createQuerytable();
+                this.closefind();
+                this.playbackbytime(_videoModule);
             }
             else {
                 $MB.n_warning("Not find");
@@ -194,6 +198,7 @@ var PB = function ($) {
         },
 
         findall: function () {
+            debugger;
             var result;
             var tBeginTime;
             var tEndTime;
@@ -208,14 +213,6 @@ var PB = function ($) {
                 };
                 this.queryjsonMap.push(dateobj);
                 this.findall();
-            } else {
-                if (this.queryjsonMap.length == 0) {
-                    $MB.n_warning("Not find");
-                } else {
-                    this.createQuerytable();
-                    this.closefind();
-                    this.playbackbytime();
-                }
             }
         },
 
@@ -259,30 +256,29 @@ var PB = function ($) {
         },
 
         closefind: function () {
+            debugger;
             var msg;
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindClose", this.queryHandle);
             if (-1 != SDKRet) {
-                msg = "Find Success";
+                // $MB.n_success("Find Success");
             } else {
-                msg = "Find Fail";
+                $MB.n_warning("Find Fail");
             }
-            $MB.n_warning(msg);
         },
 
-        playbackbytime: function () {
+        playbackbytime: function (vmobj) {
             debugger;
-            var selectedDateStr = $("#_history_date_time_start").val();
-            var BeginTime =  selectedDateStr+ " 0:0:0";
-            var EndTime = selectedDateStr + " 23:59:59";
-            BeginTime = BeginTime.replace(/-/g, "/");
-            EndTime = EndTime.replace(/-/g, "/");
-            var vBeginTime = (new Date(BeginTime).getTime()) / 1000;
-            var vEndTime = (new Date(EndTime).getTime()) / 1000;
-            var channelID = $("#DevchannelID").val();
+            var vt = vmobj._video_map.slice(0,1);
+            // vmobj._video_map.map(function(elem, index, arr) {
+            //     if(index==1) {
+            //         vt = elem;
+            //     }
+            // });
+
             var dataMap = {
-                dwChannelID: channelID,
-                tBeginTime: vBeginTime,
-                tEndTime: vEndTime,
+                dwChannelID: vmobj._channel_id,
+                tBeginTime: vt.tBeginTime,
+                tEndTime: vt.tEndTime,
                 dwLinkMode: Protocal.TRANSPROTOCAL_RTPTCP,
                 dwFileType: EventType.ALL,
                 dwPlaySpeed: 9
@@ -290,25 +286,44 @@ var PB = function ($) {
 
             var jsonStr = JSON.stringify(dataMap);
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            var spbresultcode = this.stopplayback(ResourceId);
+            if (0 != spbresultcode) {
+                $MB.n_warning("stop fail,NetSDKGetFocusWnd is:"+ResourceId);
+                return;
+            }
+
             var obj = {
                 streamtype: videostreamtype.playback,
                 screenNum: ResourceId
             };
-            this.videotypejsonMap[ResourceId] = obj;
-            top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
             var retcode = top.sdk_viewer.execFunction("NETDEV_PlayBack", parseInt(ResourceId), this.DeviceHandle, jsonStr);
             if (-1 == retcode) {
                 $MB.n_warning("playback fail");
+            } else {
+                this.videotypejsonMap[ResourceId] = vmobj;
             }
         },
 
-        stopplayback: function () {
-            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            this.videotypejsonMap[ResourceId] = null;
+        stopplayback: function (_resourceId) {
+            var ResourceId ;
+            if(!_resourceId) {
+                ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            } else {
+                ResourceId = _resourceId;
+            }
+
+            var videoObj = this.videotypejsonMap[ResourceId];
+            if(null == videoObj) {
+                return 0;
+            }
+
             var retcode = top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
             if (0 != retcode) {
-                $MB.n_warning("stop fail");
+                // $MB.n_warning("stop fail");
+            } else {
+                this.videotypejsonMap[ResourceId] = null;
             }
+            return retcode;
         },
 
         GetProgress: function () {

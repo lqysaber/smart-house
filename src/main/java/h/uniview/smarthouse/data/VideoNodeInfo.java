@@ -56,6 +56,7 @@ public class VideoNodeInfo extends CameraInfo implements Serializable {
 				", loginPwd='" + loginPwd + '\'' +
 				", channelID='" + channelID + '\'' +
 				", cloudControl='" + cloudControl + '\'' +
+				", " + super.toString() +
 				'}';
 	}
 }
