@@ -348,14 +348,24 @@ var PB = function ($) {
 
         SetProgress: function () {
             debugger;
-            var setprogresstime = $("#setprogresstime").val();
-            if (setprogresstime == "") {
+            var _hh = $("#_pb_hh").val();
+            var _mm = $("#_pb_mm").val();
+            var _ss = $("#_pb_ss").val();
+            if (_hh == "" || _mm == "" || _ss == "") {
             	$MB.n_warning($.lang.tip["tipinputsearchtime"]);
                 return;
             }
-            setprogresstime = setprogresstime.replace(/-/g, "/");
-            var pullTime = parseInt((new Date(setprogresstime).getTime()) / 1000);
+
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            var videoObj = this.videotypejsonMap[ResourceId];
+            if(null == videoObj) {
+                $MB.n_warning("No stream in the video windows:"+ResourceId);
+                return;
+            }
+
+            var setprogresstime = videoObj._video_date.replace(/-/g, "/");
+            var pullTime = parseInt((new Date(setprogresstime + " "+_hh+":"+_mm+":"+_ss).getTime()) / 1000);
+
             var dataMap = {
                 pulTime: pullTime,
                 pulSpeed: 20
@@ -365,7 +375,7 @@ var PB = function ($) {
             if (-1 == SDKRet) {
                 $MB.n_warning("Set Play Time Fail");
             } else {
-                $MB.n_warning("Set play Time Success");
+                $MB.n_success("Set play Time Success");
             }
         },
         resumeProgress: function () {
