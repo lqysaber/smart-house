@@ -57,16 +57,11 @@ public class DeviceController extends BaseController {
     @RequestMapping(value = "/device/network", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
 	public R listNetwork() {
-        try {
+    	try {
             R r = R.ok();
             r.put("server", envCenter.getServerNodeList());
             r.put("camera", envCenter.getCameraInfoList());
-
-            List<CameraInfo> result = new ArrayList<CameraInfo>();
-//            result.addAll(envCenter.getNvrInfoList());
-            result.addAll(envCenter.getVideoInfoList());
-
-            r.put("video", result);
+            this.handleVideoInfo(r);
             return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
@@ -148,7 +143,8 @@ public class DeviceController extends BaseController {
             VideoNodeInfo object = objectMapper.convertValue(videoForm, VideoNodeInfo.class);
             envCenter.crateNode(object, Constant.ConfigEnvType.VIDEO.getValue());
             R r = R.ok();
-            r.put("video", envCenter.getVideoInfoList());
+//            r.put("video", envCenter.getVideoInfoList());
+            this.handleVideoInfo(r);
             return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
@@ -166,7 +162,8 @@ public class DeviceController extends BaseController {
             NVRInfo object = objectMapper.convertValue(form, NVRInfo.class);
             envCenter.crateNode(object, Constant.ConfigEnvType.NVR.getValue());
             R r = R.ok();
-            r.put("video", envCenter.getVideoInfoList());
+//            r.put("video", envCenter.getVideoInfoList());
+            this.handleVideoInfo(r);
             return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
@@ -179,7 +176,8 @@ public class DeviceController extends BaseController {
         try {
             envCenter.deleteNode(Constant.ConfigEnvType.VIDEO.getValue(), Integer.parseInt(cursor));
             R r = R.ok();
-            r.put("video", envCenter.getVideoInfoList());
+//            r.put("video", envCenter.getVideoInfoList());
+            this.handleVideoInfo(r);
             return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
@@ -205,6 +203,11 @@ public class DeviceController extends BaseController {
         } catch (Exception e) {
             return R.error(e.getMessage());
         }
+    }
+    
+    private void handleVideoInfo(R r) {
+        r.put("nvr", envCenter.getNvrInfoList());
+        r.put("video", envCenter.getVideoInfoList());
     }
 
 }

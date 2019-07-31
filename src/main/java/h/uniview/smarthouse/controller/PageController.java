@@ -60,6 +60,25 @@ public class PageController extends BaseController {
             return R.error(e.getMessage());
         }
     }
+    
+    @RequestMapping(value = "/device/server/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public R updateServerNode(@Valid @RequestBody ServerForm form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return R.error(handleError(bindingResult));
+        }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            ServerNodeInfo object = objectMapper.convertValue(form, ServerNodeInfo.class);
+            envCenter.upadteNode(ConfigEnvType.SERVERNODE.getValue(), form.getCursor(), object);
+            
+            R r = R.ok();
+            r.put("server", envCenter.getServerNodeList());
+            return r;
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
 
     @RequestMapping(value = "/device/camera/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
@@ -71,6 +90,24 @@ public class PageController extends BaseController {
             ObjectMapper objectMapper = new ObjectMapper();
             CameraInfo object = objectMapper.convertValue(form, CameraInfo.class);
             envCenter.upadteNode(ConfigEnvType.CAMERA.getValue(), form.getCursor(), object);
+            R r = R.ok();
+            r.put("camera", envCenter.getCameraInfoList());
+            return r;
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
+    
+    @RequestMapping(value = "/device/nvr/update", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public R updateNVR(@Valid @RequestBody NVRForm form, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return R.error(handleError(bindingResult));
+        }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            NVRInfo object = objectMapper.convertValue(form, NVRInfo.class);
+            envCenter.upadteNode(ConfigEnvType.NVR.getValue(), form.getCursor(), object);
             return R.ok();
         } catch (Exception e) {
             return R.error(e.getMessage());
@@ -95,7 +132,7 @@ public class PageController extends BaseController {
     
     @RequestMapping("/device/show/detail")
     @ResponseBody
-	public R showDevice(@RequestBody @Valid DeviceForm form, BindingResult bindingResult){
+	public R showDevice(@Valid @RequestBody DeviceForm form, BindingResult bindingResult){
     	if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }

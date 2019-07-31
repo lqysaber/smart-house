@@ -64,6 +64,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 			try {
 				Object o = getFieldValue(f, object);
 				String nodeName = "ip".equals(f.getName())? "IP" : upperFirst(f.getName());
+//				System.out.println("f.getName():"+f.getName());
 				element.element(nodeName).setText(null == o ? "" : o.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -75,21 +76,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		writer.write(doc);
 		writer.close();
 		
-		if(clazz.equals(ServerNodeInfo.class)) {
-			serverNodeList.add((ServerNodeInfo) object);
-		} else if (clazz.equals(WorkstationMsg.class)) {
-			workstationMsg = (WorkstationMsg) object;
-		} else if (clazz.equals(ConfigMsg.class)) {
-			configMsg = (ConfigMsg) object;
-		} if(clazz.equals(CameraInfo.class)) {
-			cameraInfoList.add((CameraInfo) object);
-		} else if(clazz.equals(VideoNodeInfo.class)) {
-			videoInfoList.add((VideoNodeInfo) object);
-		} else if(clazz.equals(NVRInfo.class)) {
-			nvrInfoList.add((NVRInfo) object);
-		} else {
-			// do nothing..
-		}
+		initialConfigData(this.configEnvDir);
 	}
 
 	public synchronized void crateNode(Object object, String pattern) throws Exception {
@@ -111,7 +98,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 			// 添加值到节点中
 			try {
 				Object o = getFieldValue(f, object);
-				nelement.addElement(upperFirst(f.getName())).setText(null == o ? "" : o.toString());
+				nelement.addElement("ip".equals(f.getName())? "IP":upperFirst(f.getName())).setText(null == o ? "" : o.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -100,7 +100,7 @@
 <div data-th-replace="common/jsmng.html"></div>
 
 <script>
-  function deviceControl() {
+function deviceControl() {
     var reqParam = {};
     $.ajax({
       type: "post",
@@ -112,7 +112,7 @@
         if (r.code === 0) {
           handleServerNodeRender(r.server);
           handleCameraNodeRender(r.camera);
-          handleVideoNodeRender(r.video);
+          handleVideoNodeRender(r.video, r.nvr);
         } else {
           alert(r.msg);
         }
@@ -127,14 +127,14 @@
     var hstr = "";
     $.each(rlistdata,function(n,v) {
       hstr += "<tr>" +
-          "<th scope=\"row\">"+v.name+"</th>" +
-          "<td>"+v.ip+"</td>" +
-          "<td>"+v.port+"</td>" +
-          "<td>"+v.mess+"</td>" +
-          "<td>" +
-          "<button data-toggle=\"modal\" data-target=\"#_plugin_modal_server_node_edit\"><i class=\"fa fa-edit\"></i></button>" +
-          "<button onclick=\"deleteNode('serverNode',"+n+");\"><i class=\"fa fa-trash-o\"></i></button>" +
-          "</td></tr>";
+	          "<th scope=\"row\">"+v.name+"</th>" +
+	          "<td>"+v.ip+"</td>" +
+	          "<td>"+v.port+"</td>" +
+	          "<td>"+v.mess+"</td>" +
+	          "<td>" +
+	          "<button onclick=\"showUpdateWin('_plugin_modal_server_node_edit',5,"+n+");\"><i class=\"fa fa-edit\"></i></button>" +
+	          "<button onclick=\"deleteNode('serverNode',"+n+");\"><i class=\"fa fa-trash-o\"></i></button>" +
+	          "</td></tr>";
     });
     $("#_nt_server_table tbody").html(hstr);
   }
@@ -149,15 +149,27 @@
               "<td>"+v.port+"</td>" +
               "<td>"+v.typeName+"</td>" +
               "<td>" +
-              "<button data-toggle=\"modal\" data-target=\"#_plugin_modal_camera_info_edit\"><i class=\"fa fa-edit\"></i></button>" +
+              "<button onclick=\"showUpdateWin('_plugin_modal_camera_info_edit',1,"+n+");\"><i class=\"fa fa-edit\"></i></button>" +
               "<button onclick=\"deleteNode('cameraNode',"+n+");\"><i class=\"fa fa-trash-o\"></i></button>" +
               "</td></tr>";
     });
     $("#_nt_camera_table tbody").html(hstr);
   }
 
-  function handleVideoNodeRender(rlistdata) {
+  function handleVideoNodeRender(rlistdata, nvrdata) {
     var hstr = "";
+    $.each(nvrdata, function (n, v) {
+      hstr += "<tr>" +
+              "<th scope=\"row\">"+v.name+"</th>" +
+              "<td>"+v.channelID+"</td>" +
+              "<td>"+v.ip+"</td>" +
+              "<td>"+v.port+"</td>" +
+              "<td>"+v.typeName+"</td>" +
+              "<td>" +
+              "<button onclick=\"showUpdateWin('_plugin_modal_video_info_edit',"+v.type+","+n+");\"><i class=\"fa fa-edit\"></i></button>" +
+              "<button onclick=\"deleteNode('videoNode',"+n+","+v.type+");\"><i class=\"fa fa-trash-o\"></i></button>" +
+              "</td></tr>";
+    });
     $.each(rlistdata, function (n, v) {
       hstr += "<tr>" +
               "<th scope=\"row\">"+v.name+"</th>" +
@@ -166,8 +178,8 @@
               "<td>"+v.port+"</td>" +
               "<td>"+v.typeName+"</td>" +
               "<td>" +
-              "<button data-toggle=\"modal\" data-target=\"#_plugin_modal_video_info_edit\"><i class=\"fa fa-edit\"></i></button>" +
-              "<button onclick=\"deleteNode('videoNode',"+n+");\"><i class=\"fa fa-trash-o\"></i></button>" +
+              "<button onclick=\"showUpdateWin('_plugin_modal_video_info_edit',"+v.type+","+n+");\"><i class=\"fa fa-edit\"></i></button>" +
+              "<button onclick=\"deleteNode('videoNode',"+n+","+v.type+");\"><i class=\"fa fa-trash-o\"></i></button>" +
               "</td></tr>";
     });
     $("#_nt_video_table tbody").html(hstr);
@@ -175,7 +187,7 @@
 
   deviceControl();
   
-  function switchUri(id) {
+  function switchUri(id, type) {
 	  var uri;
       switch (id) {
           case "serverNode":
@@ -185,7 +197,11 @@
         	  uri = "/smart-house/device/camera/del";
               break;
           case "videoNode":
-        	  uri = "/smart-house/device/video/del";
+        	  if(type == 2) {
+        		  uri = "/smart-house/device/nvr/del";
+        	  } else {
+        		  uri = "/smart-house/device/video/del";
+        	  }
               break;
       }
       return uri;
@@ -200,16 +216,16 @@
         handleCameraNodeRender(r.camera);
         break;
       case "videoNode":
-          handleVideoNodeRender(r.video);
-          break;
+        handleVideoNodeRender(r.video,r.nvr);
+        break;
     }
   }
   
-  function deleteNode(id, cursor) {
+  function deleteNode(id, cursor, type) {
     if(confirm("确定删除此数据吗？")) {
       $.ajax({
         type: "post",
-        url: switchUri(id),
+        url: switchUri(id, type),
         data: {
           "cursor": cursor + 1
         },
@@ -225,14 +241,90 @@
     }
   }
   
+  function showUpdateWin(_modal_id,type,cursor) {
+	var reqParam = {
+      "type": type,
+      "cursor": cursor
+    };
+    $.ajax({
+      type: "post",
+      contentType: "application/json;charset=UTF-8",
+      url: "/smart-house/device/show/detail",
+      data: JSON.stringify(reqParam),
+      dataType: "json",
+      success: function (r) {
+        if (r.code === 0) {
+        	switch (type) {
+	            case 5:
+	            	$("#_plugin_modal_server_node_edit_name").val(r.msg.name);
+	            	$("#_plugin_modal_server_node_edit_ip").val(r.msg.ip);
+	            	$("#_plugin_modal_server_node_edit_port").val(r.msg.port);
+	            	$("#_plugin_modal_server_node_edit_mess").val(r.msg.mess);
+	            	$("#_plugin_modal_server_node_edit_cursor").val(cursor+1);
+	                break;
+	            case 1:
+	            	$("#_plugin_modal_camera_info_edit_name").val(r.msg.name);
+	                $("#_plugin_modal_camera_info_edit_ip").val(r.msg.ip);
+	                $("#_plugin_modal_camera_info_edit_port").val(r.msg.port);
+	                $("#_plugin_modal_camera_info_edit_status").val(r.msg.status);
+	                $("#_plugin_modal_camera_info_edit_workModel").val(r.msg.workModel);
+	                $("#_plugin_modal_camera_info_edit_mess").val(r.msg.mess);
+	            	$("#_plugin_modal_camera_info_edit_cursor").val(cursor+1);
+	                break;
+	            case 2:
+	                break;
+	            default:
+	            	
+	        }
+          $('#'+_modal_id).modal('show');
+        } else {
+          alert(r.msg);
+        }
+      },
+      error: function (XMLhttpRequest, textStatus, errorThrown) {
+        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+      }
+    });
+  }
+  
   $("#_plugin_modal_server_node_add").on("show.bs.modal", function () {
 	  $("#_plugin_modal_server_node_add input[type='text']").val("");
 	  $("#_plugin_modal_server_node_add_mess").val("");
   });
   
-  $("#_plugin_modal_server_node_edit").on("show.bs.modal", function () {
-	  // 执行一些动作...
+  $("#_plugin_modal_server_node_edit").on("hide.bs.modal", function () {
+	  $("#_plugin_modal_server_node_edit input[type='text']").val("");
+	  $("#_plugin_modal_server_node_edit_mess").val("");
   });
+  
+  $("#_plugin_modal_server_node_btn_edit").on("click", function(){
+	  var reqParam = {
+	      "name": $("#_plugin_modal_server_node_edit_name").val(),
+	      "ip": $("#_plugin_modal_server_node_edit_ip").val(),
+	      "port": $("#_plugin_modal_server_node_edit_port").val(),
+	      "mess": $("#_plugin_modal_server_node_edit_mess").val(),
+	      "cursor": $("#_plugin_modal_server_node_edit_cursor").val()
+	    };
+	    $.ajax({
+	      type: "post",
+	      contentType: "application/json;charset=UTF-8",
+	      url: "/smart-house/device/server/update",
+	      data: JSON.stringify(reqParam),
+	      dataType: "json",
+	      success: function (r) {
+	        if (r.code === 0) {
+	          handleServerNodeRender(r.server);
+	          $('#_plugin_modal_server_node_edit').modal('hide');//手动隐藏modal
+	        } else {
+	          alert(r.msg);
+	        }
+	      },
+	      error: function (XMLhttpRequest, textStatus, errorThrown) {
+	        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+	      }
+	    });
+  });
+  
   
   $("#_plugin_modal_server_node_btn_add").on("click", function() {
     var reqParam = {
@@ -265,11 +357,43 @@
     $("#_plugin_modal_camera_info_add input[type='text']").val("");
     $("#_plugin_modal_camera_info_add_mess").val("");
   });
-
-  $("#_plugin_modal_camera_info_edit").on("show.bs.modal", function () {
-    // 执行一些动作...
+  
+  $("#_plugin_modal_camera_info_edit").on("hide.bs.modal", function () {
+	  $("#_plugin_modal_camera_info_edit input[type='text']").val("");
+	  $("#_plugin_modal_camera_info_edit_mess").val("");
   });
-
+  
+  $("#_plugin_modal_camera_info_btn_edit").on("click", function(){
+	  var reqParam = {
+		  "name": $("#_plugin_modal_camera_info_edit_name").val(),
+	      "ip": $("#_plugin_modal_camera_info_edit_ip").val(),
+	      "port": $("#_plugin_modal_camera_info_edit_port").val(),
+	      "status": $("#_plugin_modal_camera_info_edit_status").val(),
+	      "workModel": $("#_plugin_modal_camera_info_edit_workModel").val(),
+	      "type": "1",
+	      "mess": $("#_plugin_modal_camera_info_edit_mess").val(),
+	      "cursor": $("#_plugin_modal_camera_info_edit_cursor").val()
+	    };
+	    $.ajax({
+	      type: "post",
+	      contentType: "application/json;charset=UTF-8",
+	      url: "/smart-house/device/camera/update",
+	      data: JSON.stringify(reqParam),
+	      dataType: "json",
+	      success: function (r) {
+	        if (r.code === 0) {
+	        	handleCameraNodeRender(r.camear);
+	          $('#_plugin_modal_camera_info_edit').modal('hide');//手动隐藏modal
+	        } else {
+	          alert(r.msg);
+	        }
+	      },
+	      error: function (XMLhttpRequest, textStatus, errorThrown) {
+	        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+	      }
+	    });
+  });
+	
   $("#_plugin_modal_camera_info_btn_add").on("click", function() {
     var reqParam = {
       "name": $("#_plugin_modal_camera_info_add_name").val(),
@@ -306,7 +430,7 @@
     $("#_plugin_modal_video_info_add_mess").val("");
   });
 
-  $("#_plugin_modal_video_info_edit").on("show.bs.modal", function () {
+  $("#_plugin_modal_video_info_edit").on("hide.bs.modal", function () {
     // 执行一些动作...
   });
 
@@ -366,6 +490,7 @@
       }
     });
   });
+  
 </script>
 
 </body>

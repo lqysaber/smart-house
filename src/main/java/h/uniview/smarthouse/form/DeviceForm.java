@@ -19,7 +19,7 @@ public class DeviceForm implements Serializable {
 	private String cursor;
 	
 	@Min(value = 1, message = "请选择正确的设备类型")
-	@Max(value = 4, message = "请选择正确的设备类型")
+	@Max(value = 5, message = "请选择正确的设备类型")
 	@Digits(integer = 1, fraction = 0)
 	private String type;
 
