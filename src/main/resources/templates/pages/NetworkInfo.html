@@ -161,7 +161,7 @@ function deviceControl() {
     $.each(nvrdata, function (n, v) {
       hstr += "<tr>" +
               "<th scope=\"row\">"+v.name+"</th>" +
-              "<td>"+v.channelID+"</td>" +
+              "<td></td>" +
               "<td>"+v.ip+"</td>" +
               "<td>"+v.port+"</td>" +
               "<td>"+v.typeName+"</td>" +
@@ -272,9 +272,42 @@ function deviceControl() {
 	            	$("#_plugin_modal_camera_info_edit_cursor").val(cursor+1);
 	                break;
 	            case 2:
+	            	$("#_plugin_modal_video_info_edit_name").val(r.msg.name);
+	                $("#_plugin_modal_video_info_edit_ip").val(r.msg.ip);
+	                $("#_plugin_modal_video_info_edit_port").val(r.msg.port);
+	                $("#_plugin_modal_video_info_edit_status").val(r.msg.status);
+	                $("#_plugin_modal_video_info_edit_workModel").val(r.msg.workModel);
+	                $("#_plugin_modal_video_info_edit_mess").val(r.msg.mess);
+	            	$("#_plugin_modal_video_info_edit_cursor").val(cursor+1);
+	            	$("#_plugin_modal_video_info_edit_loginName").val(r.msg.loginName);
+	            	$("#_plugin_modal_video_info_edit_loginPwd").val(r.msg.loginPwd);
+	            	$("#_plugin_modal_video_info_edit_channelSum").val(r.msg.channelSum);
+	            	$("#_plugin_modal_video_info_edit_hardDiskUsage").val(r.msg.hardDiskUsage);
+	            	$("#_plugin_modal_video_info_edit_type option[value="+type+"]").attr("selected", "selected");
+	            	
+	    			$("#_plugin_modal_video_info_edit_channelSum_div").show();
+	    			$("#_plugin_modal_video_info_edit_hardDiskUsage_div").show();
+	    			$("#_plugin_modal_video_info_edit_channelId_div").hide();
+	    			$("#_plugin_modal_video_info_edit_cloudControl_div").hide();
 	                break;
 	            default:
-	            	
+	            	$("#_plugin_modal_video_info_edit_name").val(r.msg.name);
+	                $("#_plugin_modal_video_info_edit_ip").val(r.msg.ip);
+	                $("#_plugin_modal_video_info_edit_port").val(r.msg.port);
+	                $("#_plugin_modal_video_info_edit_status").val(r.msg.status);
+	                $("#_plugin_modal_video_info_edit_workModel").val(r.msg.workModel);
+	                $("#_plugin_modal_video_info_edit_mess").val(r.msg.mess);
+	            	$("#_plugin_modal_video_info_edit_cursor").val(cursor+1);
+	            	$("#_plugin_modal_video_info_edit_loginName").val(r.msg.loginName);
+	            	$("#_plugin_modal_video_info_edit_loginPwd").val(r.msg.loginPwd);
+	            	$("#_plugin_modal_video_info_edit_channelId").val(r.msg.channelID);
+	            	$("#_plugin_modal_video_info_edit_cloudControl option[value="+r.msg.hardDiskUsage+"]").attr("selected", "selected");
+	                $("#_plugin_modal_video_info_edit_type option[value="+type+"]").attr("selected", "selected");
+	                
+	                $("#_plugin_modal_video_info_edit_channelSum_div").hide();
+	    			$("#_plugin_modal_video_info_edit_hardDiskUsage_div").hide();
+	    			$("#_plugin_modal_video_info_edit_channelId_div").show();
+	    			$("#_plugin_modal_video_info_edit_cloudControl_div").show();
 	        }
           $('#'+_modal_id).modal('show');
         } else {
@@ -382,7 +415,7 @@ function deviceControl() {
 	      dataType: "json",
 	      success: function (r) {
 	        if (r.code === 0) {
-	        	handleCameraNodeRender(r.camear);
+	        	handleCameraNodeRender(r.camera);
 	          $('#_plugin_modal_camera_info_edit').modal('hide');//手动隐藏modal
 	        } else {
 	          alert(r.msg);
@@ -428,10 +461,75 @@ function deviceControl() {
   $("#_plugin_modal_video_info_add").on("show.bs.modal", function () {
     $("#_plugin_modal_video_info_add input[type='text']").val("");
     $("#_plugin_modal_video_info_add_mess").val("");
+    
+    $("#_plugin_modal_video_info_add_type").get(0).selectedIndex = 0;  
+    
+    $("#_plugin_modal_video_info_add_channelId_div").hide();
+	$("#_plugin_modal_video_info_add_cloudControl_div").hide();
+	
+	$("#_plugin_modal_video_info_add_channelSum_div").show();
+	$("#_plugin_modal_video_info_add_hardDiskUsage_div").show();
   });
 
   $("#_plugin_modal_video_info_edit").on("hide.bs.modal", function () {
-    // 执行一些动作...
+	// 执行一些动作...
+	
+  });
+  
+  $("#_plugin_modal_video_info_btn_edit").on("click", function() {
+	  var reqParam, _duri;
+	    var dtype = $("#_plugin_modal_video_info_edit_type").val();
+	    if("2" == dtype) {
+	      _duri = "/smart-house/device/nvr/update";
+	      reqParam = {
+	        "name":      $("#_plugin_modal_video_info_edit_name").val(),
+	        "ip":        $("#_plugin_modal_video_info_edit_ip").val(),
+	        "port":      $("#_plugin_modal_video_info_edit_port").val(),
+	        "status":    $("#_plugin_modal_video_info_edit_status").val(),
+	        "workModel": $("#_plugin_modal_video_info_edit_workModel").val(),
+	        "mess":      $("#_plugin_modal_video_info_edit_mess").val(),
+	        "type":      dtype,
+	        "loginName": $("#_plugin_modal_video_info_edit_loginName").val(),
+	        "loginPwd":  $("#_plugin_modal_video_info_edit_loginPwd").val(),
+	        "hardDiskUsage": $("#_plugin_modal_video_info_edit_hardDiskUsage").val(),
+	        "channelSum":$("#_plugin_modal_video_info_edit_channelSum").val(),
+	        "cursor":    $("#_plugin_modal_video_info_edit_cursor").val()
+	      };
+	    } else {
+	      _duri = "/smart-house/device/video/update";
+	      reqParam = {
+	        "name":      $("#_plugin_modal_video_info_edit_name").val(),
+	        "ip":        $("#_plugin_modal_video_info_edit_ip").val(),
+	        "port":      $("#_plugin_modal_video_info_edit_port").val(),
+	        "status":    $("#_plugin_modal_video_info_edit_status").val(),
+	        "workModel": $("#_plugin_modal_video_info_edit_workModel").val(),
+	        "mess":      $("#_plugin_modal_video_info_edit_mess").val(),
+	        "type":      dtype,
+	        "loginName": $("#_plugin_modal_video_info_edit_loginName").val(),
+	        "loginPwd":  $("#_plugin_modal_video_info_edit_loginPwd").val(),
+	        "channelID": $("#_plugin_modal_video_info_edit_channelId").val(),
+	        "cloudControl": $("#_plugin_modal_video_info_edit_cloudControl").val(),
+	        "cursor":    $("#_plugin_modal_video_info_edit_cursor").val()
+	      };
+	    }
+	    $.ajax({
+	      type: "post",
+	      contentType: "application/json;charset=UTF-8",
+	      url: _duri,
+	      data: JSON.stringify(reqParam),
+	      dataType: "json",
+	      success: function (r) {
+	        if (r.code === 0) {
+	        	handleVideoNodeRender(r.video, r.nvr);
+	          	$('#_plugin_modal_video_info_edit').modal('hide');//手动隐藏modal
+	        } else {
+	          alert(r.msg);
+	        }
+	      },
+	      error: function (XMLhttpRequest, textStatus, errorThrown) {
+	        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+	      }
+	    });
   });
 
   $("#_plugin_modal_video_info_btn_add").on("click", function() {
@@ -450,7 +548,7 @@ function deviceControl() {
         "type":      dtype,
         "loginName": $("#_plugin_modal_video_info_add_loginName").val(),
         "loginPwd":  $("#_plugin_modal_video_info_add_loginPwd").val(),
-        "hardDiskUsage": "55%",
+        "hardDiskUsage": $("#_plugin_modal_video_info_add_hardDiskUsage").val(),
         "channelSum":$("#_plugin_modal_video_info_add_channelSum").val()
       };
     } else {
@@ -466,11 +564,10 @@ function deviceControl() {
         "loginName": $("#_plugin_modal_video_info_add_loginName").val(),
         "loginPwd":  $("#_plugin_modal_video_info_add_loginPwd").val(),
         "channelID": $("#_plugin_modal_video_info_add_channelId").val(),
-        "cloudControl": "1"
+        "cloudControl": $("#_plugin_modal_video_info_add_cloudControl").val()
       };
     }
-    alert(JSON.stringify(reqParam));
-
+	
     $.ajax({
       type: "post",
       contentType: "application/json;charset=UTF-8",
@@ -479,7 +576,7 @@ function deviceControl() {
       dataType: "json",
       success: function (r) {
         if (r.code === 0) {
-        	handleVideoNodeRender(r.video);
+        	handleVideoNodeRender(r.video, r.nvr);
           $('#_plugin_modal_video_info_add').modal('hide');//手动隐藏modal
         } else {
           alert(r.msg);
@@ -490,6 +587,44 @@ function deviceControl() {
       }
     });
   });
+  
+  $("#_plugin_modal_video_info_add_type").on("change", function(){
+		var type = $(this).val();
+		switch(type) {
+		case "2":
+			$("#_plugin_modal_video_info_add_channelSum_div").show();
+			$("#_plugin_modal_video_info_add_hardDiskUsage_div").show();
+			
+			$("#_plugin_modal_video_info_add_channelId_div").hide();
+			$("#_plugin_modal_video_info_add_cloudControl_div").hide();
+			break;
+		default:
+			$("#_plugin_modal_video_info_add_channelSum_div").hide();
+			$("#_plugin_modal_video_info_add_hardDiskUsage_div").hide();
+			
+			$("#_plugin_modal_video_info_add_channelId_div").show();
+			$("#_plugin_modal_video_info_add_cloudControl_div").show();
+		}
+	});
+  
+  $("#_plugin_modal_video_info_edit_type").on("change", function(){
+		var type = $(this).val();
+		switch(type) {
+		case "2":
+			$("#_plugin_modal_video_info_edit_channelSum_div").show();
+			$("#_plugin_modal_video_info_edit_hardDiskUsage_div").show();
+			
+			$("#_plugin_modal_video_info_edit_channelId_div").hide();
+			$("#_plugin_modal_video_info_edit_cloudControl_div").hide();
+			break;
+		default:
+			$("#_plugin_modal_video_info_edit_channelSum_div").hide();
+			$("#_plugin_modal_video_info_edit_hardDiskUsage_div").hide();
+			
+			$("#_plugin_modal_video_info_edit_channelId_div").show();
+			$("#_plugin_modal_video_info_edit_cloudControl_div").show();
+		}
+	});
   
 </script>
 

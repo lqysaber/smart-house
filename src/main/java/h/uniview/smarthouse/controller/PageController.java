@@ -108,7 +108,10 @@ public class PageController extends BaseController {
             ObjectMapper objectMapper = new ObjectMapper();
             NVRInfo object = objectMapper.convertValue(form, NVRInfo.class);
             envCenter.upadteNode(ConfigEnvType.NVR.getValue(), form.getCursor(), object);
-            return R.ok();
+            R r = R.ok();
+            r.put("nvr", envCenter.getNvrInfoList());
+            r.put("video", envCenter.getVideoInfoList());
+            return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
         }
@@ -124,7 +127,10 @@ public class PageController extends BaseController {
             ObjectMapper objectMapper = new ObjectMapper();
             VideoNodeInfo object = objectMapper.convertValue(form, VideoNodeInfo.class);
             envCenter.upadteNode(ConfigEnvType.VIDEO.getValue(), form.getCursor(), object);
-            return R.ok();
+            R r = R.ok();
+            r.put("nvr", envCenter.getNvrInfoList());
+            r.put("video", envCenter.getVideoInfoList());
+            return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
         }

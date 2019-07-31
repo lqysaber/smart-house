@@ -12,67 +12,94 @@
 				<div class="form-group row">
 					<label  class="col-sm-2 col-form-label text-right">设备类型:</label>
 					<div class="col-sm-10 input-group-sm">
-						<select class="form-control single-select">
-							<option>硬盘录像机</option>
-							<option>监控球机</option>
-							<option>监控枪机</option>
+						<select class="form-control single-select" id="_plugin_modal_video_info_edit_type">
+							<option value="2">硬盘录像机</option>
+							<option value="3">监控球机</option>
+							<option value="4">监控枪机</option>
 						</select>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label  class="col-sm-2 col-form-label text-right">设备名称:</label>
 					<div class="col-sm-10 input-group-sm">
-						<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_name">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label  class="col-sm-2 col-form-label text-right">在线状态:</label>
+					<div class="col-sm-10 input-group-sm">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_status">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label  class="col-sm-2 col-form-label text-right">工作模式:</label>
+					<div class="col-sm-10 input-group-sm">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_workModel">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label  class="col-sm-2 col-form-label text-right">IP地址:</label>
 					<div class="col-sm-10 input-group-sm">
-						<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_ip">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label  class="col-sm-2 col-form-label text-right">通信端口:</label>
 					<div class="col-sm-10 input-group-sm">
-						<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_port">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label  class="col-sm-2 col-form-label text-right">登录ID:</label>
 					<div class="col-sm-10 input-group-sm">
-						<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_loginName">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label  class="col-sm-2 col-form-label text-right">登录密码:</label>
 					<div class="col-sm-10 input-group-sm">
-						<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_loginPwd">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row" id="_plugin_modal_video_info_edit_channelId_div">
 					<label  class="col-sm-2 col-form-label text-right">设备通道:</label>
 					<div class="col-sm-10 input-group-sm">
-						<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_channelId">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row" id="_plugin_modal_video_info_edit_cloudControl_div">
+					<label  class="col-sm-2 col-form-label text-right">云台控制:</label>
+					<div class="col-sm-10 input-group-sm">
+						<select class="form-control single-select" id="_plugin_modal_video_info_edit_cloudControl">
+							<option value="1">是</option>
+							<option value="0">否</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row" id="_plugin_modal_video_info_edit_channelSum_div">
 					<label  class="col-sm-2 col-form-label text-right">最多支持通道:</label>
 					<div class="col-sm-10 input-group-sm">
-						<input type="text" class="form-control" placeholder="">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_channelSum">
+					</div>
+				</div>
+				<div class="form-group row" id="_plugin_modal_video_info_edit_hardDiskUsage_div">
+					<label  class="col-sm-2 col-form-label text-right">录像机使用率:</label>
+					<div class="col-sm-10 input-group-sm">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_edit_hardDiskUsage">
 					</div>
 				</div>
 				<div class="form-group row">
 					<label  class="col-sm-2 col-form-label text-right">备注:</label>
 					<div class="col-sm-10 input-group-sm">
-						<textarea class="form-control" rows="2"></textarea>
+						<textarea class="form-control" rows="2" id="_plugin_modal_video_info_edit_mess"></textarea>
 					</div>
 				</div>
-
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-sm" data-dismiss="modal"><i class="fa fa-times"></i> 取消</button>
-				<button type="button" class="btn btn-sm btny"><i class="fa fa-check-square-o"></i> 保存</button>
+				<button type="button" class="btn btn-sm btny" id="_plugin_modal_video_info_btn_edit"><i class="fa fa-check-square-o"></i> 保存</button>
 			</div>
+			<input type="hidden" id="_plugin_modal_video_info_edit_cursor"/>
 		</div>
 	</div>
 </div>
@@ -92,7 +119,7 @@
 					<label  class="col-sm-2 col-form-label text-right">设备类型:</label>
 					<div class="col-sm-10 input-group-sm">
 						<select class="form-control single-select" id="_plugin_modal_video_info_add_type">
-							<option value="2">硬盘录像机</option>
+							<option value="2" selected>硬盘录像机</option>
 							<option value="3">监控球机</option>
 							<option value="4">监控枪机</option>
 						</select>
@@ -140,16 +167,31 @@
 						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_add_loginPwd">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row" id="_plugin_modal_video_info_add_channelId_div">
 					<label  class="col-sm-2 col-form-label text-right">设备通道:</label>
 					<div class="col-sm-10 input-group-sm">
 						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_add_channelId">
 					</div>
 				</div>
-				<div class="form-group row">
+				<div class="form-group row" id="_plugin_modal_video_info_add_cloudControl_div">
+					<label  class="col-sm-2 col-form-label text-right">云台控制:</label>
+					<div class="col-sm-10 input-group-sm">
+						<select class="form-control single-select" id="_plugin_modal_video_info_add_cloudControl">
+							<option value="1" selected>是</option>
+							<option value="0">否</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row" id="_plugin_modal_video_info_add_channelSum_div">
 					<label  class="col-sm-2 col-form-label text-right">最多支持通道:</label>
 					<div class="col-sm-10 input-group-sm">
 						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_add_channelSum">
+					</div>
+				</div>
+				<div class="form-group row" id="_plugin_modal_video_info_add_hardDiskUsage_div">
+					<label  class="col-sm-2 col-form-label text-right">录像机使用率:</label>
+					<div class="col-sm-10 input-group-sm">
+						<input type="text" class="form-control" placeholder="" id="_plugin_modal_video_info_add_hardDiskUsage">
 					</div>
 				</div>
 				<div class="form-group row">
@@ -158,7 +200,6 @@
 						<textarea class="form-control" rows="2" id="_plugin_modal_video_info_add_mess"></textarea>
 					</div>
 				</div>
-
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-sm" data-dismiss="modal"><i class="fa fa-times"></i> 取消</button>
@@ -167,3 +208,6 @@
 		</div>
 	</div>
 </div>
+<script data-th-inline="javascript">
+
+</script>

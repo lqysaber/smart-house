@@ -183,6 +183,20 @@ public class DeviceController extends BaseController {
             return R.error(e.getMessage());
         }
     }
+    
+    @RequestMapping(value = "/device/nvr/del")
+    @ResponseBody
+    public R deleteNVRNode(String cursor) {
+        try {
+            envCenter.deleteNode(Constant.ConfigEnvType.NVR.getValue(), Integer.parseInt(cursor));
+            R r = R.ok();
+//            r.put("video", envCenter.getVideoInfoList());
+            this.handleVideoInfo(r);
+            return r;
+        } catch (Exception e) {
+            return R.error(e.getMessage());
+        }
+    }
 
 
     @RequestMapping(value = "/video/list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
