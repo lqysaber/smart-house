@@ -20,7 +20,6 @@ var PB = function ($) {
             this.initPage();
             this.initData();
             this.initEvent();
-            // this.testlogin();
         },
         initPage: function () {
             debugger;
@@ -67,12 +66,7 @@ var PB = function ($) {
             this.commonQuery();
         },
 
-        /*************************************** test login  **********************************/
-        testlogin: function() {
-            debugger;
-            this.loginnvr("192.168.1.130", 80, "admin", "123456");
-        },
-
+        /*************************************** login  **********************************/
         loginnvr: function(_ip, _port, _username, _password) {
             debugger;
             this.ip = _ip;
@@ -89,12 +83,11 @@ var PB = function ($) {
                 "dwLoginProto": this.protocol,
                 "dwDeviceType": this.devicetype
             };
-            var loginJsonstring = JSON.stringify(loginJsonMap);
-            this.login(loginJsonstring);
+            var loginJsonStr = JSON.stringify(loginJsonMap);
+            this.login(loginJsonStr);
 
-            var SDKRet;
             if (this.devicetype == deviceTypestr.IPC || this.devicetype == deviceTypestr.NVR) {
-                SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
+                var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
                 if (SDKRet == -1) {
                     $MB.n_warning($.lang.tip["getlocallistfail"]);
                     return;
@@ -144,7 +137,6 @@ var PB = function ($) {
             var selectedDateStr = $("#_history_date_time_start").val();
             if (selectedDateStr == "") {
                 $('#_inline_datepicker_plugin').datepicker('setDate', new Date());
-                // $MB.n_warning($.lang.tip["tipinputsearchtime"]);
                 return;
             }
             var BeginTime =  selectedDateStr+ " 0:0:0";
@@ -186,10 +178,10 @@ var PB = function ($) {
                 });
                 _videoModule._initData(channelID, selectedDateStr);
                 _videoModule._setVideoMap(this.queryjsonMap);
-                this.queryjsonMap = [];
 
                 this.createQuerytable();
                 this.closefind();
+                this.queryjsonMap = [];
                 this.playbackbytime(_videoModule);
             }
             else {
@@ -313,16 +305,16 @@ var PB = function ($) {
             }
 
             var videoObj = this.videotypejsonMap[ResourceId];
-            if(null == videoObj) {
+            if(null == videoObj || !videoObj) {
                 return 0;
             }
 
             var retcode = top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
-            if (0 != retcode) {
-                // $MB.n_warning("stop fail");
-            } else {
-                this.videotypejsonMap[ResourceId] = null;
+            if (-1 != retcode) {
+                return retcode;
             }
+
+            this.videotypejsonMap[ResourceId] = null;
             return retcode;
         },
 
@@ -413,8 +405,7 @@ var PB = function ($) {
         destory_activex: function () {
             if (top.sdk_viewer) {
                 var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-                top.sdk_viewer.execFunction("NETDEV_CloseSound", parseInt(ResourceId));
-                top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
+                top.sdk_viewer.execFunction("NETDEV_StopPlayback", parseInt(ResourceId));
                 top.sdk_viewer.execFunction("NETDEV_Cleanup");
                 delete top.sdk_viewer;
             }

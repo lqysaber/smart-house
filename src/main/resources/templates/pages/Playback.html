@@ -23,10 +23,44 @@
       width: 100%;
       height: 100%;
     }
+    .PlayBtn{
+      width: 400px;
+      height: 60px;
+      padding-left: 0;
+      margin:0 auto;
+      display: flex;
+
+      align-items: center;
+
+      list-style: none;
+    }
+    .PlayBtn li{
+      margin:0 6px;
+
+    }
+    .PlayBtn li button{
+      background: 0;
+      border:0;
+      padding:10px 14px;
+      border: 1px solid #2f85ec;
+      border-radius: 50%;
+    }
+    .PlayBtn li button span{
+      color: #2f85ec;
+    }
+
+    #playerContainer{
+      margin-top: 28px;
+      /*width: 100%;*/
+      height: calc(100vh - 210px);
+    }
+
   </style>
 
 </head>
 <body onbeforeunload="PB.destory_activex();">
+<div id="errormsg"></div>
+<input type="hidden" id="DevchannelID"/>
 <!-- Start wrapper-->
 <div id="wrapper" class="PlayB">
   <div class="row Monitor">
@@ -34,10 +68,9 @@
       <div class="row">
         <div class="col-lg-2 col-md-4  model_Left">
           <div data-th-replace="common/ControlList.html"/>
-
           <div class="Line">
             <label>历史视频:</label>
-            <div id="_inline_datepicker_plugin" ></div>
+            <div id="_inline_datepicker_plugin"></div>
             <input type="hidden" id="_history_date_time_start" />
           </div>
 
@@ -45,9 +78,9 @@
             <label>回放时间点定位:</label>
             <!--<div id="inline-datepicker"></div>-->
             <div class="input-group">
-              <input type="text" class="form-control" id="_pb_hh">：
-              <input type="text" class="form-control" id="_pb_mm">：
-              <input type="text" class="form-control" id="_pb_ss">
+              <input type="text" class="form-control">：
+              <input type="text" class="form-control">：
+              <input type="text" class="form-control">
               <button type="button" class="btn btn-primary waves-effect waves-light m-1" onclick="PB.SetProgress();">确认</button>
             </div>
           </div>
@@ -56,18 +89,30 @@
         </div>
 
         <div class="col-lg-10 col-md-8 model_Right">
-          <div data-th-replace="common/UniviewCtrlWin.html"></div>
-
           <div class="bg-transparent border-0 mRc mRd">
             <div class="tab-content">
-              <div class="ocxStyle">
-                <div id="playerContainer"></div>
+              <div id="tabe-10" class="tab-pane active">
+                <div class="row">
+                  <div class="col-md-12 col-xs-12 mRimg mRimgA">
+                    <div class="ocxStyle">
+                      <div id="playerContainer"></div>
+                    </div>
+                  </div>
+                  <ul class="PlayBtn">
+                    <li><button><span class="fa fa-play"></span></button></li>
+                    <li><button><span class="fa fa-pause"></span></button></li>
+                    <li><button><span class="fa fa-stop"></span></button></li>
+                    <li><button><span class="fa fa-backward"></span></button></li>
+                    <li><button><span class="fa fa-forward"></span></button></li>
+                    <li><button><span class="fa fa-arrows-alt"></span></button></li>
+                  </ul>
+                  <div class="timeAx"><img src="../assets/images/time axis.jpg"></div>
+                </div>
               </div>
-              <i class="fa fa-chevron-circle-left ileft"></i>
-              <i class="fa fa-chevron-circle-right iRight"></i>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -79,7 +124,7 @@
 <script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
 <script data-th-src="@{/assets/playback.js}"></script>
 <script data-th-inline="javascript">
-  $( function() {
+  $(function() {
     $("#_inline_datepicker_plugin").datepicker({
       autoclose: true,
       todayHighlight: true,
@@ -92,57 +137,35 @@
       $('#_history_date_time_start').val($('#_inline_datepicker_plugin').datepicker('getFormattedDate'));
       PB.commonQuery();
     });
+    function loadVideoCtrlList() {
+      var reqParam = {};
+      $.ajax({
+        type: "post",
+        contentType: "application/json;charset=UTF-8",
+        url: "/smart-house/video/list",
+        data: JSON.stringify(reqParam),
+        dataType: "json",
+        success: function (r) {
+          if (r.code === 0) {
+            var hstr = "";
+            $.each(r.msg,function(n,v) {
+              hstr += "<a class='list-group-item' onclick='PB.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
+            });
+            $("#_plugin_ctrl_list").html(hstr);
+
+            var rt = r.loginD;
+            PB.loginnvr(rt.ip, rt.port, rt.loginName, rt.loginPwd);
+          } else {
+            alert(r.msg);
+          }
+        },
+        error: function (XMLhttpRequest, textStatus, errorThrown) {
+          alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
+        }
+      });
+    }
+    loadVideoCtrlList();
   });
-  function loadVideoCtrlList() {
-    var reqParam = {};
-    $.ajax({
-      type: "post",
-      contentType: "application/json;charset=UTF-8",
-      url: "/smart-house/video/list",
-      data: JSON.stringify(reqParam),
-      dataType: "json",
-      success: function (r) {
-        if (r.code === 0) {
-          var hstr = "";
-          $.each(r.msg,function(n,v) {
-            hstr += "<a class='list-group-item' onclick='PB.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
-          });
-          $("#_plugin_ctrl_list").html(hstr);
-        } else {
-          alert(r.msg);
-        }
-      },
-      error: function (XMLhttpRequest, textStatus, errorThrown) {
-        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
-      }
-    });
-  }
-
-  function loginPlugin() {
-    var reqParam = {};
-    $.ajax({
-      type: "post",
-      contentType: "application/json;charset=UTF-8",
-      url: "/smart-house/nvr/login",
-      data: JSON.stringify(reqParam),
-      dataType: "json",
-      success: function (r) {
-        if (r.code === 0) {
-          var rt = r.msg;
-          PB.loginnvr(rt.ip, rt.port, rt.loginName, rt.loginPwd);
-        } else {
-          alert(r.msg);
-        }
-      },
-      error: function (XMLhttpRequest, textStatus, errorThrown) {
-        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
-      }
-    });
-  }
-
-  loadVideoCtrlList();
-
-  loginPlugin();
 
 </script>
 </body>

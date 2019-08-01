@@ -1,42 +1,21 @@
 var Index = function ($) {
     var mainClass = Class.extend({
-        recordlivename: 0,
         videotypejsonMap: [],      //视频类型对象数组
-        livevideojsonMap: [],      //实况流对象数组
-        playbackvideojsonMap: [],  //回放流对象数组
         initOcxWindownum: 1,       //控件默认开启窗口个数
         ocxHeight: "400px",        //控件默认高度
-        islocallogin: false,       //是否本地登录标志位
-        iscloudlogin: false,       //是否云端登录标志位
-        EVMSjsonMap: [],           //一体机下加载的所有设备集合
-        cloudEVMSjsonMap: [],      //云端一体机下加载的所有设备集合
-        CLOUDjsonMap: [],          //云端所有设备
-        queryjsonMap: [],          //查询结果集合
         ip: null,
         port: null,
         username: null,
         password: null,
         protocol: null,
         devicetype: null,
-        clouddevicetype: null,
-        channelList: null,
-        localchalisttable: null,     //局域网通道表格对象
-        localquerytable: null,       //查询视频录像表格对象
-        clouddevlisttable: null,     //云账号登录设备列表表格对象
-        clouddevchllisttable: null,  //云账号登录设备通道列表表格对象
         DeviceHandle: null,          //登录设备的凭证ID
-        cloudDeviceHadle: null,      //云账号设备handle
-        CloudHandle: null,           //云登录账号凭证ID
-        queryHandle: null,           //查询所需凭证ID
-        PlayBackBeginTime: null,     //回放开始时间标志位
-        PlayBackEndTime: null,       //回放结束时间标志位
-        DownLoadHandle: null,        //文件下载时间标志位
         init: function () {
+            debugger;
             this.destory_activex();
             this.initPage();
             this.initData();
             this.initEvent();
-            // this.testlogin();
         },
         initPage: function () {
             debugger;
@@ -82,12 +61,6 @@ var Index = function ($) {
                 _this.presetOperation(id);
 
             });
-
-            // $("#_plugin_trl_cursor a").bind("click", function (e) {
-            //     var id = e.target.id;
-            //     _this.cursorOperation(id);
-            //
-            // });
         },
 
         selectedDevChannel: function(channelId, winObj, type) {
@@ -165,6 +138,12 @@ var Index = function ($) {
                 case "ZOOM_O":
                     ptzcontrolcmd = PtzCmd.ZOOM_O;
                     break;
+                case "IRIS_O":
+                    ptzcontrolcmd = PtzCmd.IRIS_O;
+                    break;
+                case "IRIS_S":
+                    ptzcontrolcmd = PtzCmd.IRIS_S;
+                    break;
             }
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
             var retcode = top.sdk_viewer.execFunction("NETDEV_PTZControl", parseInt(ResourceId), ptzcontrolcmd, 2);
@@ -176,12 +155,7 @@ var Index = function ($) {
         },
 
 
-        /*************************************** test login  **********************************/
-        testlogin: function() {
-            debugger;
-            this.loginnvr("192.168.1.130", 80, "admin", "123456");
-        },
-
+        /*************************************** login  **********************************/
         loginnvr: function(_ip, _port, _username, _password) {
             debugger;
             this.ip = _ip;
@@ -198,12 +172,11 @@ var Index = function ($) {
                 "dwLoginProto": this.protocol,
                 "dwDeviceType": this.devicetype
             };
-            var loginJsonstring = JSON.stringify(loginJsonMap);
-            this.login(loginJsonstring);
+            var loginJsonStr = JSON.stringify(loginJsonMap);
+            this.login(loginJsonStr);
 
-            var SDKRet;
             if (this.devicetype == deviceTypestr.IPC || this.devicetype == deviceTypestr.NVR) {
-                SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
+                var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_QueryVideoChl"], this.DeviceHandle);
                 if (SDKRet == -1) {
                     $MB.n_warning($.lang.tip["getlocallistfail"]);
                     return;
@@ -271,15 +244,14 @@ var Index = function ($) {
                 streamtype: videostreamtype.live,
                 screenNum: ResourceId
             };
-
-            var closeRetcode = this.stopVideo();
-            if(0 != closeRetcode) {
-                $MB.n_warning($.lang.tip["tipstopvideofail"]+",channelId:"+channelValue);
+            var closeRetcode = this.stopVideo(ResourceId);
+            if(-1 == closeRetcode) {
+                $MB.n_warning($.lang.tip["tipstopvideofail"]+",channelId:"+channelValue+",resourceId:"+ResourceId);
                 return;
             }
 
             var openretcode = top.sdk_viewer.execFunction("NETDEV_RealPlay", parseInt(ResourceId), this.DeviceHandle, jsonStr);
-            if (0 != openretcode) {
+            if (-1 == openretcode) {
                 $MB.n_warning($.lang.tip["tipstartvideofail"]);
             } else {
                 this.videotypejsonMap[ResourceId] = obj;
@@ -289,19 +261,27 @@ var Index = function ($) {
         },
 
         //关闭视频
-        stopVideo: function () {
-            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+        stopVideo: function (ResourceId) {
+            debugger;
+            // var ResourceId ;
+            // if(!_resourceId) {
+            //     ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            // } else {
+            //     ResourceId = _resourceId;
+            // }
+
             var videoObj = this.videotypejsonMap[ResourceId];
-            if(null == videoObj) {
+            if(null == videoObj || !videoObj) {
                 return 0;
             }
+
             var retcode = top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
-            if (0 != retcode) {
-                // $MB.n_warning($.lang.tip["tipstopvideofail"]);
-            } else {
-                this.videotypejsonMap[ResourceId] = null;
-                // $MB.n_success($.lang.tip ["tipstopvideosuc"]);
+            if(retcode == -1) {
+                return retcode;
             }
+
+            this.videotypejsonMap[ResourceId] = null;
+            this.bodyScroll();
             return retcode;
         },
         /******************************* 实况相关 END ***************************/
@@ -309,6 +289,7 @@ var Index = function ($) {
 
         /**************************清理SDK并关闭线程********************/
         destory_activex: function () {
+            debugger;
             if (top.sdk_viewer) {
                 var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
                 top.sdk_viewer.execFunction("NETDEV_CloseSound", parseInt(ResourceId));
@@ -321,6 +302,7 @@ var Index = function ($) {
         /*************************** 公用方法 Begin ****************************/
         //滚动调滑动一小步，为解决关闭视频最后一帧画面问题
         bodyScroll: function () {
+            debugger;
             var t = $(window).scrollTop();
             $('body,html').animate({'scrollTop': t - 10}, 100);
             $('body,html').animate({'scrollTop': t + 10}, 100);

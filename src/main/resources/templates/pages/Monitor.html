@@ -23,6 +23,7 @@
 
 <body onbeforeunload="Index.destory_activex();">
 <div id="errormsg"></div>
+<input type="hidden" id="DevchannelID"/>
 <!-- Start wrapper-->
 <div id="wrapper">
   <div class="row Monitor">
@@ -46,7 +47,7 @@
                   <label>焦距:</label>
                   <div>
                     <button id="FOCUS_N" onclick="Index.cursorOperation('FOCUS_N');"><span class="fa fa-plus-circle"></span></button>
-                    <input type="text" placeholder="1" value="0" id="_plugin_focus_size"/>
+                    <input type="text" placeholder="1" id="_plugin_focus_size"/>
                     <button id="FOCUS_F" onclick="Index.cursorOperation('FOCUS_F');"><span class="fa fa-minus-circle"></span></button>
                   </div>
                 </div>
@@ -54,16 +55,16 @@
                   <label>焦点:</label>
                   <div>
                     <button id="ZOOM_O" onclick="Index.cursorOperation('ZOOM_O');"><span class="fa fa-plus-circle"></span></button>
-                    <input type="text" placeholder="1" value="0" id="_plugin_zoom_size"/>
+                    <input type="text" placeholder="1" id="_plugin_zoom_size"/>
                     <button id="ZOOM_I" onclick="Index.cursorOperation('ZOOM_I');"><span class="fa fa-minus-circle"></span></button>
                   </div>
                 </div>
                 <div class="COr">
                   <label>光圈:</label>
                   <div>
-                    <span class="fa fa-plus-circle"></span>
+                    <button id="IRIS_S" onclick="Index.cursorOperation('IRIS_S');"><span class="fa fa-plus-circle"></span></button>
                     <input type="text" placeholder="1">
-                    <span class="fa fa-minus-circle"></span>
+                    <button id="IRIS_O" onclick="Index.cursorOperation('IRIS_O');"><span class="fa fa-minus-circle"></span></button>
                   </div>
                 </div>
               </div>
@@ -73,15 +74,15 @@
           <div class="ColorA">
             <label>色彩调节：</label>
             <div class="col_con">
-              <label for="">亮度:</label>
+              <label for="range_01">亮度:</label>
               <div class="Col_IN"><input type="text" id="range_01" value="" name="range" /></div>
             </div>
             <div class="col_con">
-              <label for="">对比度:</label>
+              <label for="range_011">对比度:</label>
               <div class="Col_IN"><input type="text" id="range_011" value="" name="range" /></div>
             </div>
             <div class="col_con">
-              <label for="">饱和度:</label>
+              <label for="range_012">饱和度:</label>
               <div class="Col_IN"><input type="text" id="range_012" value="" name="range" /></div>
             </div>
 
@@ -108,56 +109,36 @@
 <div data-th-replace="common/javascriptfile.html" ></div>
 <script data-th-src="@{/assets/index.js}"></script>
 <script data-th-inline="javascript">
-  function loadVideoCtrlList() {
-    var reqParam = {};
-    $.ajax({
-      type: "post",
-      contentType: "application/json;charset=UTF-8",
-      url: "/smart-house/video/list",
-      data: JSON.stringify(reqParam),
-      dataType: "json",
-      success: function (r) {
-        if (r.code === 0) {
-          var hstr = "";
-          $.each(r.msg,function(n,v) {
-            hstr += "<a class='list-group-item' onclick='Index.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
-          });
-          $("#_plugin_ctrl_list").html(hstr);
-        } else {
-          alert(r.msg);
+  $(document).ready(function(){
+    function loadVideoCtrlList() {
+      var reqParam = {};
+      $.ajax({
+        type: "post",
+        contentType: "application/json;charset=UTF-8",
+        url: "/smart-house/video/list",
+        data: JSON.stringify(reqParam),
+        dataType: "json",
+        success: function (r) {
+          if (r.code === 0) {
+            var hstr = "";
+            $.each(r.msg,function(n,v) {
+              hstr += "<a class='list-group-item' onclick='Index.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
+            });
+            $("#_plugin_ctrl_list").html(hstr);
+
+            var rt = r.loginD;
+            Index.loginnvr(rt.ip, rt.port, rt.loginName, rt.loginPwd);
+          } else {
+            alert(r.msg);
+          }
+        },
+        error: function (XMLhttpRequest, textStatus, errorThrown) {
+          alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
         }
-      },
-      error: function (XMLhttpRequest, textStatus, errorThrown) {
-        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
-      }
-    });
-  }
-
-  function loginPlugin() {
-    var reqParam = {};
-    $.ajax({
-      type: "post",
-      contentType: "application/json;charset=UTF-8",
-      url: "/smart-house/nvr/login",
-      data: JSON.stringify(reqParam),
-      dataType: "json",
-      success: function (r) {
-        if (r.code === 0) {
-          var rt = r.msg;
-          Index.loginnvr(rt.ip, rt.port, rt.loginName, rt.loginPwd);
-        } else {
-          alert(r.msg);
-        }
-      },
-      error: function (XMLhttpRequest, textStatus, errorThrown) {
-        alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
-      }
-    });
-  }
-
-  loadVideoCtrlList();
-
-  loginPlugin();
+      });
+    }
+    loadVideoCtrlList();
+  });
 
 </script>
 </body>

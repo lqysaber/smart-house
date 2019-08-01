@@ -203,7 +203,9 @@ public class DeviceController extends BaseController {
     @ResponseBody
     public R listVideo() {
         try {
-            return R.ok(envCenter.getVideoInfoList());
+            R r = R.ok(envCenter.getVideoInfoList());
+            r.put("loginD", envCenter.getNvrInfoList().get(0));
+            return r;
         } catch (Exception e) {
             return R.error(e.getMessage());
         }
