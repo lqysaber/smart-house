@@ -53,8 +53,12 @@ var PtzCmd = {
 
     ZOOM_OS: 0x0303,       // 缩小停止 Zoom out stop
 
-    ZOOM_O: 0x0304         // 缩小 Zoom out
-
+    ZOOM_O: 0x0304,         // 缩小 Zoom out
+    
+    IRIS_SS:0x0101,         // 光圈关停
+    IRIS_S: 0x0102,         // 光圈关
+    IRIS_OS:0x0103,         // 光圈开停
+    IRIS_O: 0x0104          // 光圈开
 
 };
 
