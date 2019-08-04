@@ -96,6 +96,23 @@ var PlayControl ={
     NETDEV_PLAY_CTRL_SINGLE_FRAME:     7            /* 设置单帧播放  Configure single frame playing speed */
 }
 
+var SpeedControl = {
+    SPEED_UP_T_0:  0,      /*16倍速后退播放  Backward at 16x speed */
+    SPEED_UP_T_1:  1,      /*8倍速后退播放  Backward at 8x speed */
+    SPEED_UP_T_2:  2,      /*4倍速后退播放  Backward at 4x speed */
+    SPEED_UP_T_3:  3,      /*2倍速后退播放  Backward at 2x speed */
+    SPEED_UP_T_4:  4,      /*正常速度后退播放  Backward at normal speed */
+    SPEED_UP_T_5:  5,      /*1/2倍速后退播放  Backward at 1/2 speed */
+    SPEED_UP_T_6:  6,      /*1/4倍速后退播放  Backward at 1/4 speed */
+    SPEED_UP_G_7:  7,      /*1/4倍速播放  Play at 1/4 speed */
+    SPEED_UP_G_8:  8,      /*1/2倍速播放  Play at 1/2 speed */
+    SPEED_UP_G_9:  9,      /*正常速度前进播放  Forward at normal speed */
+    SPEED_UP_G_10: 10,     /*2倍速前进播放  Forward at 2x speed */
+    SPEED_UP_G_11: 11,     /*4倍速前进播放  Forward at 4x speed */
+    SPEED_UP_G_12: 12,     /*8倍速前进播放  Forward at 8x speed */
+    SPEED_UP_G_13: 13      /*16倍速前进播放  Forward at 16x speed */
+}
+
 //查询所需事件存储类型
 var EventType = {
     ALL: 0,                    // 所有的存储

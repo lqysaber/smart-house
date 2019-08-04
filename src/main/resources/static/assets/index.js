@@ -286,13 +286,26 @@ var Index = function ($) {
         },
         /******************************* 实况相关 END ***************************/
 
+        stopallvideo: function () {
+            for (var i = 0; i < this.videotypejsonMap.length; i++) {
+                if (this.videotypejsonMap[i] == null) {
+                    continue;
+                } else {
+                    this.stoponevideo(this.videotypejsonMap[i]["screenNum"]);
+                }
+            }
+        },
+        /**************************停止所有播放流********************/
+        stoponevideo: function (id) {
+            top.sdk_viewer.execFunction("NETDEV_StopRealPlay", id);
+        },
 
         /**************************清理SDK并关闭线程********************/
         destory_activex: function () {
             debugger;
             if (top.sdk_viewer) {
+                this.stopallvideo();
                 var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-                top.sdk_viewer.execFunction("NETDEV_CloseSound", parseInt(ResourceId));
                 top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
                 top.sdk_viewer.execFunction("NETDEV_Cleanup");
                 delete top.sdk_viewer;
@@ -303,9 +316,9 @@ var Index = function ($) {
         //滚动调滑动一小步，为解决关闭视频最后一帧画面问题
         bodyScroll: function () {
             debugger;
-            var t = $(window).scrollTop();
-            $('body,html').animate({'scrollTop': t - 10}, 100);
-            $('body,html').animate({'scrollTop': t + 10}, 100);
+            var t = $("playerContainer").height();
+            $('body,html').animate({'height': t + 10}, 100);
+            $('body,html').animate({'height': t - 10}, 100);
         },
         //提示信息
         msgtipshow: function (msg, icon) {

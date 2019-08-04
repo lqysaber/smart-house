@@ -8,6 +8,7 @@
   <meta name="author" content=""/>
   <title>安防视频回放</title>
   <div data-th-replace="common/cssfile.html"></div>
+  <link data-th-href="@{/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" type="text/css" media="screen">
   <style type="text/css">
     .row{
       margin:0;
@@ -54,6 +55,42 @@
       /*width: 100%;*/
       height: calc(100vh - 210px);
     }
+    [class^="icon-"],
+    [class*=" icon-"] {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-top: 1px;
+      *margin-right: .3em;
+      line-height: 14px;
+      vertical-align: text-top;
+      background-image: url("../assets/images/glyphicons-halflings.png");
+      background-position: 14px 14px;
+      background-repeat: no-repeat;
+    }
+    .icon-chevron-up {
+      background-position: -288px -120px;
+    }
+    .icon-chevron-down {
+      background-position: -313px -119px;
+    }
+    .icon-time {
+      background-position: -48px -24px;
+    }
+    #_pbvideo_progress_div .add-on {
+      display: inline-block;
+      width: auto;
+      height: 100%;
+      min-width: 16px;
+      padding: 4px 5px;
+      font-size: 14px;
+      font-weight: normal;
+      line-height: 20px;
+      text-align: center;
+      text-shadow: 0 1px 0 #ffffff;
+      background-color: #eeeeee;
+      border: 1px solid #ccc;
+    }
 
   </style>
 
@@ -76,16 +113,20 @@
 
           <div class="Location">
             <label>回放时间点定位:</label>
-            <!--<div id="inline-datepicker"></div>-->
             <div class="input-group">
-              <input type="text" class="form-control">：
-              <input type="text" class="form-control">：
-              <input type="text" class="form-control">
-              <button type="button" class="btn btn-primary waves-effect waves-light m-1" onclick="PB.SetProgress();">确认</button>
+              <div class="form-group">
+                <div class='input-group date' id='_pbvideo_progress_div'>
+                  <input id="_pbvideo_progress_time" type='text' class="form-control" data-format="hh:mm:ss" size="10" readonly/>
+                  <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                  </span>
+                  <button type="button" class="btn btn-primary waves-effect waves-light m-1" onclick="PB.setProgress();">确认</button>
+                </div>
+              </div>
             </div>
           </div>
-
           <div id="querytablediv"></div>
+          <input type="text" id="getprogresstime"/>
         </div>
 
         <div class="col-lg-10 col-md-8 model_Right">
@@ -99,12 +140,12 @@
                     </div>
                   </div>
                   <ul class="PlayBtn">
-                    <li><button><span class="fa fa-play"></span></button></li>
-                    <li><button><span class="fa fa-pause"></span></button></li>
-                    <li><button><span class="fa fa-stop"></span></button></li>
-                    <li><button><span class="fa fa-backward"></span></button></li>
-                    <li><button><span class="fa fa-forward"></span></button></li>
-                    <li><button><span class="fa fa-arrows-alt"></span></button></li>
+                    <li><button onclick="PB.resumeProgress();"><span class="fa fa-play"></span></button></li>
+                    <li><button onclick="PB.pauseProgress();"><span class="fa fa-pause"></span></button></li>
+                    <li><button onclick="PB.stopplayback();"><span class="fa fa-stop"></span></button></li>
+                    <li><button onclick="PB.speedRT();"><span class="fa fa-backward"></span></button></li>
+                    <li><button onclick="PB.speedGO();"><span class="fa fa-forward"></span></button></li>
+                    <li><button onclick="PB.getProgress();"><span class="fa fa-arrows-alt"></span></button></li>
                   </ul>
                   <div class="timeAx"><img src="../assets/images/time axis.jpg"></div>
                 </div>
@@ -122,6 +163,8 @@
 <div data-th-replace="common/javascriptfile.html"></div>
 <!--Bootstrap Datepicker Js-->
 <script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js}" charset="UTF-8"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.fr.js}" charset="UTF-8"></script>
 <script data-th-src="@{/assets/playback.js}"></script>
 <script data-th-inline="javascript">
   $(function() {
@@ -129,9 +172,14 @@
       autoclose: true,
       todayHighlight: true,
       /*汉化*/
-      language: "zh-CN",
+      language: "fr",
       /*日期格式*/
       format:"yyyy-mm-dd"
+    });
+
+    $('#_pbvideo_progress_div').datetimepicker({
+      language:  'fr',
+      pickDate: false
     });
     $('#_inline_datepicker_plugin').on('changeDate', function() {
       $('#_history_date_time_start').val($('#_inline_datepicker_plugin').datepicker('getFormattedDate'));
@@ -158,13 +206,12 @@
           } else {
             alert(r.msg);
           }
-        },
-        error: function (XMLhttpRequest, textStatus, errorThrown) {
-          alert(XMLhttpRequest.readyState+","+XMLhttpRequest.status+","+XMLhttpRequest.statusText+","+textStatus+","+errorThrown);
         }
       });
     }
     loadVideoCtrlList();
+
+    $("#getprogresstime").val(new Date(1564731031*1000).toLocaleString());
   });
 
 </script>
