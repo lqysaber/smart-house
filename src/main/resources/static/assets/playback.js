@@ -45,6 +45,7 @@ var PB = function ($) {
 
         initData: function () {
             debugger;
+            // this.setlogpath();
             // 默认关闭日志
             top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 0);
         },
@@ -172,20 +173,10 @@ var PB = function ($) {
 
             this.queryHandle = SDKRet;
             this.findall();
-            var _videoModule = new Object({
-                _channel_id : null,
-                _video_date: null,
-                _video_map : [],
-                _initData : function (_d_channel_id, _d_video_date){
-                    this._channel_id = _d_channel_id;
-                    this._video_date = _d_video_date;
-                },
-                _setVideoMap: function (_d_video_map) {
-                    this._video_map = _d_video_map;
-                }
-            });
-            _videoModule._initData(channelID, selectedDateStr);
-            _videoModule._setVideoMap(this.queryjsonMap);
+            var _videoModule = new Object();
+            _videoModule._channel_id = channelID;
+            _videoModule._video_date = selectedDateStr;
+            _videoModule._video_map = this.queryjsonMap;
 
             this.createQuerytable();
             this.closefind();
@@ -205,7 +196,9 @@ var PB = function ($) {
                 tEndTime = this.changeMStoDate(result["tEndTime"] * 1000);
                 var dateobj = {
                     tBeginTime: tBeginTime,
-                    tEndTime: tEndTime
+                    tEndTime: tEndTime,
+                    rBeginTime: result["tBeginTime"],
+                    rEndTime: result["tEndTime"]
                 };
                 this.queryjsonMap.push(dateobj);
                 this.findall();
@@ -224,11 +217,6 @@ var PB = function ($) {
             $("#querytable").html(hstr);
         },
 
-        changeMStoDate: function (ms) {
-            var datedata = new Date(ms);
-            return datedata.toLocaleString();
-        },
-
         closefind: function () {
             debugger;
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindClose", this.queryHandle);
@@ -239,11 +227,12 @@ var PB = function ($) {
 
         playbackbytime: function (vmobj) {
             debugger;
-            var vt = vmobj._video_map.slice(0,1);
+            var _video_map = vmobj._video_map;
+            var vt = _video_map.slice(0, 1);
             var dataMap = {
                 dwChannelID: vmobj._channel_id,
-                tBeginTime: vt.tBeginTime,
-                tEndTime: vt.tEndTime,
+                tBeginTime: vt[0]["rBeginTime"],
+                tEndTime: vt[0]["rEndTime"],
                 dwLinkMode: Protocal.TRANSPROTOCAL_RTPTCP,
                 dwFileType: EventType.ALL,
                 dwPlaySpeed: 9
@@ -313,9 +302,7 @@ var PB = function ($) {
             }
             var result = JSON.parse(SDKRet);
             var pttime = result.PlayTime;
-            alert(pttime);
             var showplaytime = this.changeMStoDate(pttime * 1000);
-            alert(showplaytime);
             $("#getprogresstime").val(showplaytime);
         },
 
@@ -335,7 +322,7 @@ var PB = function ($) {
             }
             var _pb_datetime = videoObj._video_date + " " + _pbvideo_time;
             var setprogresstime = _pb_datetime.replace(/-/g, "/");
-            var pullTime = parseInt((new Date(setprogresstime).getTime()) / 1000);
+            var pullTime = parseInt((new Date(setprogresstime).valueOf()) / 1000);
             var dataMap = {
                 pulTime: pullTime,
                 pulSpeed: 20
@@ -472,6 +459,44 @@ var PB = function ($) {
             }
         },
 
+        /******************************* 日志相关 BEGIN ***************************/
+        /**
+         * 开启日志
+         * @constructor
+         */
+        OpenLog: function () {
+            var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 1);
+            if (-1 != SDKRet) {
+                $MB.n_success($.lang.tip["tiplogOpensuc"]);
+            } else {
+                $MB.n_warning($.lang.tip["tiplogOpenfail"]);
+            }
+        },
+        /**
+         * 关闭日志
+         * @constructor
+         */
+        CloseLog: function () {
+            var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 0);
+            if (-1 != SDKRet) {
+                $MB.n_success($.lang.tip["tiplogClosesuc"]);
+            } else {
+                $MB.n_warning($.lang.tip["tiplogClosefail"]);
+            }
+        },
+
+        setlogpath: function () {
+            var pathurl = "D:\\sdklog";
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_SetLogPath", pathurl);
+            if (SDKRet != -1) {
+                $MB.n_success($.lang.tip["tiplogClosesuc"]);
+            } else {
+                $MB.n_warning($.lang.tip["tiplogClosefail"]);
+            }
+        },
+        /******************************* 日志相关 END ***************************/
+
+
         /**************************停止播放单路回放流*******************/
         stoponeplaybackvideo: function (id) {
             top.sdk_viewer.execFunction("NETDEV_StopPlayback", id);
@@ -536,6 +561,11 @@ var PB = function ($) {
                   break;
           }
           return msg;
+        },
+
+        changeMStoDate: function (ms) {
+            var datedata = new Date(ms);
+            return datedata.toLocaleString();
         }
     });
     return new mainClass();

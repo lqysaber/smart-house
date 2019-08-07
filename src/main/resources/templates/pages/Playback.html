@@ -174,17 +174,21 @@
       /*汉化*/
       language: "fr",
       /*日期格式*/
-      format:"yyyy-mm-dd"
+      format:"yyyy-mm-dd",
+      startDate: new Date('1970-01-01')
     });
 
-    $('#_pbvideo_progress_div').datetimepicker({
-      language:  'fr',
-      pickDate: false
-    });
     $('#_inline_datepicker_plugin').on('changeDate', function() {
       $('#_history_date_time_start').val($('#_inline_datepicker_plugin').datepicker('getFormattedDate'));
       PB.commonQuery();
     });
+
+    $('#_pbvideo_progress_div').datetimepicker({
+      language:  'fr',
+      pickDate: false,
+      startDate: new Date('1970-01-01')
+    });
+
     function loadVideoCtrlList() {
       var reqParam = {};
       $.ajax({
@@ -211,7 +215,6 @@
     }
     loadVideoCtrlList();
 
-    $("#getprogresstime").val(new Date(1564731031*1000).toLocaleString());
   });
 
 </script>
