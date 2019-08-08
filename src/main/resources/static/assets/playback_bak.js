@@ -148,13 +148,13 @@ var PB = function ($) {
                 $('#_inline_datepicker_plugin').datepicker('setDate', new Date());
                 return;
             }
-            var sBeginTime =  selectedDateStr+ " 0:0:0";
-            var sEndTime = selectedDateStr + " 23:59:59";
+            var BeginTime =  selectedDateStr+ " 0:0:0";
+            var EndTime = selectedDateStr + " 23:59:59";
 
-            sBeginTime = sBeginTime.replace(/-/g, "/");
-            sEndTime = sEndTime.replace(/-/g, "/");
-            var vBeginTime = (new Date(sBeginTime).getTime()) / 1000;
-            var vEndTime = (new Date(sEndTime).getTime()) / 1000;
+            BeginTime = BeginTime.replace(/-/g, "/");
+            EndTime = EndTime.replace(/-/g, "/");
+            var vBeginTime = (new Date(BeginTime).getTime()) / 1000;
+            var vEndTime = (new Date(EndTime).getTime()) / 1000;
 
             var dataMap = {
                 szFileName: 0,
@@ -174,8 +174,6 @@ var PB = function ($) {
             this.queryHandle = SDKRet;
             this.findall();
             var _videoModule = new Object();
-            _videoModule._s_date_start = vBeginTime;
-            _videoModule._s_date_end = vEndTime;
             _videoModule._channel_id = channelID;
             _videoModule._video_date = selectedDateStr;
             _videoModule._video_map = this.queryjsonMap;
@@ -233,10 +231,8 @@ var PB = function ($) {
             var vt = _video_map.slice(0, 1);
             var dataMap = {
                 dwChannelID: vmobj._channel_id,
-                // tBeginTime: vt[0]["rBeginTime"],
-                // tEndTime: vt[0]["rEndTime"],
-                tBeginTime: vmobj._s_date_start,
-                tEndTime: vmobj._s_date_end,
+                tBeginTime: vt[0]["rBeginTime"],
+                tEndTime: vt[0]["rEndTime"],
                 dwLinkMode: Protocal.TRANSPROTOCAL_RTPTCP,
                 dwFileType: EventType.ALL,
                 dwPlaySpeed: 9

@@ -19,9 +19,9 @@ public class UserServiceImpl implements UserService {
 			return null;
 		}
 
-		userXMLCenter.getLoginMap().forEach((k, v) -> {
-			System.out.println("username:" + k + ",pwd:" + v);
-		});
+//		userXMLCenter.getLoginMap().forEach((k, v) -> {
+//			System.out.println("username:" + k + ",pwd:" + v);
+//		});
 		
 		return new UserEntity(username, userXMLCenter.getLoginMap().get(username));
 	}

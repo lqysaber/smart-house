@@ -45,9 +45,9 @@ public class UserXMLCenter implements CommandLineRunner, Serializable {
 			loginMap.put(uElement.element("Username").getTextTrim(), uElement.element("Password").getTextTrim());
 		}
 
-		loginMap.forEach((k, v) -> {
-			System.out.println("username:" + k + ",pwd:" + v);
-		});
+//		loginMap.forEach((k, v) -> {
+//			System.out.println("username:" + k + ",pwd:" + v);
+//		});
 	}
 
 	public void updatePassword(String username, String password) throws Exception {

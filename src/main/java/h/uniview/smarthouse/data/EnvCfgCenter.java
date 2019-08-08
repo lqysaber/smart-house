@@ -89,7 +89,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		Element root = doc.getRootElement().selectSingleNode(pattern).getParent();
 		
 		Class<?> clazz = object.getClass();
-		System.out.println(clazz);
+//		System.out.println(clazz);
 		// 添加一个标签 即一个节点
 		Element nelement = root.addElement(clazz.getSimpleName());
 		
@@ -156,10 +156,10 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		Document doc = saxReader.read(url);
 
 		workstationMsg = convert2Object((Element) doc.selectSingleNode(ConfigEnvType.WROKSTATION.getValue()), WorkstationMsg.class);
-		System.out.println(workstationMsg);
+//		System.out.println(workstationMsg);
 
 		configMsg = convert2Object((Element) doc.selectSingleNode(ConfigEnvType.CONFIGDATA.getValue()), ConfigMsg.class);
-		System.out.println(configMsg);
+//		System.out.println(configMsg);
 
 		List<?> list = doc.selectNodes(ConfigEnvType.CAMERA.getValue());
 		Iterator<?> it = list.iterator();
@@ -168,7 +168,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 			tmalist.add(convert2Object((Element) it.next(), CameraInfo.class));
 		}
 		cameraInfoList = tmalist;
-		System.out.println(cameraInfoList);
+//		System.out.println(cameraInfoList);
 
 		list = doc.selectNodes(ConfigEnvType.NVR.getValue());
 		it = list.iterator();
@@ -177,7 +177,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 			nvrlist.add(convert2Object((Element) it.next(), NVRInfo.class));
 		}
 		nvrInfoList = nvrlist;
-		System.out.println(nvrInfoList);
+//		System.out.println(nvrInfoList);
 
 		list = doc.selectNodes(ConfigEnvType.VIDEO.getValue());
 		it = list.iterator();
@@ -186,7 +186,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 			tvnilist.add(convert2Object((Element) it.next(), VideoNodeInfo.class));
 		}
 		videoInfoList = tvnilist;
-		System.out.println(videoInfoList);
+//		System.out.println(videoInfoList);
 
 		list = doc.selectNodes(ConfigEnvType.SERVERNODE.getValue());
 		it = list.iterator();
@@ -195,7 +195,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 			tsnilist.add(convert2Object((Element) it.next(), ServerNodeInfo.class));
 		}
 		serverNodeList = tsnilist;
-		System.out.println(serverNodeList);
+//		System.out.println(serverNodeList);
 	}
 
 	public static <T> T convert2Object(Element element, Class<T> clazz) throws Exception {
