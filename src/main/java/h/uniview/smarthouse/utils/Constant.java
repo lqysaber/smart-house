@@ -6,6 +6,8 @@ import java.util.Map;
 public class Constant {
 	/** 超级管理员ID */
 	public static final int SUPER_ADMIN = 1;
+
+	public static final String CATALOG_END_CHAR = "/";
 	
 	public enum PhotoType {
 //		BMP、JPG、JPEG、PNG、GIF

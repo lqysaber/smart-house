@@ -17,7 +17,7 @@ var PB = function ($) {
         PlayBackEndTime: null,       //回放结束时间标志位
         speedBW: [4, 18, 19, 20, 21],
         speedFW: [9, 14, 15, 16, 17],
-        currSpeedRT:18,                //
+        currSpeedRT:4,                //
         nextSpeedRT:1,
         currSpeedGO:14,                //
         nextSpeedGO:1,
@@ -46,6 +46,7 @@ var PB = function ($) {
         initData: function () {
             debugger;
             // this.setlogpath();
+            // top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 1);
             // 默认关闭日志
             top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 0);
         },
@@ -174,11 +175,18 @@ var PB = function ($) {
             this.queryHandle = SDKRet;
             this.findall();
             var _videoModule = new Object();
-            _videoModule._s_date_start = vBeginTime;
-            _videoModule._s_date_end = vEndTime;
             _videoModule._channel_id = channelID;
             _videoModule._video_date = selectedDateStr;
             _videoModule._video_map = this.queryjsonMap;
+
+            if(this.queryjsonMap.length == 1) {
+                var vt = this.queryjsonMap.slice(0, 1);
+                _videoModule._s_date_start = vt[0]["rBeginTime"];
+                _videoModule._s_date_end = vt[0]["rEndTime"];
+            } else {
+                _videoModule._s_date_start = vBeginTime;
+                _videoModule._s_date_end = vEndTime;
+            }
 
             this.createQuerytable();
             this.closefind();
@@ -229,12 +237,11 @@ var PB = function ($) {
 
         playbackbytime: function (vmobj) {
             debugger;
+            this.currSpeedRT = 4;
+            this.currSpeedGO = 14;
             var _video_map = vmobj._video_map;
-            var vt = _video_map.slice(0, 1);
             var dataMap = {
                 dwChannelID: vmobj._channel_id,
-                // tBeginTime: vt[0]["rBeginTime"],
-                // tEndTime: vt[0]["rEndTime"],
                 tBeginTime: vmobj._s_date_start,
                 tEndTime: vmobj._s_date_end,
                 dwLinkMode: Protocal.TRANSPROTOCAL_RTPTCP,

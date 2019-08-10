@@ -43,4 +43,12 @@ public class PhotoForm implements Serializable {
 		this.queryDate = queryDate;
 	}
 
+	@Override
+	public String toString() {
+		return "PhotoForm{" +
+				"pageSize=" + pageSize +
+				", currPage=" + currPage +
+				", queryDate='" + queryDate + '\'' +
+				'}';
+	}
 }

@@ -16,14 +16,6 @@
     .mRc .mRimgA{
       height: calc(100vh - 180px);
     }
-    .timeAx{
-      width: 100%;
-      height: 60px;
-    }
-    .timeAx img{
-      width: 100%;
-      height: 100%;
-    }
     .PlayBtn{
       width: 400px;
       height: 60px;
@@ -91,7 +83,38 @@
       background-color: #eeeeee;
       border: 1px solid #ccc;
     }
+    #_video_progress_div {
+      width: 100%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
 
+    #_video_progress_div ._video_progress {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #F1D5FD;
+    }
+
+    #_video_progress_div ._video_progress ._video_progress_bar {
+      width: 0%;
+      height: 100%;
+      border-radius: 3px;
+      background: #0072FF;
+    }
+
+    #_video_progress_div ._video_progress ._video_progress_bar ._video_progress_thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 0 15px 5px #0072FF;
+      float: right;
+      position: relative;
+      left: 7px;
+      top: -5px;
+    }
   </style>
 
 </head>
@@ -147,7 +170,15 @@
                     <li><button onclick="PB.speedGO();"><span class="fa fa-forward"></span></button></li>
                     <li><button onclick="PB.getProgress();"><span class="fa fa-arrows-alt"></span></button></li>
                   </ul>
-                  <div class="timeAx"><img src="../assets/images/time axis.jpg"></div>
+                </div>
+                <div class="row">
+                  <div id="_video_progress_div">
+                    <div class="_video_progress">
+                      <div class="_video_progress_bar">
+                        <div class="_video_progress_thumb"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -215,7 +246,49 @@
     }
     loadVideoCtrlList();
 
+    var slider = {
+      use: function(id) {
+        debugger;
+        var self = this;
+        self.slider = document.getElementById(id);
+        self.bar = self.slider.querySelector('._video_progress_bar');
+        self.thumb = self.slider.querySelector('._video_progress_thumb');
+        self.slider.addEventListener('mousedown', function(e) {
+          if (e.button == 0) { // 判断点击左键
+            debugger;
+            self.mDown = true;
+            self.beginX = e.offsetX;
+            self.positionX = e.offsetX;
+            self.beginClientX = e.clientX;
+            self.sliderLong = parseInt(self.getStyle(self.slider, 'width'));
+            var per = parseInt(self.positionX / self.sliderLong * 100);
+            self.bar.style.width = per + '%';
+          }
+        });
+
+        self.slider.addEventListener('mousemove', function(e) {
+          if (self.mDown) {
+            var moveX = e.clientX - self.beginClientX;
+            self.positionX = (self.beginX + moveX > self.sliderLong) ? self.sliderLong : (self.beginX + moveX < 0) ? 0 : self.beginX + moveX;
+            var per = parseInt(self.positionX / self.sliderLong * 100);
+            self.bar.style.width = per + '%';
+          }
+        });
+
+        self.slider.addEventListener('mouseup', function(e) {
+          if (e.button == 0) {
+            self.mDown = false;
+          }
+        });
+      },
+
+      getStyle: function(obj,styleName){ // 获取元素样式的方法
+          return getComputedStyle(obj,null)[styleName];
+      }
+    };
+    slider.use('_video_progress_div');
   });
+
 
 </script>
 </body>

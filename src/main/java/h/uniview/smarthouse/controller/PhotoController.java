@@ -2,6 +2,7 @@ package h.uniview.smarthouse.controller;
 
 import h.uniview.smarthouse.data.EnvCfgCenter;
 import h.uniview.smarthouse.form.PhotoForm;
+import h.uniview.smarthouse.utils.Constant;
 import h.uniview.smarthouse.utils.FileUtils;
 import h.uniview.smarthouse.utils.PageUtils;
 import h.uniview.smarthouse.utils.R;
@@ -25,6 +26,9 @@ public class PhotoController extends BaseController {
 
 	private String getPhotoPath() {
 	    String tmp = envCfgCenter.getConfigMsg().getCameraManageCatalog();
+        if(!tmp.endsWith(Constant.CATALOG_END_CHAR)) {
+            tmp += Constant.CATALOG_END_CHAR;
+        }
 	    return new File(tmp).exists()? tmp : path;
     }
 
@@ -34,9 +38,11 @@ public class PhotoController extends BaseController {
 		if (bindingResult.hasErrors()) {
             return R.error(handleError(bindingResult));
         }
-		
+
+//        System.out.println(photoForm.toString());
+		String photoPath = getPhotoPath() + photoForm.getQueryDate() + Constant.CATALOG_END_CHAR;
         try {
-            List<String> result = FileUtils.listFile(getPhotoPath());
+            List<String> result = FileUtils.listFile(photoPath);
             PageUtils pg = new PageUtils(result, photoForm.getPageSize(), photoForm.getCurrPage());
             return R.ok(pg);
         } catch (Exception e) {
@@ -48,9 +54,9 @@ public class PhotoController extends BaseController {
      * 处理图片显示请求
      * @param fileName
      */
-    @RequestMapping("/showPic/{fileName}")
-    public void showPicture(@PathVariable("fileName") String fileName,  HttpServletResponse response){
-        File imgFile = new File(getPhotoPath()+fileName);
+    @RequestMapping("/showPic/{queryDate}/{fileName}")
+    public void showPicture(@PathVariable("queryDate") String queryDate, @PathVariable("fileName") String fileName,  HttpServletResponse response){
+        File imgFile = new File(getPhotoPath() + queryDate + Constant.CATALOG_END_CHAR + fileName);
         responseFile(response, imgFile);
     }
 

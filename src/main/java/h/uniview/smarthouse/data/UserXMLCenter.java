@@ -63,6 +63,8 @@ public class UserXMLCenter implements CommandLineRunner, Serializable {
 		XMLWriter writer = new XMLWriter(new FileWriter(url));// 将内存数据关联给一个字符输出流
 		writer.write(doc);
 		writer.close();
+
+		loginMap.put(username, password);
 	}
 
 	@Override

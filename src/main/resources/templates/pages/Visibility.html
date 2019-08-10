@@ -26,7 +26,7 @@
           <div class="col-lg-2 col-md-4  model_Left">
             <div class="Line">
               <label>历史视频:</label>
-              <div id="inline-datepicker"></div>
+              <div id="_vily_inline_dp_plugin"></div>
               <input type="hidden" id="_history_date_time_start" />
             </div>
           </div>
@@ -95,19 +95,17 @@
   <!--<script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datetimepicker.zh-CN.js}"></script>-->
 <script>
   $(function() {
-    $("#inline-datepicker").datepicker({
+    $("#_vily_inline_dp_plugin").datepicker({
       autoclose: true,
       todayHighlight: true,
-      /*汉化*/
-      language: "zh-CN",
-      /*日期格式*/
       format:"yyyy-mm-dd"
     });
-    $("#inline-datepicker").on('changeDate', function() {
-      $("#_history_date_time_start").val($("#inline-datepicker").datepicker("getFormattedDate"));
+    $("#_vily_inline_dp_plugin").on('changeDate', function() {
+      $("#_history_date_time_start").val($("#_vily_inline_dp_plugin").datepicker("getFormattedDate"));
+      $("#visibility_currpage").val(1);
       listPhoto();
     });
-
+    $("#_vily_inline_dp_plugin").datepicker("setDate", new Date());
   });
 
   function previewPage() {
@@ -144,6 +142,11 @@
     $("#visibility_currpage").val(1);
 
     listPhoto();
+  }
+
+  function getPrevPath(pathname) {
+    var dateDirectory = $("#_history_date_time_start").val();
+    return dateDirectory + "/" + pathname;
   }
 
   function listPhoto() {
@@ -184,19 +187,19 @@
     if(tabId === "#tabe-10") {
       $.each(rlistdata,function(n,value){
         hstr += "<div class='col-md-12 col-xs-12 mRimg mRimgA'>";
-        hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+        hstr += "<img src='/smart-house/showPic/"+getPrevPath(value)+"' width='100%'/>";
         hstr += "</div>";
       });
     } else if (tabId === "#tabe-11") {
       $.each(rlistdata,function(n,value){
         hstr += "<div class='col-md-6 col-xs-6 mRimg'>";
-        hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+        hstr += "<img src='/smart-house/showPic/"+getPrevPath(value)+"' width='100%'/>";
         hstr += "</div>";
       });
     } else if (tabId === "#tabe-12") {
       $.each(rlistdata,function(n,value){
         hstr += "<div class='col-md-4 col-xs-4 mRimg mRimgB'>";
-        hstr += "<img src='/smart-house/showPic/"+value+"' width='100%'/>";
+        hstr += "<img src='/smart-house/showPic/"+getPrevPath(value)+"' width='100%'/>";
         hstr += "</div>";
       });
     }
@@ -207,8 +210,7 @@
     $(tabId).html(hstr);
   }
 
-  listPhoto();
-
+  // listPhoto();
 </script>
 
 
