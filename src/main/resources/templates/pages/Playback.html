@@ -177,6 +177,9 @@
                       <div class="_video_progress_bar">
                         <div class="_video_progress_thumb"></div>
                       </div>
+                      <input type="hidden" id="_pbvideo_play_time_current" value="0"/>
+                      <input type="hidden" id="_pbvideo_play_time_start" value="0"/>
+                      <input type="hidden" id="_pbvideo_play_time_end" value="0"/>
                     </div>
                   </div>
                 </div>
@@ -284,9 +287,25 @@
 
       getStyle: function(obj,styleName){ // 获取元素样式的方法
           return getComputedStyle(obj,null)[styleName];
+      }, 
+      
+      renderVideoProgress: function(playtime) {
+    	  var starttime = parseInt($("#_pbvideo_play_time_start").val());
+          var endtime = parseInt($("#_pbvideo_play_time_end").val());
+          if(playtime<=starttime) {
+        	  this.bar.style.width = 0 + '%';
+        	  return;
+          } 
+          if(playtime>=endtime) {
+        	  this.bar.style.width = 100 + '%';
+        	  return;
+          }
+          var per = parseInt(playtime / endtime * 100);
+          this.bar.style.width = per + '%';
       }
     };
     slider.use('_video_progress_div');
+	    
   });
 
 

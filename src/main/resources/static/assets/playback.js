@@ -1,5 +1,6 @@
 var PB = function ($) {
     var mainClass = Class.extend({
+    	videoSchedualId: null,
         videotypejsonMap: [],      //视频类型对象数组
         initOcxWindownum: 1,       //控件默认开启窗口个数
         ocxHeight: "400px",        //控件默认高度
@@ -264,11 +265,25 @@ var PB = function ($) {
             var retcode = top.sdk_viewer.execFunction("NETDEV_PlayBack", parseInt(ResourceId), this.DeviceHandle, jsonStr);
             if (-1 == retcode) {
                 $MB.n_warning("playback fail");
-            } else {
-                this.videotypejsonMap[ResourceId] = vmobj;
-            }
+                return;
+            } 
+            
+            this.videotypejsonMap[ResourceId] = vmobj;
+            //set the video play time rang
+            $("#_pbvideo_play_time_start").val(vmobj._s_date_start);
+            $("#_pbvideo_play_time_end").val(vmobj._s_date_end);
+            
+            this.videoSchedualId = setInterval(function() {
+            	//TODO 
+            	var playtime = this.getProgress();
+            	if(-1 == playtime) {
+            		return;
+            	}
+            	slider.renderVideoProgress(playtime);
+            }, 1000);
+            
         },
-
+        
         stopplayback: function (_resourceId, _showTips) {
             var ResourceId = this.checkStreamExists(_resourceId);
             if(-1 == ResourceId) {
@@ -299,7 +314,7 @@ var PB = function ($) {
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
                 $MB.n_warning("No stream in the video windows.");
-                return ;
+                return -1;
             }
             var dataMap = {
                 pulTime: 0,
@@ -309,13 +324,22 @@ var PB = function ($) {
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_GETPLAYTIME, jsonStr);
             if (-1 == SDKRet) {
                 $MB.n_warning("Please Contact The Administrator.");
-                return ;
+                return -1;
             }
             var result = JSON.parse(SDKRet);
-            var pttime = result.PlayTime;
+            return result.PlayTime;
+        },
+        
+        showCurrentProgress: function() {
+        	debugger;
+            var pttime = this.getProgress();
+            if (-1 == pttime) {
+                $MB.n_warning("get video progress fail.");
+                return;
+            }
             var showplaytime = this.changeMStoDate(pttime * 1000);
             $("#getprogresstime").val(showplaytime);
-        },
+        }
 
         setProgress: function () {
             debugger;
@@ -384,6 +408,16 @@ var PB = function ($) {
                 $MB.n_success("Pause Success");
             }
         },
+        
+        fullScreen: function() {
+        	debugger;
+        	var SDKRet = top.sdk_viewer.execFunction("NetSDKFullScreen", 1); 
+        	if (-1 == SDKRet) {
+                $MB.n_warning("Full Screen fail");
+            } else {
+                $MB.n_success("Full Screen Success");
+            }
+        }, 
 
         speedRT: function() {
             debugger;
