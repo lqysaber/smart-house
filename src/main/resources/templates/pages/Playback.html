@@ -168,13 +168,13 @@
                     <li><button onclick="PB.stopplayback();"><span class="fa fa-stop"></span></button></li>
                     <li><button onclick="PB.speedRT();"><span class="fa fa-backward"></span></button></li>
                     <li><button onclick="PB.speedGO();"><span class="fa fa-forward"></span></button></li>
-                    <li><button onclick="PB.getProgress();"><span class="fa fa-arrows-alt"></span></button></li>
+                    <li><button onclick="PB.fullScreen();"><span class="fa fa-arrows-alt"></span></button></li>
                   </ul>
                 </div>
                 <div class="row">
                   <div id="_video_progress_div">
                     <div class="_video_progress">
-                      <div class="_video_progress_bar">
+                      <div class="_video_progress_bar" id="_video_progress_bar_id">
                         <div class="_video_progress_thumb"></div>
                       </div>
                       <input type="hidden" id="_pbvideo_play_time_current" value="0"/>
@@ -281,27 +281,19 @@
         self.slider.addEventListener('mouseup', function(e) {
           if (e.button == 0) {
             self.mDown = false;
+            var starttime = parseInt($("#_pbvideo_play_time_start").val());
+            if(starttime <= 0) {
+              return;
+            }
+            var endtime = parseInt($("#_pbvideo_play_time_end").val());
+            var positionPer = starttime + parseInt((endtime-starttime)*(self.positionX / self.sliderLong));
+            PB.setProgressMS(positionPer);
           }
         });
       },
 
       getStyle: function(obj,styleName){ // 获取元素样式的方法
           return getComputedStyle(obj,null)[styleName];
-      }, 
-      
-      renderVideoProgress: function(playtime) {
-    	  var starttime = parseInt($("#_pbvideo_play_time_start").val());
-          var endtime = parseInt($("#_pbvideo_play_time_end").val());
-          if(playtime<=starttime) {
-        	  this.bar.style.width = 0 + '%';
-        	  return;
-          } 
-          if(playtime>=endtime) {
-        	  this.bar.style.width = 100 + '%';
-        	  return;
-          }
-          var per = parseInt(playtime / endtime * 100);
-          this.bar.style.width = per + '%';
       }
     };
     slider.use('_video_progress_div');

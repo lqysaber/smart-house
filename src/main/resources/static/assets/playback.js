@@ -16,11 +16,11 @@ var PB = function ($) {
         queryHandle: null,           //查询所需凭证ID
         PlayBackBeginTime: null,     //回放开始时间标志位
         PlayBackEndTime: null,       //回放结束时间标志位
-        speedBW: [4, 18, 19, 20, 21],
-        speedFW: [9, 14, 15, 16, 17],
+        speedBW: [4, 3, 2, 1, 0],
+        speedFW: [9, 10, 11, 12, 13],
         currSpeedRT:4,                //
-        nextSpeedRT:1,
-        currSpeedGO:14,                //
+        nextSpeedRT:0,
+        currSpeedGO:10,                //
         nextSpeedGO:1,
         init: function () {
             this.destory_activex();
@@ -239,7 +239,7 @@ var PB = function ($) {
         playbackbytime: function (vmobj) {
             debugger;
             this.currSpeedRT = 4;
-            this.currSpeedGO = 14;
+            this.currSpeedGO = 10;
             var _video_map = vmobj._video_map;
             var dataMap = {
                 dwChannelID: vmobj._channel_id,
@@ -275,14 +275,33 @@ var PB = function ($) {
             
             this.videoSchedualId = setInterval(function() {
             	//TODO 
-            	var playtime = this.getProgress();
+            	var playtime = PB.getProgress();
             	if(-1 == playtime) {
             		return;
             	}
-            	slider.renderVideoProgress(playtime);
+            	PB.renderVideoProgress(playtime);
             }, 1000);
             
         },
+
+        renderVideoProgress: function(playtime) {
+            debugger;
+            var starttime = parseInt($("#_pbvideo_play_time_start").val());
+            var endtime = parseInt($("#_pbvideo_play_time_end").val());
+
+            var sliderbar = $("#_video_progress_bar_id");
+            if(playtime<=starttime) {
+                sliderbar.width(0 + '%');
+                return;
+            }
+            if(playtime>=endtime) {
+                sliderbar.width(100 + '%');
+                return;
+            }
+            var per = parseInt((playtime - starttime) / (endtime - starttime) * 100);
+            sliderbar.width(per + '%');
+        },
+
         
         stopplayback: function (_resourceId, _showTips) {
             var ResourceId = this.checkStreamExists(_resourceId);
@@ -301,6 +320,8 @@ var PB = function ($) {
                 return retcode;
             }
 
+            clearInterval(this.videoSchedualId);
+
             if(!_showTips) {
                 $MB.n_success("stop playback success");
             }
@@ -310,7 +331,7 @@ var PB = function ($) {
         },
 
         getProgress: function () {
-            debugger;
+            // debugger;
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
                 $MB.n_warning("No stream in the video windows.");
@@ -339,7 +360,28 @@ var PB = function ($) {
             }
             var showplaytime = this.changeMStoDate(pttime * 1000);
             $("#getprogresstime").val(showplaytime);
-        }
+        },
+
+        setProgressMS: function (playtime) {
+            debugger;
+            var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+            var videoObj = this.videotypejsonMap[ResourceId];
+            if(null == videoObj) {
+                $MB.n_warning("No stream in the video windows:"+ResourceId);
+                return;
+            }
+            var dataMap = {
+                pulTime: playtime,
+                pulSpeed: 20
+            };
+            var jsonStr = JSON.stringify(dataMap);
+            var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_SETPLAYTIME, jsonStr);
+            if (-1 == SDKRet) {
+                $MB.n_warning("Set Play Time Fail");
+            } else {
+                $MB.n_success("Set play Time Success");
+            }
+        },
 
         setProgress: function () {
             debugger;
@@ -439,12 +481,19 @@ var PB = function ($) {
 
             $MB.n_success(this.showSpeedMSG(this.currSpeedRT));
 
-            if(this.nextSpeedRT + 1 >= this.speedBW.length) {
+            if(this.nextSpeedRT - 1 < 0) {
                 this.nextSpeedRT = 0;
             } else {
-                this.nextSpeedRT ++ ;
+                this.nextSpeedRT ++;
             }
-            this.currSpeedRT = this.speedBW.slice(this.nextSpeedRT, this.nextSpeedRT+1)[0];
+            this.currSpeedGO = this.speedFW[this.nextSpeedGO];
+
+            // if(this.nextSpeedRT + 1 >= this.speedBW.length) {
+            //     this.nextSpeedRT = 0;
+            // } else {
+            //     this.nextSpeedRT ++ ;
+            // }
+            // this.currSpeedRT = this.speedBW.slice(this.nextSpeedRT, this.nextSpeedRT+1)[0];
         },
 
         speedGO: function() {
@@ -466,13 +515,18 @@ var PB = function ($) {
             }
 
             $MB.n_success(this.showSpeedMSG(this.currSpeedGO));
-
-            if(this.nextSpeedGO + 1 >= this.speedFW.length) {
+            if(this.nextSpeedGO + 1 > 13) {
                 this.nextSpeedGO = 0;
             } else {
-                this.nextSpeedGO ++ ;
+                this.nextSpeedGO ++;
             }
-            this.currSpeedGO = this.speedFW.slice(this.nextSpeedGO, this.nextSpeedGO+1)[0];
+            this.currSpeedGO = this.speedFW[this.nextSpeedGO];
+            // if(this.nextSpeedGO + 1 >= this.speedFW.length) {
+            //     this.nextSpeedGO = 0;
+            // } else {
+            //     this.nextSpeedGO ++ ;
+            // }
+            // this.currSpeedGO = this.speedFW.slice(this.nextSpeedGO, this.nextSpeedGO+1)[0];
         },
 
         checkStreamExists: function(_resourceId) {
@@ -574,17 +628,17 @@ var PB = function ($) {
         showSpeedMSG: function (num) {
             var msg ;
             switch (num) {
-              case 18:
-                  msg = "2倍速后退播放  ";
+              case 3:
+                  msg = "2倍速后退播放";
                   break;
-              case 19:
-                  msg = "4倍速后退播放   ";
+              case 2:
+                  msg = "4倍速后退播放";
                   break;
-              case 20:
-                  msg = "8倍速后退播放   ";
+              case 1:
+                  msg = "8倍速后退播放";
                   break;
-              case 21:
-                  msg = "16倍速后退播放   ";
+              case 0:
+                  msg = "16倍速后退播放";
                   break;
               case 4:
                   msg = "正常速度后退播放";
@@ -592,17 +646,17 @@ var PB = function ($) {
               case 9:
                   msg = "正常速度前进播放";
                   break;
-              case 14:
-                  msg = "2倍速前进播放   ";
+              case 10:
+                  msg = "2倍速前进播放";
                   break;
-              case 15:
-                  msg = "4倍速前进播放   ";
+              case 11:
+                  msg = "4倍速前进播放";
                   break;
-              case 16:
-                  msg = "8倍速前进播放   ";
+              case 12:
+                  msg = "8倍速前进播放";
                   break;
-              case 17:
-                  msg = "16倍速前进播放  ";
+              case 13:
+                  msg = "16倍速前进播放";
                   break;
           }
           return msg;
