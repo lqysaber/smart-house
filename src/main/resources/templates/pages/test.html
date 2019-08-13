@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <meta name="description" content=""/>
+  <meta name="author" content=""/>
+  <title>Progress</title>
+
+<style type="text/css"> 
+ #demo, #demo-progress { 
+    width: 100%; height: 100px; margin: 100px auto;
+    display: flex; align-items: center; 
+}
+
+#demo .progress { 
+    width: 100%; height: 6px; border-radius: 3px; 
+    background: #F1D5FD; 
+}
+
+#demo .progress .progress-bar { 
+    width: 40%; height: 100%; border-radius: 3px; 
+    background: #0072FF; 
+}
+
+#demo .progress .progress-bar .progress-thumb { 
+    width: 14px; height: 14px; border-radius: 50%; 
+    background: #FFFFFF; box-shadow: 0 0 15px 5px #0072FF; 
+    float: right; 
+    position: relative; left: 7px; top: -5px; 
+}
+</style>
+</head>
+<body>
+<div id="errormsg"></div>
+<input type="hidden" id="DevchannelID"/>
+<div style="width:20%;height:10px;float:left;">11</div>
+<div id="demo" style="float:left;">
+	<div class="progress">
+		<div class="progress-bar" id="demo-progress-bar">
+			<div class="progress-thumb" id="demo-progress-thumb"></div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+
+var VVG = {};  //命名空间
+VVG.DOM = {
+    $: function(id) { //创建方便的选择符
+        return typeof id == "string" ? document.getElementById(id) : id;
+    },
+    bindEvent: function(node, type, func) { //事件绑定方法
+        if (node.addEventListener) {
+            node.addEventListener(type, func, false);
+        } else if (node.attachEvent) {
+            node.attachEvent("on" + type, func);
+        } else {
+            node["on" + type] = func;
+        }
+    },
+    getEvent: function(event) { //获取事件
+        return event ? event : window.event;
+    },
+    getTarget: function(event) { //获取事件目标
+        return event.target || event.srcElement;
+    }
+}
+
+var DragDrop =  function() { //新建一个返回对象的函数
+    var dragBox = VVG.DOM.$("demo");//获取需要拖动的BOX
+    var dragBar = VVG.DOM.$("demo-progress-bar");
+    var dragThumb = VVG.DOM.$("demo-progress-thumb");
+    var dragging = false; //初始化对象
+    var beginClientX = null;
+    var beginX = null;
+    var sliderLong = null;
+    function drag(event) { //事件执行函数
+    	
+        event = VVG.DOM.getEvent(event); 
+        var target = VVG.DOM.getTarget(event);
+        switch (event.type) {//判断事件类型
+        case "mousedown":
+        	if (event.button == 0) { // 判断点击左键
+        		dragging = true;
+        		sliderLong = parseInt(dragBox.offsetWidth);
+            	beginClientX = event.clientX || event.pageX;
+            	console.log("dragBox offsetLeft is :" + dragBox.offsetLeft);
+            	beginX = beginClientX - dragBox.offsetLeft;
+            	console.log("beginClientX - dragBox.offsetLeft is :" + (beginClientX - dragBox.offsetLeft));
+                console.log("mousedown sliderLong is :" + sliderLong+",beginX is :" + beginX + ",beginClientX is :" +beginClientX);
+                
+                var per = parseInt(beginX / sliderLong * 100);
+            	dragBar.style.width = per + '%';
+            	
+            	document.body.onselectstart = function(){return false};//禁止浏览器默认选中行为
+                event.stopPropagation();;
+            }
+            break;
+        case "mousemove":
+            if(!dragging){ //当有拖动目标时执行
+            	return;
+            }
+            var X = event.clientX || event.pageX;
+            var moveX = X - beginClientX;
+			var positionX = (beginX + moveX > sliderLong) ? sliderLong : (beginX + moveX < 0) ? 0 : beginX + moveX;
+			console.log("mousemove moveX is :" + moveX+",positionX is :" + positionX+",sliderLong is :" + sliderLong);
+			var per = parseInt(positionX / sliderLong * 100);
+			dragBar.style.width = per + '%';
+			
+			event.stopPropagation();
+			event.preventDefault();
+            
+            break;
+        case "mouseup":
+            // 清空拖动目标
+            if(!dragging) return;
+            dragging = false;
+            document.body.onselectstart = function(){return true};//解除浏览器默认选中行为
+            event.stopPropagation();
+            break;
+	    case "mouseleave":
+	        // 清空拖动目标
+	    	if(!dragging) return;
+            dragging = false;
+            document.body.onselectstart = function(){return true};//解除浏览器默认选中行为
+            event.stopPropagation();
+	        break;
+	    }
+    };
+	
+    return {
+        dragStart: function() {
+            // 绑定事件
+            VVG.DOM.bindEvent(dragBox, "mousedown", drag);
+            VVG.DOM.bindEvent(dragBox, "mousemove", drag);
+            VVG.DOM.bindEvent(dragBox, "mouseup", drag);
+            VVG.DOM.bindEvent(dragBox, "mouseleave", drag);
+        }
+    }
+}();
+
+DragDrop.dragStart();
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <meta name="description" content=""/>
+  <meta name="author" content=""/>
+  <title>安防视频回放</title>
+  <div data-th-replace="common/cssfile.html"></div>
+  <link data-th-href="@{/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" type="text/css" media="screen">
+  <style type="text/css">
+    .row{
+      margin:0;
+    }
+    .mRc .mRimgA{
+      height: calc(100vh - 180px);
+    }
+    .PlayBtn{
+      width: 400px;
+      height: 60px;
+      padding-left: 0;
+      margin:0 auto;
+      display: flex;
+
+      align-items: center;
+
+      list-style: none;
+    }
+    .PlayBtn li{
+      margin:0 6px;
+
+    }
+    .PlayBtn li button{
+      background: 0;
+      border:0;
+      padding:10px 14px;
+      border: 1px solid #2f85ec;
+      border-radius: 50%;
+    }
+    .PlayBtn li button span{
+      color: #2f85ec;
+    }
+
+    #playerContainer{
+      margin-top: 28px;
+      /*width: 100%;*/
+      height: calc(100vh - 210px);
+    }
+    [class^="icon-"],
+    [class*=" icon-"] {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-top: 1px;
+      *margin-right: .3em;
+      line-height: 14px;
+      vertical-align: text-top;
+      background-image: url("../assets/images/glyphicons-halflings.png");
+      background-position: 14px 14px;
+      background-repeat: no-repeat;
+    }
+    .icon-chevron-up {
+      background-position: -288px -120px;
+    }
+    .icon-chevron-down {
+      background-position: -313px -119px;
+    }
+    .icon-time {
+      background-position: -48px -24px;
+    }
+    #_pbvideo_progress_div .add-on {
+      display: inline-block;
+      width: auto;
+      height: 100%;
+      min-width: 16px;
+      padding: 4px 5px;
+      font-size: 14px;
+      font-weight: normal;
+      line-height: 20px;
+      text-align: center;
+      text-shadow: 0 1px 0 #ffffff;
+      background-color: #eeeeee;
+      border: 1px solid #ccc;
+    }
+    #_video_progress_div {
+      width: 100%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    #_video_progress_div ._video_progress {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #F1D5FD;
+    }
+
+    #_video_progress_div ._video_progress ._video_progress_bar {
+      width: 0%;
+      height: 100%;
+      border-radius: 3px;
+      background: #0072FF;
+    }
+
+    #_video_progress_div ._video_progress ._video_progress_bar ._video_progress_thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 0 15px 5px #0072FF;
+      float: right;
+      position: relative;
+      left: 7px;
+      top: -5px;
+    }
+  </style>
+
+</head>
+<body onbeforeunload="PB.destory_activex();">
+<div id="errormsg"></div>
+<input type="hidden" id="DevchannelID"/>
+<!-- Start wrapper-->
+<div id="wrapper" class="PlayB">
+  <div class="row Monitor">
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-lg-2 col-md-4  model_Left">
+          <div data-th-replace="common/ControlList.html"/>
+          <div class="Line">
+            <label>历史视频:</label>
+            <div id="_inline_datepicker_plugin"></div>
+            <input type="hidden" id="_history_date_time_start" />
+          </div>
+
+          <div class="Location">
+            <label>回放时间点定位:</label>
+            <div class="input-group">
+              <div class="form-group">
+                <div class='input-group date' id='_pbvideo_progress_div'>
+                  <input id="_pbvideo_progress_time" type='text' class="form-control" data-format="hh:mm:ss" size="10" readonly/>
+                  <span class="add-on">
+                    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                  </span>
+                  <button type="button" class="btn btn-primary waves-effect waves-light m-1" onclick="PB.setProgress();">确认</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="querytablediv"></div>
+          <input type="text" id="getprogresstime"/>
+        </div>
+
+        <div class="col-lg-10 col-md-8 model_Right">
+          <div class="bg-transparent border-0 mRc mRd">
+            <div class="tab-content">
+              <div id="tabe-10" class="tab-pane active">
+                <div class="row">
+                  <div class="col-md-12 col-xs-12 mRimg mRimgA">
+                    <div class="ocxStyle">
+                      <div id="playerContainer"></div>
+                    </div>
+                  </div>
+                  <ul class="PlayBtn">
+                    <li><button onclick="PB.resumeProgress();"><span class="fa fa-play"></span></button></li>
+                    <li><button onclick="PB.pauseProgress();"><span class="fa fa-pause"></span></button></li>
+                    <li><button onclick="PB.stopplayback();"><span class="fa fa-stop"></span></button></li>
+                    <li><button onclick="PB.speedRT();"><span class="fa fa-backward"></span></button></li>
+                    <li><button onclick="PB.speedGO();"><span class="fa fa-forward"></span></button></li>
+                    <li><button onclick="PB.fullScreen();"><span class="fa fa-arrows-alt"></span></button></li>
+                  </ul>
+                </div>
+                <div class="row">
+                  <div id="_video_progress_div">
+                    <div class="_video_progress">
+                      <div class="_video_progress_bar" id="_video_progress_bar_id">
+                        <div class="_video_progress_thumb"></div>
+                      </div>
+                      <input type="hidden" id="_pbvideo_play_time_current" value="0"/>
+                      <input type="hidden" id="_pbvideo_play_time_start" value="0"/>
+                      <input type="hidden" id="_pbvideo_play_time_end" value="0"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div data-th-replace="common/javascriptfile.html"></div>
+<!--Bootstrap Datepicker Js-->
+<script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js}" charset="UTF-8"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.fr.js}" charset="UTF-8"></script>
+<script data-th-src="@{/assets/playback.js}"></script>
+<script data-th-inline="javascript">
+  $(function() {
+    $("#_inline_datepicker_plugin").datepicker({
+      autoclose: true,
+      todayHighlight: true,
+      /*汉化*/
+      language: "fr",
+      /*日期格式*/
+      format:"yyyy-mm-dd",
+      startDate: new Date('1970-01-01')
+    });
+
+    $('#_inline_datepicker_plugin').on('changeDate', function() {
+      $('#_history_date_time_start').val($('#_inline_datepicker_plugin').datepicker('getFormattedDate'));
+      PB.commonQuery();
+    });
+
+    $('#_pbvideo_progress_div').datetimepicker({
+      language:  'fr',
+      pickDate: false,
+      startDate: new Date('1970-01-01')
+    });
+
+    function loadVideoCtrlList() {
+      var reqParam = {};
+      $.ajax({
+        type: "post",
+        contentType: "application/json;charset=UTF-8",
+        url: "/smart-house/video/list",
+        data: JSON.stringify(reqParam),
+        dataType: "json",
+        success: function (r) {
+          if (r.code === 0) {
+            var hstr = "";
+            $.each(r.msg,function(n,v) {
+              hstr += "<a class='list-group-item' onclick='PB.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
+            });
+            $("#_plugin_ctrl_list").html(hstr);
+
+            var rt = r.loginD;
+            PB.loginnvr(rt.ip, rt.port, rt.loginName, rt.loginPwd);
+          } else {
+            alert(r.msg);
+          }
+        }
+      });
+    }
+    loadVideoCtrlList();
+
+    var slider = {
+      use: function(id) {
+        debugger;
+        var self = this;
+        self.slider = document.getElementById(id);
+        self.bar = self.slider.querySelector('._video_progress_bar');
+        self.thumb = self.slider.querySelector('._video_progress_thumb');
+        self.slider.addEventListener('mousedown', function(e) {
+          if (e.button == 0) { // 判断点击左键
+            debugger;
+            self.mDown = true;
+            self.beginX = e.offsetX;
+            self.positionX = e.offsetX;
+            self.beginClientX = e.clientX;
+            self.sliderLong = parseInt(self.getStyle(self.slider, 'width'));
+            var per = parseInt(self.positionX / self.sliderLong * 100);
+            self.bar.style.width = per + '%';
+          }
+        });
+
+        self.slider.addEventListener('mousemove', function(e) {
+          if (self.mDown) {
+            var moveX = e.clientX - self.beginClientX;
+            self.positionX = (self.beginX + moveX > self.sliderLong) ? self.sliderLong : (self.beginX + moveX < 0) ? 0 : self.beginX + moveX;
+            var per = parseInt(self.positionX / self.sliderLong * 100);
+            self.bar.style.width = per + '%';
+          }
+        });
+
+        self.slider.addEventListener('mouseup', function(e) {
+          if (e.button == 0) {
+            self.mDown = false;
+            var starttime = parseInt($("#_pbvideo_play_time_start").val());
+            if(starttime <= 0) {
+              return;
+            }
+            var endtime = parseInt($("#_pbvideo_play_time_end").val());
+            var positionPer = starttime + parseInt((endtime-starttime)*(self.positionX / self.sliderLong));
+            PB.setProgressMS(positionPer);
+          }
+        });
+      },
+
+      getStyle: function(obj,styleName){ // 获取元素样式的方法
+          return getComputedStyle(obj,null)[styleName];
+      }
+    };
+    slider.use('_video_progress_div');
+	    
+  });
+
+
+</script>
+</body>
+</html>
