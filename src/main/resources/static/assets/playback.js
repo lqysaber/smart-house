@@ -46,10 +46,10 @@ var PB = function ($) {
 
         initData: function () {
             debugger;
-            // this.setlogpath();
-            // top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 1);
+            this.setlogpath();
+            top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 1);
             // 默认关闭日志
-            top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 0);
+            // top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 0);
         },
 
         initEvent: function () {
@@ -240,6 +240,8 @@ var PB = function ($) {
             debugger;
             this.currSpeedRT = 4;
             this.currSpeedGO = 10;
+            this.nextSpeedRT = 0;
+            this.nextSpeedGO = 1;
             var _video_map = vmobj._video_map;
             var dataMap = {
                 dwChannelID: vmobj._channel_id,
@@ -273,14 +275,13 @@ var PB = function ($) {
             $("#_pbvideo_play_time_start").val(vmobj._s_date_start);
             $("#_pbvideo_play_time_end").val(vmobj._s_date_end);
             
-            this.videoSchedualId = setInterval(function() {
-            	//TODO 
-            	var playtime = PB.getProgress();
-            	if(-1 == playtime) {
-            		return;
-            	}
-            	PB.renderVideoProgress(playtime);
-            }, 1000);
+            // this.videoSchedualId = setInterval(function() {
+            // 	var playtime = PB.getProgress();
+            // 	if(-1 == playtime) {
+            // 		return;
+            // 	}
+            // 	PB.renderVideoProgress(playtime);
+            // }, 1000);
             
         },
 
@@ -298,7 +299,7 @@ var PB = function ($) {
                 sliderbar.width(100 + '%');
                 return;
             }
-            var per = parseInt((playtime - starttime) / (endtime - starttime) * 100);
+            var per = ((playtime - starttime) / (endtime - starttime) * 100).toFixed(2);
             sliderbar.width(per + '%');
         },
 
@@ -320,7 +321,7 @@ var PB = function ($) {
                 return retcode;
             }
 
-            clearInterval(this.videoSchedualId);
+            // clearInterval(this.videoSchedualId);
 
             if(!_showTips) {
                 $MB.n_success("stop playback success");
@@ -486,7 +487,7 @@ var PB = function ($) {
             } else {
                 this.nextSpeedRT ++;
             }
-            this.currSpeedGO = this.speedFW[this.nextSpeedGO];
+            this.currSpeedRT = this.speedBW[this.nextSpeedRT];
 
             // if(this.nextSpeedRT + 1 >= this.speedBW.length) {
             //     this.nextSpeedRT = 0;
@@ -515,7 +516,7 @@ var PB = function ($) {
             }
 
             $MB.n_success(this.showSpeedMSG(this.currSpeedGO));
-            if(this.nextSpeedGO + 1 > 13) {
+            if(this.nextSpeedGO + 1 > 4) {
                 this.nextSpeedGO = 0;
             } else {
                 this.nextSpeedGO ++;

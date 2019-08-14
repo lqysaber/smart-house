@@ -331,7 +331,9 @@
                 }
                 var endtime = parseInt($("#_pbvideo_play_time_end").val());
                 var positionPer = starttime + parseInt((endtime-starttime)*(positionX / sliderLong));
-                
+
+                // PB.setProgressMS(positionPer);
+
                 document.body.onselectstart = function(){return true};//解除浏览器默认选中行为
                 event.stopPropagation();
                 break;
@@ -346,7 +348,9 @@
                 }
                 var endtime = parseInt($("#_pbvideo_play_time_end").val());
                 var positionPer = starttime + parseInt((endtime-starttime)*(positionX / sliderLong));
-                
+
+                // PB.setProgressMS(positionPer);
+
                 document.body.onselectstart = function(){return true};//解除浏览器默认选中行为
                 event.stopPropagation();
     	        break;
