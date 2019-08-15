@@ -418,6 +418,7 @@ var PB = function ($) {
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
                 $MB.n_warning("No stream in the video windows.");
+                this.commonQuery();
                 return ;
             }
             var dataMap = {
