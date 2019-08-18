@@ -46,10 +46,10 @@ var PB = function ($) {
 
         initData: function () {
             debugger;
-            this.setlogpath();
-            top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 1);
+            // this.setlogpath();
+            // top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 1);
             // 默认关闭日志
-            // top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 0);
+            top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 0);
         },
 
         initEvent: function () {
@@ -275,14 +275,23 @@ var PB = function ($) {
             $("#_pbvideo_play_time_start").val(vmobj._s_date_start);
             $("#_pbvideo_play_time_end").val(vmobj._s_date_end);
             
-            // this.videoSchedualId = setInterval(function() {
-            // 	var playtime = PB.getProgress();
-            // 	if(-1 == playtime) {
-            // 		return;
-            // 	}
-            // 	PB.renderVideoProgress(playtime);
-            // }, 1000);
+            this.openSliderSchedular();
+            this.renderSliderScale(vmobj._s_date_end, vmobj._s_date_start);
             
+        },
+
+        openSliderSchedular: function() {
+            this.videoSchedualId = setInterval(function() {
+                var playtime = PB.getProgress();
+                if(-1 == playtime) {
+                    return;
+                }
+                PB.renderVideoProgress(playtime);
+            }, 1000);
+        },
+
+        closeSliderSchedular: function() {
+            clearInterval(this.videoSchedualId);
         },
 
         renderVideoProgress: function(playtime) {
@@ -322,6 +331,7 @@ var PB = function ($) {
             }
 
             // clearInterval(this.videoSchedualId);
+            this.closeSliderSchedular();
 
             if(!_showTips) {
                 $MB.n_success("stop playback success");
@@ -417,7 +427,7 @@ var PB = function ($) {
         resumeProgress: function () {
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
-                $MB.n_warning("No stream in the video windows.");
+                // $MB.n_warning("No stream in the video windows.");
                 this.commonQuery();
                 return ;
             }
@@ -429,9 +439,11 @@ var PB = function ($) {
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_RESUME, jsonStr);
             if (-1 == SDKRet) {
                 $MB.n_warning("Resume Fail");
-            } else {
-                $MB.n_success("Resume Success");
+                return;
             }
+            this.openSliderSchedular();
+            $MB.n_success("Resume Success");
+
         },
 
         pauseProgress: function () {
@@ -440,6 +452,7 @@ var PB = function ($) {
                 $MB.n_warning("No stream in the video windows.");
                 return ;
             }
+            this.closeSliderSchedular();
             var dataMap = {
                 pulTime: 0,
                 pulSpeed: 0
@@ -483,7 +496,7 @@ var PB = function ($) {
 
             $MB.n_success(this.showSpeedMSG(this.currSpeedRT));
 
-            if(this.nextSpeedRT - 1 < 0) {
+            if(this.nextSpeedRT + 1 > 4) {
                 this.nextSpeedRT = 0;
             } else {
                 this.nextSpeedRT ++;
@@ -600,13 +613,14 @@ var PB = function ($) {
 
         /**************************停止播放单路回放流*******************/
         stoponeplaybackvideo: function (id) {
+            clearInterval(this.videoSchedualId);
             top.sdk_viewer.execFunction("NETDEV_StopPlayback", id);
         },
 
         /**************************清理SDK并关闭线程********************/
         destory_activex: function () {
             if (top.sdk_viewer) {
-                // this.stopallvideo();
+                this.stopallvideo();
                 var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
                 top.sdk_viewer.execFunction("NETDEV_StopPlayback", parseInt(ResourceId));
                 top.sdk_viewer.execFunction("NETDEV_Cleanup");
@@ -667,6 +681,53 @@ var PB = function ($) {
         changeMStoDate: function (ms) {
             var datedata = new Date(ms);
             return datedata.toLocaleString();
+        },
+
+        getHours: function (d) {
+            var h = d.getHours();
+            if(h<10) {
+                return "0"+h;
+            }
+            return h;
+        },
+        getMiniutes: function (d) {
+            var m = d.getMinutes();
+            if(m<10) {
+                return "0"+m;
+            }
+            return m;
+        },
+        getSeconds: function (d) {
+            var s = d.getSeconds();
+            if(s<10) {
+                return "0"+s;
+            }
+            return s;
+        },
+
+        renderSliderScale: function (slierTimeEnd, slierTimeStart) {
+            var sliderScale = $("#_pb_time_slider_scale");
+            var timeGap = slierTimeEnd - slierTimeStart;
+            var perGap = (timeGap / 12).toFixed(2);
+            var eLeftPer = 0;
+            var d = null;
+            var scaleHtml = "";
+            for(var i = 0; i < 13; i++) {
+                eLeftPer = (perGap*i/timeGap*100).toFixed(2);
+                d = new Date((slierTimeStart + perGap*i)*1000);
+                scaleHtml += "<span style=\"left: "+eLeftPer+"%\"><ins style=\"margin-left: -6px;\">"+this.getHours(d)+":"+this.getMiniutes(d)+"</ins></span>"
+                // alert(slierTimeEnd + perGap*i);
+
+            }
+            // alert(scaleHtml);
+            sliderScale.html(scaleHtml);
+            // var startD = new Date(slierTimeStart*1000);
+            // var endD = new Date(slierTimeEnd*1000);
+            //
+            // alert(startD+","+endD);
+            // var shour = startD.getHours();
+            // var ehour = endD.getHours();
+            // alert(shour+","+ehour);
         }
     });
     return new mainClass();

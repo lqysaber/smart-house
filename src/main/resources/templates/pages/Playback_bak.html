@@ -86,7 +86,7 @@
     #_video_progress_div {
       width: 100%;
       height: 60px;
-      display: flex;
+      /*display: flex;*/
       align-items: center;
     }
 
@@ -115,6 +115,26 @@
       left: 7px;
       top: -5px;
     }
+
+    .jslider .jslider-bg i,
+    .jslider { display: block; width: 100%; height: 1em; position: relative; /*top: 0.6em; */font-family: Arial, sans-serif; }
+    .jslider table { width: 100%; border-collapse: collapse; border: 0; }
+    .jslider td, .jslider th { padding: 0; vertical-align: top; text-align: left; border: 0; }
+
+    .jslider table,
+    .jslider table tr,
+    .jslider table tr td { width: 100%; vertical-align: top; }
+
+    .jslider .jslider-bg i { height: 5px; position: absolute; font-size: 0; top: 0; }
+
+    .jslider .jslider-value { font-size: 9px; white-space: nowrap; padding: 1px 2px 0; position: absolute; top: -12px; left: 20%; background: white; line-height: 12px; -moz-border-radius: 2px; -webkit-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
+
+    .jslider .jslider-label small,
+    .jslider .jslider-value small { position: relative; top: -0.4em; }
+
+    .jslider .jslider-scale { position: relative; top: 3px; }
+    .jslider .jslider-scale span { position: absolute; height: 5px; border-left: 1px solid #999; font-size: 0; }
+    .jslider .jslider-scale ins { font-size: 9px; text-decoration: none; position: absolute; left: 0px; top: 5px; color: #999; }
   </style>
 
 </head>
@@ -126,6 +146,7 @@
   <div class="row Monitor">
     <div class="col-lg-12">
       <div class="row">
+        <!-- start of left content -->
         <div class="col-lg-2 col-md-4  model_Left">
           <div data-th-replace="common/ControlList.html"/>
           <div class="Line">
@@ -151,9 +172,11 @@
           <div id="querytablediv"></div>
           <input type="text" id="getprogresstime"/>
         </div>
+        <!-- end of left content -->
 
-        <div class="col-lg-10 col-md-8 model_Right">
-          <div class="bg-transparent border-0 mRc mRd">
+        <!-- start of right content -->
+        <div class="col-lg-10 col-md-8 model_Right" id="_pb_video_div_box_id">
+          <div class="bg-transparent border-0 mRc mRd" id="_pb_video_div_box_id_1">
             <div class="tab-content">
               <div id="tabe-10" class="tab-pane active">
                 <div class="row">
@@ -173,21 +196,40 @@
                 </div>
                 <div class="row">
                   <div id="_video_progress_div">
+                    <div class="jslider">
+                      <div id="_pb_time_tips" class="jslider-value" style="visibility: visible; left: 0%; margin-left: -13.5px; right: auto;">
+                        <span>00:00</span>
+                      </div>
+                    </div>
                     <div class="_video_progress">
                       <div class="_video_progress_bar" id="_video_progress_bar_id">
-                        <div class="_video_progress_thumb"></div>
+                        <div class="_video_progress_thumb" id="_video_progress_thumb_id"></div>
                       </div>
-                      <input type="hidden" id="_pbvideo_play_time_current" value="0"/>
-                      <input type="hidden" id="_pbvideo_play_time_start" value="0"/>
-                      <input type="hidden" id="_pbvideo_play_time_end" value="0"/>
+                    </div>
+                    <div class="jslider">
+                      <div class="jslider-scale" id="_pb_time_slider_scale">
+                        <span style="left: 0%"><ins style="margin-left: -9px;">8:00</ins></span>
+                        <span style="left: 11.1%"><ins style="margin-left: -9px;">9:00</ins></span>
+                        <span style="left: 22.2%"><ins style="margin-left: -11.5px;">10:00</ins></span>
+                        <span style="left: 33.3%"><ins style="margin-left: -11px;">11:00</ins></span>
+                        <span style="left: 44.4%"><ins style="margin-left: -11.5px;">12:00</ins></span>
+                        <span style="left: 55.5%"><ins style="margin-left: -11.5px;">13:00</ins></span>
+                        <span style="left: 66.6%"><ins style="margin-left: -11.5px;">14:00</ins></span>
+                        <span style="left: 77.7%"><ins style="margin-left: -11.5px;">15:00</ins></span>
+                        <span style="left: 88.8%"><ins style="margin-left: -11.5px;">16:00</ins></span>
+                        <span style="left: 99.89999999999999%"><ins style="margin-left: -11.5px;">17:00</ins></span>
+                      </div>
                     </div>
                   </div>
+                  <input type="hidden" id="_pbvideo_play_time_current" value="0"/>
+                  <input type="hidden" id="_pbvideo_play_time_start" value="0"/>
+                  <input type="hidden" id="_pbvideo_play_time_end" value="0"/>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
+        <!-- end of right content -->
       </div>
     </div>
   </div>
@@ -249,55 +291,147 @@
     }
     loadVideoCtrlList();
 
-    var slider = {
-      use: function(id) {
-        debugger;
-        var self = this;
-        self.slider = document.getElementById(id);
-        self.bar = self.slider.querySelector('._video_progress_bar');
-        self.thumb = self.slider.querySelector('._video_progress_thumb');
-        self.slider.addEventListener('mousedown', function(e) {
-          if (e.button == 0) { // 判断点击左键
-            debugger;
-            self.mDown = true;
-            self.beginX = e.offsetX;
-            self.positionX = e.offsetX;
-            self.beginClientX = e.clientX;
-            self.sliderLong = parseInt(self.getStyle(self.slider, 'width'));
-            var per = parseInt(self.positionX / self.sliderLong * 100);
-            self.bar.style.width = per + '%';
-          }
-        });
+    var VVG = {};  //命名空间
+    VVG.DOM = {
+      $: function(id) { //创建方便的选择符
+        return typeof id == "string" ? document.getElementById(id) : id;
+      },
+      bindEvent: function(node, type, func) { //事件绑定方法
+        if (node.addEventListener) {
+          node.addEventListener(type, func, false);
+        } else if (node.attachEvent) {
+          node.attachEvent("on" + type, func);
+        } else {
+          node["on" + type] = func;
+        }
+      },
+      getEvent: function(event) { //获取事件
+        return event ? event : window.event;
+      },
+      getTarget: function(event) { //获取事件目标
+        return event.target || event.srcElement;
+      }
+    }
 
-        self.slider.addEventListener('mousemove', function(e) {
-          if (self.mDown) {
-            var moveX = e.clientX - self.beginClientX;
-            self.positionX = (self.beginX + moveX > self.sliderLong) ? self.sliderLong : (self.beginX + moveX < 0) ? 0 : self.beginX + moveX;
-            var per = parseInt(self.positionX / self.sliderLong * 100);
-            self.bar.style.width = per + '%';
-          }
-        });
+    var DragDrop =  function() { //新建一个返回对象的函数
+      var dragBox = VVG.DOM.$("_video_progress_div");//获取需要拖动的BOX
+      var dragBar = VVG.DOM.$("_video_progress_bar_id");
+      var dragThumb = VVG.DOM.$("_video_progress_thumb_id");
+      var parentBox = VVG.DOM.$("_pb_video_div_box_id");
+      var parentBox1 = VVG.DOM.$("_pb_video_div_box_id_1");
+      var dragging = false; //初始化对象
+      var beginClientX = 0;
+      var beginX = 0;
+      var sliderLong = 0;
+      var positionX = 0;
 
-        self.slider.addEventListener('mouseup', function(e) {
-          if (e.button == 0) {
-            self.mDown = false;
+      var sliderTips = VVG.DOM.$("_pb_time_tips");
+      var sliderScale = VVG.DOM.$("_pb_time_slider_scale");
+      var slierTimeStart = 0;
+      var slierTimeEnd = 0;
+      function drag(event) { //事件执行函数
+        event = VVG.DOM.getEvent(event);
+        var target = VVG.DOM.getTarget(event);
+        switch (event.type) {//判断事件类型
+          case "mousedown":
+            if (event.button == 0) { // 判断点击左键
+              dragging = true;
+              sliderLong = parseInt(dragBox.offsetWidth);
+              beginClientX = event.clientX || event.pageX;
+              // console.log("dragBox offsetLeft is :" + (parentBox.offsetLeft + parentBox1.offsetLeft));
+              beginX = beginClientX - (parentBox.offsetLeft + parentBox1.offsetLeft);
+              positionX = beginX;
+              // console.log("positionX is :" + positionX);
+              // console.log("mousedown sliderLong is :" + sliderLong+",beginX is :" + beginX + ",beginClientX is :" +beginClientX);
+
+              var per = (positionX / sliderLong * 100).toFixed(2);
+              dragBar.style.width = per + '%';
+
+              document.body.onselectstart = function(){return false};//禁止浏览器默认选中行为
+              event.stopPropagation();;
+            }
+            break;
+          case "mousemove":
+            sliderLong = parseInt(dragBox.offsetWidth);
+            var X = event.clientX || event.pageX;
+            var moveX = X - beginClientX;
+            positionX = (beginX + moveX > sliderLong) ? sliderLong : (beginX + moveX < 0) ? 0 : beginX + moveX;
+            // console.log("mousemove moveX is :" + moveX+",positionX is :" + positionX+",sliderLong is :" + sliderLong);
+            var per = (positionX / sliderLong * 100).toFixed(2);
+
+            slierTimeStart = parseInt(VVG.DOM.$("_pbvideo_play_time_start").value);
+            slierTimeEnd = parseInt(VVG.DOM.$("_pbvideo_play_time_end").value);
+
+            if(!dragging){ //当有拖动目标时执行
+              var timeGap = slierTimeEnd - slierTimeStart;
+              var curTime = parseInt(per/100*timeGap+slierTimeStart);
+              var d = new Date(curTime*1000);
+              var h = PB.getHours(d);
+              var m = PB.getMiniutes(d);
+              var s = PB.getSeconds(d);
+
+              sliderTips.getElementsByTagName("span")[0].innerText = h+":"+m+":"+s;
+
+              sliderTips.style.left = per + '%';
+              return;
+            }
+
+            dragBar.style.width = per + '%';
+
+            event.stopPropagation();
+            event.preventDefault();
+
+            break;
+          case "mouseup":
+            // 清空拖动目标
+            if(!dragging) return;
+            dragging = false;
+
             var starttime = parseInt($("#_pbvideo_play_time_start").val());
             if(starttime <= 0) {
               return;
             }
             var endtime = parseInt($("#_pbvideo_play_time_end").val());
-            var positionPer = starttime + parseInt((endtime-starttime)*(self.positionX / self.sliderLong));
-            PB.setProgressMS(positionPer);
-          }
-        });
-      },
+            var positionPer = starttime + parseInt((endtime-starttime)*(positionX / sliderLong));
 
-      getStyle: function(obj,styleName){ // 获取元素样式的方法
-          return getComputedStyle(obj,null)[styleName];
+            PB.setProgressMS(positionPer);
+
+            document.body.onselectstart = function(){return true};//解除浏览器默认选中行为
+            event.stopPropagation();
+            break;
+          case "mouseleave":
+            // 清空拖动目标
+            if(!dragging) return;
+            dragging = false;
+
+            var starttime = parseInt($("#_pbvideo_play_time_start").val());
+            if(starttime <= 0) {
+              return;
+            }
+            var endtime = parseInt($("#_pbvideo_play_time_end").val());
+            var positionPer = starttime + parseInt((endtime-starttime)*(positionX / sliderLong));
+
+            PB.setProgressMS(positionPer);
+
+            document.body.onselectstart = function(){return true};//解除浏览器默认选中行为
+            event.stopPropagation();
+            break;
+        }
+      };
+
+      return {
+        dragStart: function() {
+          // 绑定事件
+          VVG.DOM.bindEvent(dragBox, "mousedown", drag);
+          VVG.DOM.bindEvent(dragBox, "mousemove", drag);
+          VVG.DOM.bindEvent(dragBox, "mouseup", drag);
+          VVG.DOM.bindEvent(dragBox, "mouseleave", drag);
+        }
       }
-    };
-    slider.use('_video_progress_div');
-	    
+    }();
+
+    DragDrop.dragStart();
+
   });
 
 
