@@ -127,7 +127,7 @@
 
     .jslider .jslider-bg i { height: 5px; position: absolute; font-size: 0; top: 0; }
 
-    .jslider .jslider-value { font-size: 9px; white-space: nowrap; padding: 1px 2px 0; position: absolute; top: -12px; left: 20%; background: white; line-height: 12px; -moz-border-radius: 2px; -webkit-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
+    .jslider .jslider-value { font-size: 9px; white-space: nowrap; padding: 1px 2px 0; position: absolute; top: -10px; left: 20%; background: white; line-height: 12px; -moz-border-radius: 2px; -webkit-border-radius: 2px; -o-border-radius: 2px; border-radius: 2px; }
 
     .jslider .jslider-label small,
     .jslider .jslider-value small { position: relative; top: -0.4em; }
@@ -160,10 +160,10 @@
             <div class="input-group">
               <div class="form-group">
                 <div class='input-group date' id='_pbvideo_progress_div'>
-                  <input id="_pbvideo_progress_time" type='text' class="form-control" data-format="hh:mm:ss" size="10" readonly/>
                   <span class="add-on">
                     <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
                   </span>
+                  <input id="_pbvideo_progress_time" type='text' class="form-control" data-format="hh:mm:ss" size="10" readonly/>
                   <button type="button" class="btn btn-primary waves-effect waves-light m-1" onclick="PB.setProgress();">确认</button>
                 </div>
               </div>
@@ -350,6 +350,7 @@
           break;
         case "mousemove":
           sliderLong = parseInt(dragBox.offsetWidth);
+          beginX = beginClientX - (parentBox.offsetLeft + parentBox1.offsetLeft);
           var X = event.clientX || event.pageX;
           var moveX = X - beginClientX;
           positionX = (beginX + moveX > sliderLong) ? sliderLong : (beginX + moveX < 0) ? 0 : beginX + moveX;
