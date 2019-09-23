@@ -63,11 +63,13 @@ var PB = function ($) {
             });
         },
 
-        selectedDevChannel: function(channelId, winObj, type) {
+        selectedDevChannel: function(channelId, winObj, type, channelTxt) {
             debugger;
             $("#_plugin_ctrl_list a").removeClass("active");
             $(winObj).addClass("active");
             $("#DevchannelID").val(channelId);
+            $("#DevchannelTxt").val(channelTxt);
+            this.closeSliderSchedular();
             this.commonQuery();
         },
 
@@ -141,7 +143,7 @@ var PB = function ($) {
             debugger;
             var channelID = $("#DevchannelID").val();
             if (channelID == "") {
-                $MB.n_warning("Please Select the Monitor");
+                $MB.n_warning("请选择监控点");
                 return;
             }
 
@@ -169,7 +171,8 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindFile", this.DeviceHandle, jsonStr);
             if (-1 == SDKRet) {
-                $MB.n_warning("Channel Id :"+channelID+"did not find playback video at "+selectedDateStr);
+                // $MB.n_warning("Channel Id :"+channelID+"did not find playback video at "+selectedDateStr);
+                $MB.n_warning("监控点:"+$("#DevchannelTxt").val()+"在"+selectedDateStr+"无回放视频");
                 return;
             }
 
@@ -189,7 +192,7 @@ var PB = function ($) {
                 _videoModule._s_date_end = vEndTime;
             }
 
-            this.createQuerytable();
+            // this.createQuerytable();
             this.closefind();
             this.queryjsonMap = [];
             this.playbackbytime(_videoModule);
@@ -232,7 +235,7 @@ var PB = function ($) {
             debugger;
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindClose", this.queryHandle);
             if (-1 == SDKRet) {
-                $MB.n_warning("Find Close Fail");
+                $MB.n_warning("查询视频失败");
             }
         },
 
@@ -256,7 +259,8 @@ var PB = function ($) {
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
             var spbresultcode = this.stopplayback(ResourceId, "notips");
             if (-1 == spbresultcode) {
-                $MB.n_warning("stop fail,NetSDKGetFocusWnd is:"+ResourceId);
+                // $MB.n_warning("stop fail,NetSDKGetFocusWnd is:"+ResourceId);
+                $MB.n_warning("停止回放失败");
                 return;
             }
 
@@ -266,7 +270,7 @@ var PB = function ($) {
             };
             var retcode = top.sdk_viewer.execFunction("NETDEV_PlayBack", parseInt(ResourceId), this.DeviceHandle, jsonStr);
             if (-1 == retcode) {
-                $MB.n_warning("playback fail");
+                $MB.n_warning("视频回放失败");
                 return;
             } 
             
@@ -317,7 +321,8 @@ var PB = function ($) {
             var ResourceId = this.checkStreamExists(_resourceId);
             if(-1 == ResourceId) {
                 if(!_showTips) {
-                    $MB.n_warning("No stream in the video windows:"+ResourceId);
+                    // $MB.n_warning("No stream in the video windows:"+ResourceId);
+                    $MB.n_warning("当前视窗没有回放的视频");
                 }
                 return 0;
             }
@@ -325,7 +330,8 @@ var PB = function ($) {
             var retcode = top.sdk_viewer.execFunction("NETDEV_StopPlayback", ResourceId);
             if (-1 == retcode) {
                 if(!_showTips) {
-                    $MB.n_warning("No stream in the video windows:"+ResourceId);
+                    // $MB.n_warning("No stream in the video windows:"+ResourceId);
+                    $MB.n_warning("当前视窗没有回放的视频");
                 }
                 return retcode;
             }
@@ -334,7 +340,7 @@ var PB = function ($) {
             this.closeSliderSchedular();
 
             if(!_showTips) {
-                $MB.n_success("stop playback success");
+                $MB.n_success("停止回放成功");
             }
             this.videotypejsonMap[ResourceId] = null;
             this.bodyScroll();
@@ -345,7 +351,8 @@ var PB = function ($) {
             // debugger;
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
-                $MB.n_warning("No stream in the video windows.");
+                // $MB.n_warning("No stream in the video windows.");
+                $MB.n_warning("当前视窗没有回放的视频");
                 return -1;
             }
             var dataMap = {
@@ -355,6 +362,7 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_GETPLAYTIME, jsonStr);
             if (-1 == SDKRet) {
+                this.closeSliderSchedular();
                 $MB.n_warning("Please Contact The Administrator.");
                 return -1;
             }
@@ -370,7 +378,7 @@ var PB = function ($) {
                 return;
             }
             var showplaytime = this.changeMStoDate(pttime * 1000);
-            $("#getprogresstime").val(showplaytime);
+            // $("#getprogresstime").val(showplaytime);
         },
 
         setProgressMS: function (playtime) {
@@ -378,7 +386,8 @@ var PB = function ($) {
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
             var videoObj = this.videotypejsonMap[ResourceId];
             if(null == videoObj) {
-                $MB.n_warning("No stream in the video windows:"+ResourceId);
+                // $MB.n_warning("No stream in the video windows:"+ResourceId);
+                $MB.n_warning("当前视窗没有回放的视频");
                 return;
             }
             var dataMap = {
@@ -388,9 +397,9 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_SETPLAYTIME, jsonStr);
             if (-1 == SDKRet) {
-                $MB.n_warning("Set Play Time Fail");
+                $MB.n_warning("设置回放时间点失败");
             } else {
-                $MB.n_success("Set play Time Success");
+                $MB.n_success("设置回放时间点成功");
             }
         },
 
@@ -405,7 +414,8 @@ var PB = function ($) {
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
             var videoObj = this.videotypejsonMap[ResourceId];
             if(null == videoObj) {
-                $MB.n_warning("No stream in the video windows:"+ResourceId);
+                // $MB.n_warning("No stream in the video windows:"+ResourceId);
+                $MB.n_warning("当前视窗没有回放的视频");
                 return;
             }
             var _pb_datetime = videoObj._video_date + " " + _pbvideo_time;
@@ -418,9 +428,9 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_SETPLAYTIME, jsonStr);
             if (-1 == SDKRet) {
-                $MB.n_warning("Set Play Time Fail");
+                $MB.n_warning("设置回放时间点失败");
             } else {
-                $MB.n_success("Set play Time Success");
+                $MB.n_success("设置回放时间点成功");
             }
         },
 
@@ -438,18 +448,18 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_RESUME, jsonStr);
             if (-1 == SDKRet) {
-                $MB.n_warning("Resume Fail");
+                $MB.n_warning("视频回放失败");
                 return;
             }
             this.openSliderSchedular();
-            $MB.n_success("Resume Success");
+            $MB.n_success("视频回放成功");
 
         },
 
         pauseProgress: function () {
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
-                $MB.n_warning("No stream in the video windows.");
+                $MB.n_warning("当前视窗没有回放的视频");
                 return ;
             }
             this.closeSliderSchedular();
@@ -460,9 +470,9 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_PAUSE, jsonStr);
             if (-1 == SDKRet) {
-                $MB.n_warning("Pause fail");
+                $MB.n_warning("暂停失败");
             } else {
-                $MB.n_success("Pause Success");
+                $MB.n_success("暂停成功");
             }
         },
         
@@ -470,9 +480,9 @@ var PB = function ($) {
         	debugger;
         	var SDKRet = top.sdk_viewer.execFunction("NetSDKFullScreen", 1); 
         	if (-1 == SDKRet) {
-                $MB.n_warning("Full Screen fail");
+                $MB.n_warning("全屏失败");
             } else {
-                $MB.n_success("Full Screen Success");
+                $MB.n_success("全屏成功");
             }
         }, 
 
@@ -480,7 +490,7 @@ var PB = function ($) {
             debugger;
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
-                $MB.n_warning("No stream in the video windows.");
+                $MB.n_warning("当前视窗没有回放的视频");
                 return ;
             }
             var dataMap = {
@@ -490,7 +500,7 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_SETPLAYSPEED, jsonStr);
             if (-1 == SDKRet) {
-                $MB.n_warning("Speed backward fail");
+                $MB.n_warning("快退失败");
                 return;
             }
 
@@ -515,7 +525,7 @@ var PB = function ($) {
             debugger;
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
-                $MB.n_warning("No stream in the video windows.");
+                $MB.n_warning("当前视窗没有回放的视频");
                 return ;
             }
             var dataMap = {
@@ -525,7 +535,7 @@ var PB = function ($) {
             var jsonStr = JSON.stringify(dataMap);
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_PlayBackControl", parseInt(ResourceId), PlayControl.NETDEV_PLAY_CTRL_SETPLAYSPEED, jsonStr);
             if (-1 == SDKRet) {
-                $MB.n_warning("Speed forward fail");
+                $MB.n_warning("快进失败");
                 return;
             }
 

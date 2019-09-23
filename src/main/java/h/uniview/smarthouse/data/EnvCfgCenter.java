@@ -72,7 +72,9 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		});
 		
 		// 注意：XML文件是被加载到内存中 修改也是在内存中 ==》因此需要将内存中的数据同步到磁盘中
-		XMLWriter writer = new XMLWriter(new FileWriter(url));// 将内存数据关联给一个字符输出流
+		OutputFormat format = OutputFormat.createPrettyPrint();
+		format.setEncoding("UTF-8"); //改变编码方式
+		XMLWriter writer = new XMLWriter(new FileWriter(url), format);// 将内存数据关联给一个字符输出流
 		writer.write(doc);
 		writer.close();
 		
@@ -105,6 +107,7 @@ public class EnvCfgCenter implements CommandLineRunner, Serializable {
 		});
 
 		OutputFormat format = OutputFormat.createPrettyPrint();
+		format.setEncoding("UTF-8"); //改变编码方式
 		XMLWriter writer = new XMLWriter(new FileWriter(url), format);// 构造一个具有良好输出格式的XML输出对象
 		writer.write(doc);
 		writer.close();

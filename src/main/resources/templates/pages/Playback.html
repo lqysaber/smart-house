@@ -94,7 +94,8 @@
       width: 100%;
       height: 6px;
       border-radius: 3px;
-      background: #F1D5FD;
+      /*background: #F1D5FD;*/
+      background: #4EFFFD;
     }
 
     #_video_progress_div ._video_progress ._video_progress_bar {
@@ -141,6 +142,7 @@
 <body onbeforeunload="PB.destory_activex();">
 <div id="errormsg"></div>
 <input type="hidden" id="DevchannelID"/>
+<input type="hidden" id="DevchannelTxt"/>
 <!-- Start wrapper-->
 <div id="wrapper" class="PlayB">
   <div class="row Monitor">
@@ -169,8 +171,8 @@
               </div>
             </div>
           </div>
-          <div id="querytablediv"></div>
-          <input type="text" id="getprogresstime"/>
+          <!--<div id="querytablediv"></div>
+          <input type="text" id="getprogresstime"/>-->
         </div>
         <!-- end of left content -->
 
@@ -240,7 +242,7 @@
 <!--Bootstrap Datepicker Js-->
 <script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
 <script data-th-src="@{/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js}" charset="UTF-8"></script>
-<script data-th-src="@{/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.fr.js}" charset="UTF-8"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datetimepicker.zh-CN.js}" charset="UTF-8"></script>
 <script data-th-src="@{/assets/playback.js}"></script>
 <script data-th-inline="javascript">
   $(function() {
@@ -248,7 +250,7 @@
       autoclose: true,
       todayHighlight: true,
       /*汉化*/
-      language: "fr",
+      language: "zh-CN",
       /*日期格式*/
       format:"yyyy-mm-dd",
       startDate: new Date('1970-01-01')
@@ -277,7 +279,7 @@
           if (r.code === 0) {
             var hstr = "";
             $.each(r.msg,function(n,v) {
-              hstr += "<a class='list-group-item' onclick='PB.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
+              hstr += "<a href=\"javascript:void();\" class=\"list-group-item\" onclick=\"PB.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+", '"+v.name+"');\"><i class=\"fa fa-inbox mr-2\"></i>"+v.name+"</a>";
             });
             $("#_plugin_ctrl_list").html(hstr);
 

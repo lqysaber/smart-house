@@ -24,6 +24,7 @@
 <body onbeforeunload="Index.destory_activex();">
 <div id="errormsg"></div>
 <input type="hidden" id="DevchannelID"/>
+<input type="hidden" id="DevchannelTxt"/>
 <!-- Start wrapper-->
 <div id="wrapper">
   <div class="row Monitor">
@@ -46,17 +47,17 @@
                 <div class="COr">
                   <label>焦距:</label>
                   <div>
-                    <button id="FOCUS_N" onclick="Index.cursorOperation('FOCUS_N');"><span class="fa fa-plus-circle"></span></button>
-                    <input type="text" placeholder="1" id="_plugin_focus_size"/>
-                    <button id="FOCUS_F" onclick="Index.cursorOperation('FOCUS_F');"><span class="fa fa-minus-circle"></span></button>
+                    <button id="ZOOM_O" onclick="Index.cursorOperation('ZOOM_O');"><span class="fa fa-plus-circle"></span></button>
+                    <input type="text" placeholder="1" id="_plugin_zoom_size"/>
+                    <button id="ZOOM_I" onclick="Index.cursorOperation('ZOOM_I');"><span class="fa fa-minus-circle"></span></button>
                   </div>
                 </div>
                 <div class="COr">
                   <label>焦点:</label>
                   <div>
-                    <button id="ZOOM_O" onclick="Index.cursorOperation('ZOOM_O');"><span class="fa fa-plus-circle"></span></button>
-                    <input type="text" placeholder="1" id="_plugin_zoom_size"/>
-                    <button id="ZOOM_I" onclick="Index.cursorOperation('ZOOM_I');"><span class="fa fa-minus-circle"></span></button>
+                    <button id="FOCUS_N" onclick="Index.cursorOperation('FOCUS_N');"><span class="fa fa-plus-circle"></span></button>
+                    <input type="text" placeholder="1" id="_plugin_focus_size"/>
+                    <button id="FOCUS_F" onclick="Index.cursorOperation('FOCUS_F');"><span class="fa fa-minus-circle"></span></button>
                   </div>
                 </div>
                 <div class="COr">
@@ -95,8 +96,8 @@
               <div class="ocxStyle">
                 <div id="playerContainer"></div>
               </div>
-              <i class="fa fa-chevron-circle-left ileft"></i>
-              <i class="fa fa-chevron-circle-right iRight"></i>
+              <!--<i class="fa fa-chevron-circle-left ileft"></i>
+              <i class="fa fa-chevron-circle-right iRight"></i>-->
             </div>
           </div>
         </div>
@@ -121,7 +122,7 @@
           if (r.code === 0) {
             var hstr = "";
             $.each(r.msg,function(n,v) {
-              hstr += "<a class='list-group-item' onclick='Index.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+");'><i class='fa fa-inbox mr-2'></i>"+v.name+"</a>";
+              hstr += "<a href=\"javascript:void();\" class=\"list-group-item\" onclick=\"Index.selectedDevChannel("+v.channelID+", this, "+v.cloudControl+", '"+v.name+"');\"><i class=\"fa fa-inbox mr-2\"></i>"+v.name+"</a>";
             });
             $("#_plugin_ctrl_list").html(hstr);
 

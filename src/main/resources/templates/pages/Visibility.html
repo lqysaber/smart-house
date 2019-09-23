@@ -92,12 +92,14 @@
   <!--Bootstrap Datepicker Js-->
   <script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js}"></script>
 
-  <!--<script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datetimepicker.zh-CN.js}"></script>-->
+  <script data-th-src="@{/assets/plugins/bootstrap-datepicker/js/bootstrap-datetimepicker.zh-CN.js}"></script>
 <script>
   $(function() {
     $("#_vily_inline_dp_plugin").datepicker({
       autoclose: true,
       todayHighlight: true,
+      /*汉化*/
+      language: "zh-CN",
       format:"yyyy-mm-dd"
     });
     $("#_vily_inline_dp_plugin").on('changeDate', function() {

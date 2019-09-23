@@ -63,11 +63,12 @@ var Index = function ($) {
             });
         },
 
-        selectedDevChannel: function(channelId, winObj, type) {
+        selectedDevChannel: function(channelId, winObj, type, channelTxt) {
             debugger;
             $("#_plugin_ctrl_list a").removeClass("active");
             $(winObj).addClass("active");
             $("#DevchannelID").val(channelId);
+            $("#DevchannelTxt").val(channelTxt);
             this.startVideo();
 
             if(type == 1) {
@@ -119,7 +120,7 @@ var Index = function ($) {
                 $MB.n_warning($.lang.tip["tippresetturnfail"]);
                 return ;
             }
-            this.startVideo();
+            // this.startVideo();
         },
 
         cursorOperation: function (id) {
@@ -151,7 +152,7 @@ var Index = function ($) {
                 $MB.n_warning(id + "," + ptzcontrolcmd +" is error");
                 return ;
             }
-            this.startVideo();
+            // this.startVideo();
         },
 
 
@@ -228,7 +229,7 @@ var Index = function ($) {
             debugger;
             var channelValue = Number($("#DevchannelID").val());
             if (channelValue == "") {
-                $MB.n_warning("please select the monitor");
+                $MB.n_warning("请选择监控点");
                 return;
             }
             var dataMap = {
@@ -246,7 +247,7 @@ var Index = function ($) {
             };
             var closeRetcode = this.stopVideo(ResourceId);
             if(-1 == closeRetcode) {
-                $MB.n_warning($.lang.tip["tipstopvideofail"]+",channelId:"+channelValue+",resourceId:"+ResourceId);
+                $MB.n_warning($.lang.tip["tipstopvideofail"]+",监控点为:"+$("#DevchannelTxt").val()+",视频窗口为:"+ResourceId);
                 return;
             }
 

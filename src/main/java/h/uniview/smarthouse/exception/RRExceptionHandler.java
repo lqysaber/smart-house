@@ -1,11 +1,7 @@
 package h.uniview.smarthouse.exception;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
-
+import h.uniview.smarthouse.utils.HttpUtils;
+import h.uniview.smarthouse.utils.R;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.ExpiredSessionException;
 import org.slf4j.Logger;
@@ -15,16 +11,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import h.uniview.smarthouse.utils.HttpUtils;
-import h.uniview.smarthouse.utils.R;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 
-/**
- * 异常处理器
- * 
- * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2016年10月27日 下午10:16:19
- */
 @RestControllerAdvice
 public class RRExceptionHandler {
 	private Logger logger = LoggerFactory.getLogger(getClass());
