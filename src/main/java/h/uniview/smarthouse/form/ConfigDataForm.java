@@ -1,9 +1,8 @@
 package h.uniview.smarthouse.form;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 public class ConfigDataForm implements Serializable {
 
@@ -27,7 +26,7 @@ public class ConfigDataForm implements Serializable {
 	@NotEmpty
 	private String videoScreenshotCatalog;// 视频快照截图存储位置C:\Users\Administrator\Desktop\
 	
-	@NotEmpty
+//	@NotEmpty
 	private String videoVideotapeCatalog; // 视频录像存储位置C:\Users\Administrator\Desktop\
 	
 	@NotEmpty

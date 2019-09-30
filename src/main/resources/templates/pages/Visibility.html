@@ -25,7 +25,7 @@
         <div class="row">
           <div class="col-lg-2 col-md-4  model_Left">
             <div class="Line">
-              <label>历史视频:</label>
+              <label>历史图片:</label>
               <div id="_vily_inline_dp_plugin"></div>
               <input type="hidden" id="_history_date_time_start" />
             </div>
@@ -131,6 +131,25 @@
     listPhoto();
   }
 
+  function go2Page(page_) {
+    var page = page_;
+    if(!page_) {
+      page = Number($("#vb_page_ctrl_id_").val().trim());
+    }
+    var totalPage = Number($("#visibility_total_page").val().trim());
+    if(page < 1 || page > totalPage) {
+      alert("亲，已无数据展示，请知；");
+      return;
+    }
+
+    if(page > totalPage) {
+      alert("亲，已无数据展示，请知；");
+      return;
+    }
+    $("#visibility_currpage").val(page);
+    listPhoto();
+  }
+
   function switchPhotoWin(pageSize, htmlId, winObj) {
     debugger;
     $(".nav-link").removeClass("active");
@@ -167,13 +186,15 @@
       data: JSON.stringify(reqParam),
       dataType: "json",
       success: function (r) {
-        if (r.code === 0) {
+        if (r.code === 0 && r.msg.list.length>0) {
           // alert(JSON.stringify(r.msg));
           $("#visibility_currpage").val(r.msg.currPage);
           $("#visibility_total_page").val(r.msg.totalPage);
           handleListRender(r.msg.list);
         } else {
-          alert(r.msg);
+          // alert(r.msg);
+          var tabId = $("#visibility_tab").val().trim();
+          $(tabId).html("该日期无能见度照片");
         }
       },
       error: function (XMLhttpRequest, textStatus, errorThrown) {
@@ -183,7 +204,8 @@
   }
 
   function handleListRender(rlistdata) {
-
+    var currentPageSize_ = Number($("#visibility_currpage").val().trim());
+    var totalPageSize_ = Number($("#visibility_total_page").val().trim());
     var hstr = "<div class='row'>";
     var tabId = $("#visibility_tab").val().trim();
     if(tabId === "#tabe-10") {
@@ -205,8 +227,33 @@
         hstr += "</div>";
       });
     }
-    hstr += "<i class='fa fa-chevron-circle-left ileft' onclick='previewPage();'></i>";
-    hstr += "<i class='fa fa-chevron-circle-right iRight' onclick='nextPage();'></i>";
+    // hstr += "<i class='fa fa-chevron-circle-left ileft' onclick='previewPage();'></i>";
+    // hstr += "<i class='fa fa-chevron-circle-right iRight' onclick='nextPage();'></i>";
+    hstr += "<nav class=\"fenye\">";
+    hstr += "<ul class=\"pagination\">";
+    hstr += "<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:go2Page(1);\">首页</a></li>";
+    hstr += "<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:previewPage();\">上一页</a></li>";
+    var renderSizeLink = 0;
+    var startLinkPage = 0;
+    if(totalPageSize_<=4) {
+      startLinkPage = 1;
+      renderSizeLink = totalPageSize_;
+    } else if(currentPageSize_+4<=totalPageSize_) {
+      startLinkPage = currentPageSize_;
+      renderSizeLink = 4;
+    } else {
+      startLinkPage = totalPageSize_ - 3;
+      renderSizeLink = 4;
+    }
+    for(var tt=1; renderSizeLink>0 && tt<=renderSizeLink; tt++) {
+      hstr += "<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:go2Page("+startLinkPage+");\">"+startLinkPage+"</a></li>";
+      startLinkPage++;
+    }
+    hstr += "<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:nextPage();\">下一页</a></li>";
+    hstr += "<li class=\"page-item\"><a class=\"page-link\" href=\"javascript:go2Page("+totalPageSize_+");\">末页</a></li>";
+    hstr += "<li class=\"page-item listLi\">共："+totalPageSize_+" 页</li>, <li class=\"page-item listLi\"> <span>前往：</span> <input type=\"text\" id=\"vb_page_ctrl_id_\"> <span>页</span> <button class=\"btn btn-primary btn-sm\" onclick='go2Page()'>跳转</button> </li>";
+    hstr += "</ul>";
+    hstr += "</nav>";
     hstr += "</div>";
 
     $(tabId).html(hstr);

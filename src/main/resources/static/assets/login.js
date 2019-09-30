@@ -2,7 +2,8 @@ function login() {
     var $loginButton = $("#loginButton");
     var username = $("#exampleInputUsername").val().trim();
     var password = $("#exampleInputPassword").val().trim();
-    var rememberMe = $("#primary").is(':checked');
+    // var rememberMe = $("#primary").is(':checked');
+    var rememberMe = 1;
     if (username === "") {
         $MB.n_warning("请输入用户名！");
         return;

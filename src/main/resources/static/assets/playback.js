@@ -641,9 +641,9 @@ var PB = function ($) {
         /*************************** 公用方法 Begin ****************************/
         //滚动调滑动一小步，为解决关闭视频最后一帧画面问题
         bodyScroll: function () {
-            var t = $("playerContainer").height();
-            $('body,html').animate({'height': t + 10}, 100);
-            $('body,html').animate({'height': t - 10}, 100);
+            var t = $("#playerContainer").height();
+            $('#playerContainer').animate({'height': t + 10}, 100);
+            $('#playerContainer').animate({'height': t - 10}, 100);
         },
         //提示信息
         msgtipshow: function (msg, icon) {

@@ -1,10 +1,25 @@
 /*public*/
-
+/*分頁   8-1*/
+.fenye{
+  width: 100%;
+}
+.fenye .pagination{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin:4px auto;
+}
+.listLi{
+  margin: 0 10px;
+}
+.listLi input{
+  width: 40px;
+}
 .btn-Unifi {
   color: #fff;
   background-color: #2f84ec;
   border-color: #2375da;
-  margin:1rem 0;
+  /*margin:1rem 0;*/
 }
 .btn-Unifi:hover {
   color: #fff;
@@ -140,13 +155,13 @@
 .Cos_r .COr{
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content:flex-end;
   align-items: center;
   margin:4px 0;
 }
 .Cos_r .COr label{
   font-size: 12px;
-  width: 100px;
+  /*width: 100px;*/
   margin:0;
 }
 .Cos_r .COr div{
@@ -212,7 +227,7 @@
 }
 
 .mRc{
-  width: 94%;
+  width: 99%;
   margin:0 auto;
   position: relative;
 }
@@ -224,7 +239,7 @@
 
 .mRc .mRimg{
   width: 100%;
-  height: calc(100vh /2 - 48px);
+  height: calc(100vh /2 - 82px);
   padding: 0;
   position: relative;
 }
@@ -240,7 +255,7 @@
   height: 100%;
   padding:5px;
 }
-.mRc i{
+/*.mRc i{
  font-size: 2.2rem;
  position: absolute;
  cursor: pointer;
@@ -252,13 +267,13 @@
 }
 .mRc i.iRight{
   right: -3.2%;
-}
+}*/
 .mRc .mRimgA{
-  height: calc(100vh - 95px);
+  height: calc(100vh - 164px);
 
 }
 .mRc .mRimgB{
- height: calc(100vh /2 - 174px);
+ height: calc(100vh /2 - 196px);
 }
 .mRc .mRimgA .fa-play-circle{
   font-size: 8rem;

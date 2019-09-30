@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <title>基本信息操作</title>
+    <title>基本信息配置</title>
     <div data-th-replace="common/cssmng.html"></div>
     <!--Data Tables -->
     <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
@@ -83,7 +83,7 @@
         </div>
       </div>
       <div class="form-group row">
-        <label for="input-22" class="col-sm-2 col-form-label text-right">室外图像归档:</label>
+        <label for="input-22" class="col-sm-2 col-form-label text-right">室外图像归档路径:</label>
         <div class="col-sm-10 input-group-sm">
           <input type="text" class="form-control" id="bi_pt_hs_dir" />
         </div>
@@ -94,14 +94,14 @@
           <input type="text" class="form-control" id="bi_ve_pt_dir" />
         </div>
       </div>
-      <div class="form-group row">
+      <!--<div class="form-group row">
         <label for="input-22" class="col-sm-2 col-form-label text-right">视频监控录像路径:</label>
         <div class="col-sm-10 input-group-sm">
           <input type="text" class="form-control" id="bi_ve_ve_dir" />
         </div>
-      </div>
+      </div>-->
       <div class="form-group row">
-        <label for="input-22" class="col-sm-2 col-form-label text-right">移动侦截图路径:</label>
+        <label for="input-22" class="col-sm-2 col-form-label text-right">移动侦测截图路径:</label>
         <div class="col-sm-10 input-group-sm">
           <input type="text" class="form-control"  id="bi_pt_mt_dir" />
         </div>
@@ -157,7 +157,7 @@ function updateConfigData() {
 		"cameraOriginalCatalog": $("#bi_pt_dir").val(),
 		"cameraManageCatalog": $("#bi_pt_hs_dir").val(),
 		"videoScreenshotCatalog": $("#bi_ve_pt_dir").val(),
-		"videoVideotapeCatalog": $("#bi_ve_ve_dir").val(),
+		// "videoVideotapeCatalog": $("#bi_ve_ve_dir").val(),
 		"videoVmdalarmCatalog": $("#bi_pt_mt_dir").val(),
 		"cursor": "1"
 	};
@@ -201,7 +201,7 @@ function showBasicInfo() {
         		$("#bi_pt_dir").val(cfgInfo.cameraOriginalCatalog);
         		$("#bi_pt_hs_dir").val(cfgInfo.cameraManageCatalog);
         		$("#bi_ve_pt_dir").val(cfgInfo.videoScreenshotCatalog);
-        		$("#bi_ve_ve_dir").val(cfgInfo.videoVideotapeCatalog);
+        		// $("#bi_ve_ve_dir").val(cfgInfo.videoVideotapeCatalog);
         		$("#bi_pt_mt_dir").val(cfgInfo.videoVmdalarmCatalog);
 			} else {
 		        alert(r.msg);

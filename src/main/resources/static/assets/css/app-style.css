@@ -575,7 +575,7 @@ hr {
     padding: 0px 15px;
     z-index: 999;
     height: 60px;
-    background:#0071bd;
+    background:#3b5998;
     -webkit-box-shadow: none;
     box-shadow: none;
     border-bottom: 1px solid #eaf2f9;
@@ -716,10 +716,24 @@ hr {
     width: 100%;
     height: 60px;
     line-height: 60px;
-    text-align: center;
-    border-bottom: 1px solid #c5e0fb;
-}
 
+    border-bottom: 1px solid #c5e0fb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.brand-logo img{
+    float: left;
+    margin-left: 15px;
+}
+.brand-logo h5 {
+    width: 70%;
+    float: right;
+    margin-right: 15px;
+    font-size: 15px;
+    color: #3b5998;
+    text-align: center;
+}
 .logo-text{
     color: #3b5998;
     font-size: 17px;
@@ -1015,15 +1029,16 @@ hr {
 }
 #wrapper .signH1{
     font-weight: normal;
-    color: #2f84ec;
+    color: #0071bd;
     font-size: 3rem;
     letter-spacing: 3px;
     font-family: "汉仪细中圆简";
     width: auto;
     height: auto;
     position:fixed;
-    right:13rem;
-    top: 10rem;
+    right:14.7rem;
+    top: 7rem;
+    line-height: 4rem;
 }
 
 .cardSign{
