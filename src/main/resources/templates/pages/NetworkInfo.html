@@ -11,8 +11,11 @@
   <!--Data Tables -->
   <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css}" rel="stylesheet" type="text/css">
   <link data-th-href="@{/assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css}" rel="stylesheet" type="text/css">
+  <link data-th-href="@{/assets/plugins/bootstrap-validator/css/bootstrapValidator.min.css}" rel="stylesheet" type="text/css">
   <style type="text/css">
-	
+	.has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
+    	color: #a94442;
+	}
   </style>
 </head>
 <body>
@@ -98,7 +101,8 @@
 </div>
 
 <div data-th-replace="common/jsmng.html"></div>
-
+<script data-th-src="@{/assets/plugins/bootstrap-validator/js/bootstrapValidator.min.js}"></script>
+<script data-th-src="@{/assets/plugins/bootstrap-validator/js/language/zh_CN.js}"></script>
 <script>
 function deviceControl() {
     var reqParam = {};
@@ -320,17 +324,35 @@ function deviceControl() {
     });
   }
   
+  var _plugin_modal_server_node_form_add = $("#_plugin_modal_server_node_form_add");
+  var _plugin_modal_server_node_form_edit = $("#_plugin_modal_server_node_form_edit");
+  
   $("#_plugin_modal_server_node_add").on("show.bs.modal", function () {
 	  $("#_plugin_modal_server_node_add input[type='text']").val("");
 	  $("#_plugin_modal_server_node_add_mess").val("");
+	  
+	  _plugin_modal_server_node_form_add.data('bootstrapValidator').destroy();
+	  _plugin_modal_server_node_form_add.data('bootstrapValidator',null);
+
+	  _plugin_modal_server_node_form_fun(_plugin_modal_server_node_form_add);
   });
   
   $("#_plugin_modal_server_node_edit").on("hide.bs.modal", function () {
 	  $("#_plugin_modal_server_node_edit input[type='text']").val("");
 	  $("#_plugin_modal_server_node_edit_mess").val("");
+	  
+	  _plugin_modal_server_node_form_edit.data('bootstrapValidator').destroy();
+	  _plugin_modal_server_node_form_edit.data('bootstrapValidator',null);
+
+	  _plugin_modal_server_node_form_fun(_plugin_modal_server_node_form_edit);
   });
   
   $("#_plugin_modal_server_node_btn_edit").on("click", function(){
+	  var bv = _plugin_modal_server_node_form_edit.data('bootstrapValidator');
+      bv.validate();
+      if (!bv.isValid()) {
+    	  return;
+      }
 	  var reqParam = {
 	      "name": $("#_plugin_modal_server_node_edit_name").val(),
 	      "ip": $("#_plugin_modal_server_node_edit_ip").val(),
@@ -358,8 +380,117 @@ function deviceControl() {
 	    });
   });
   
+  function _plugin_modal_server_node_form_fun(jqueryFormObj) {
+	  jqueryFormObj.bootstrapValidator({
+			message: '输入值不合法',
+	      	feedbackIcons: {
+	        	valid: 'glyphicon glyphicon-ok',
+	          	invalid: 'glyphicon glyphicon-remove',
+	          	validating: 'glyphicon glyphicon-refresh'
+	      	},
+	      	fields: {
+	    	  	serverName: {
+	              	validators: {
+	                  	notEmpty: {
+	                      	message: '名称不能为空'
+	                  	}
+	              	}
+	          	}, 
+	          	serverStatus: {
+	              	validators: {
+	                  	notEmpty: {
+	                      	message: '状态不能为空'
+	                  	}
+	              	}
+	          	}, 
+	          	serverIp: {
+	          		validators: {
+	                  	notEmpty: {
+	                      	message: 'ip不能为空'
+	                  	},
+	                  	regexp: {
+	                  	    regexp: /^((2[0-4][0-9])|(25[0-5])|(1[0-9]{0,2})|([1-9][0-9])|([1-9]))\.(((2[0-4][0-9])|(25[0-5])|(1[0-9]{0,2})|([1-9][0-9])|([0-9]))\.){2}((2[0-4][0-9])|(25[0-5])|(1[0-9]{0,2})|([1-9][0-9])|([1-9]))$/,
+	                  	    message: 'IP地址格式不正常'
+	                  	}
+	              	}
+	          	}, 
+	          	serverPort: {
+	              	validators: {
+	                  	notEmpty: {
+	                      	message: '端口不能为空'
+	                  	},
+	                 	digits: {
+	               	    	message : '端口必须是正整数'
+	               		},
+	               		greaterThan: {
+	               	    	value : 1,
+	               	    	message : '最小输入1'
+	               		},
+		               	lessThan: {
+		               	    value : 65535,
+		               	    message : '最大输入65535'
+		               	}
+	              	}
+	          	},
+	          	channelSum: {
+	              	validators: {
+	                  	notEmpty: {
+	                      	message: '通道数量不能为空'
+	                  	},
+	                 	digits: {
+	               	    	message : '通道数量必须是正整数'
+	               		},
+	               		greaterThan: {
+	               	    	value : 1,
+	               	    	message : '最小输入1'
+	               		},
+		               	lessThan: {
+		               	    value : 100,
+		               	    message : '最大输入100'
+		               	}
+	              	}
+	          	},
+	          	channelId: {
+	              	validators: {
+	                  	notEmpty: {
+	                      	message: '通道Id不能为空'
+	                  	},
+	                 	digits: {
+	               	    	message : '通道数量必须是正整数'
+	               		},
+	               		greaterThan: {
+	               	    	value : 1,
+	               	    	message : '最小输入1'
+	               		}
+	              	}
+	          	},
+	          	loginName: {
+	              	validators: {
+	                  	notEmpty: {
+	                      	message: '登录名称不能为空'
+	                  	}
+	              	}
+	          	}, 
+	          	loginPwd: {
+	              	validators: {
+	                  	notEmpty: {
+	                      	message: '登录密码不能为空'
+	                  	}
+	              	}
+	          	}
+	      	}
+	  	});
+  }
+	
+  _plugin_modal_server_node_form_fun(_plugin_modal_server_node_form_add);
+  _plugin_modal_server_node_form_fun(_plugin_modal_server_node_form_edit);
   
   $("#_plugin_modal_server_node_btn_add").on("click", function() {
+      var bv = _plugin_modal_server_node_form_add.data('bootstrapValidator');
+      bv.validate();
+      if (!bv.isValid()) {
+    	  return;
+      }
     var reqParam = {
       "name": $("#_plugin_modal_server_node_add_name").val(),
       "ip": $("#_plugin_modal_server_node_add_ip").val(),
@@ -386,17 +517,36 @@ function deviceControl() {
     });
   });
   
+  //--------- start camera info plugin js -----------------------------------------------// 
+  var _plugin_modal_camera_info_form_add = $("#_plugin_modal_camera_info_form_add");
+  var _plugin_modal_camera_info_form_edit = $("#_plugin_modal_camera_info_form_edit");
+  
   $("#_plugin_modal_camera_info_add").on("show.bs.modal", function () {
     $("#_plugin_modal_camera_info_add input[type='text']").val("");
     $("#_plugin_modal_camera_info_add_mess").val("");
+    
+    _plugin_modal_camera_info_form_add.data('bootstrapValidator').destroy();
+    _plugin_modal_camera_info_form_add.data('bootstrapValidator',null);
+
+	_plugin_modal_server_node_form_fun(_plugin_modal_camera_info_form_add);
   });
   
   $("#_plugin_modal_camera_info_edit").on("hide.bs.modal", function () {
 	  $("#_plugin_modal_camera_info_edit input[type='text']").val("");
 	  $("#_plugin_modal_camera_info_edit_mess").val("");
+	  
+	  _plugin_modal_camera_info_form_edit.data('bootstrapValidator').destroy();
+	  _plugin_modal_camera_info_form_edit.data('bootstrapValidator',null);
+
+	  _plugin_modal_server_node_form_fun(_plugin_modal_camera_info_form_edit);
   });
   
   $("#_plugin_modal_camera_info_btn_edit").on("click", function(){
+	  var bv = _plugin_modal_camera_info_form_edit.data('bootstrapValidator');
+      bv.validate();
+      if (!bv.isValid()) {
+    	  return;
+      }
 	  var reqParam = {
 		  "name": $("#_plugin_modal_camera_info_edit_name").val(),
 	      "ip": $("#_plugin_modal_camera_info_edit_ip").val(),
@@ -428,6 +578,11 @@ function deviceControl() {
   });
 	
   $("#_plugin_modal_camera_info_btn_add").on("click", function() {
+	  var bv = _plugin_modal_camera_info_form_add.data('bootstrapValidator');
+      bv.validate();
+      if (!bv.isValid()) {
+    	  return;
+      }
     var reqParam = {
       "name": $("#_plugin_modal_camera_info_add_name").val(),
       "ip": $("#_plugin_modal_camera_info_add_ip").val(),
@@ -457,7 +612,19 @@ function deviceControl() {
       }
     });
   });
-
+	
+  _plugin_modal_server_node_form_fun(_plugin_modal_camera_info_form_add);
+  _plugin_modal_server_node_form_fun(_plugin_modal_camera_info_form_edit);
+  
+  //-----------------------end of ---------------------------------------------//
+  
+	var _plugin_modal_video_info_form_add = $("#_plugin_modal_video_info_form_add");
+    var _plugin_modal_video_info_form_edit = $("#_plugin_modal_video_info_form_edit");
+    
+    _plugin_modal_server_node_form_fun(_plugin_modal_video_info_form_add);
+    _plugin_modal_server_node_form_fun(_plugin_modal_video_info_form_edit);
+  
+  
   $("#_plugin_modal_video_info_add").on("show.bs.modal", function () {
     $("#_plugin_modal_video_info_add input[type='text']").val("");
     $("#_plugin_modal_video_info_add_mess").val("");
@@ -469,14 +636,28 @@ function deviceControl() {
 	
 	$("#_plugin_modal_video_info_add_channelSum_div").show();
 	$("#_plugin_modal_video_info_add_hardDiskUsage_div").show();
+	
+	_plugin_modal_video_info_form_add.data('bootstrapValidator').destroy();
+	_plugin_modal_video_info_form_add.data('bootstrapValidator',null);
+
+	_plugin_modal_server_node_form_fun(_plugin_modal_video_info_form_add);
   });
 
   $("#_plugin_modal_video_info_edit").on("hide.bs.modal", function () {
 	// 执行一些动作...
+	  _plugin_modal_video_info_form_edit.data('bootstrapValidator').destroy();
+	  _plugin_modal_video_info_form_edit.data('bootstrapValidator',null);
+
+		_plugin_modal_server_node_form_fun(_plugin_modal_video_info_form_edit);
 	
   });
   
   $("#_plugin_modal_video_info_btn_edit").on("click", function() {
+	  var bv = _plugin_modal_video_info_form_edit.data('bootstrapValidator');
+      bv.validate();
+      if (!bv.isValid()) {
+    	  return;
+      }
 	  var reqParam, _duri;
 	    var dtype = $("#_plugin_modal_video_info_edit_type").val();
 	    if("2" == dtype) {
@@ -533,7 +714,11 @@ function deviceControl() {
   });
 
   $("#_plugin_modal_video_info_btn_add").on("click", function() {
-
+	  var bv = _plugin_modal_video_info_form_add.data('bootstrapValidator');
+      bv.validate();
+      if (!bv.isValid()) {
+    	  return;
+      }
     var reqParam, _duri;
     var dtype = $("#_plugin_modal_video_info_add_type").val();
     if("2" == dtype) {

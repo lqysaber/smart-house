@@ -69,16 +69,21 @@ var Index = function ($) {
             $(winObj).addClass("active");
             $("#DevchannelID").val(channelId);
             $("#DevchannelTxt").val(channelTxt);
-            this.startVideo();
 
             if(type == 1) {
-                $("#_plugin_trl_presetul button").attr("disabled", false);
-                $("#_plugin_trl_cursor button").attr("disabled", false);
+//                $("#_plugin_trl_presetul button").attr("disabled", false);
+//                $("#_plugin_trl_cursor button").attr("disabled", false);
+            	$("#_plugin_trl_all_btn_clound").removeClass("Ashy");
+                $("#_plugin_trl_all_btn_clound button").attr("disabled", false);
+                
             } else {
                 // disable cloud controller
-                $("#_plugin_trl_presetul button").attr("disabled", true);
-                $("#_plugin_trl_cursor button").attr("disabled", true);
+//                $("#_plugin_trl_presetul button").attr("disabled", true);
+//                $("#_plugin_trl_cursor button").attr("disabled", true);
+            	$("#_plugin_trl_all_btn_clound").addClass("Ashy");
+            	$("#_plugin_trl_all_btn_clound button").attr("disabled", true);
             }
+            this.startVideo();
         },
 
         /*********************************云台相关********************************/

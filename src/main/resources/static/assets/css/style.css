@@ -394,6 +394,22 @@
 }
 
 
+  /*修改样式10-8   monitor*/
+.Ashy .Cos_l{
+  background: #dddddd;
+}
+.Ashy .Cos_l button{
+  color: #a0a0a0;
+
+}
+  /*修改样式10-8 networkinfo*/
+.span_tip{
+  color:#ff002a; 
+  margin-right: 6px;
+}
+.input_bo{
+  border:1px solid #ff002a;
+}
 
 
 
