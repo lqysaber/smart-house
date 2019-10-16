@@ -11,14 +11,12 @@ var Index = function ($) {
         devicetype: null,
         DeviceHandle: null,          //登录设备的凭证ID
         init: function () {
-            debugger;
             this.destory_activex();
             this.initPage();
             this.initData();
             this.initEvent();
         },
         initPage: function () {
-            debugger;
             video.initOcx();
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {
@@ -30,7 +28,6 @@ var Index = function ($) {
         },
 
         initPagebtn: function () {
-            debugger;
             // disable cloud controller
             $("#_plugin_trl_presetul button").attr("disabled", true);
             $("#_plugin_trl_cursor button").attr("disabled", true);
@@ -41,7 +38,6 @@ var Index = function ($) {
         },
 
         initData: function () {
-            debugger;
             // 默认关闭日志
             top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 0);
         },
@@ -64,7 +60,6 @@ var Index = function ($) {
         },
 
         selectedDevChannel: function(channelId, winObj, type, channelTxt) {
-            debugger;
             $("#_plugin_ctrl_list a").removeClass("active");
             $(winObj).addClass("active");
             $("#DevchannelID").val(channelId);
@@ -88,7 +83,6 @@ var Index = function ($) {
 
         /*********************************云台相关********************************/
         presetOperation: function (id) {
-            debugger;
             var ptzcontrolcmd;
             switch (id) {
                 case "turnNW":
@@ -129,7 +123,6 @@ var Index = function ($) {
         },
 
         cursorOperation: function (id) {
-            debugger;
             var ptzcontrolcmd;
             switch (id) {
                 case "FOCUS_N":
@@ -163,7 +156,6 @@ var Index = function ($) {
 
         /*************************************** login  **********************************/
         loginnvr: function(_ip, _port, _username, _password) {
-            debugger;
             this.ip = _ip;
             this.port = _port;
             this.username = _username;
@@ -194,7 +186,6 @@ var Index = function ($) {
 
         /*************************************** show multi windows  **********************************/
         rendersdkviewwindow: function(num) {
-            debugger;
             this.initOcxWindownum = num;
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {
@@ -205,7 +196,6 @@ var Index = function ($) {
         /*************************************** 本地登录 相关 **********************************/
         // 局域网登录
         login: function (data) {
-            debugger;
             var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_Login"], data);
             var msg;
             if (-1 == SDKRet) {
@@ -231,7 +221,6 @@ var Index = function ($) {
         /*************************************** 实况相关 Begin **********************************/
         //播放视频
         startVideo: function () {
-            debugger;
             var channelValue = Number($("#DevchannelID").val());
             if (channelValue == "") {
                 $MB.n_warning("请选择监控点");
@@ -268,14 +257,6 @@ var Index = function ($) {
 
         //关闭视频
         stopVideo: function (ResourceId) {
-            debugger;
-            // var ResourceId ;
-            // if(!_resourceId) {
-            //     ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-            // } else {
-            //     ResourceId = _resourceId;
-            // }
-
             var videoObj = this.videotypejsonMap[ResourceId];
             if(null == videoObj || !videoObj) {
                 return 0;
@@ -308,11 +289,9 @@ var Index = function ($) {
 
         /**************************清理SDK并关闭线程********************/
         destory_activex: function () {
-            debugger;
+            // debugger;
             if (top.sdk_viewer) {
                 this.stopallvideo();
-                var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-                top.sdk_viewer.execFunction("NETDEV_StopRealPlay", parseInt(ResourceId));
                 top.sdk_viewer.execFunction("NETDEV_Cleanup");
                 delete top.sdk_viewer;
             }
@@ -321,16 +300,13 @@ var Index = function ($) {
         /*************************** 公用方法 Begin ****************************/
         //滚动调滑动一小步，为解决关闭视频最后一帧画面问题
         bodyScroll: function () {
-            debugger;
             var t = $("#playerContainer").height();
-            // $('body,html').animate({'height': t + 10}, 100);
-            // $('body,html').animate({'height': t - 10}, 100);
-            $('#playerContainer').animate({'height': t + 10}, 100);
-            $('#playerContainer').animate({'height': t - 10}, 100);
+            $('#playerContainer').animate({'height': t - 1}, 100);
+            $('#playerContainer').animate({'height': t + 1}, 100);
         },
         //提示信息
         msgtipshow: function (msg, icon) {
-            debugger;
+            // debugger;
             MSG.msgbox.show(msg, icon, 3000, 61, "errormsg");
         }
     });

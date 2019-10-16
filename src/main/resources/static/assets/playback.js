@@ -29,7 +29,6 @@ var PB = function ($) {
             this.initEvent();
         },
         initPage: function () {
-            debugger;
             video.initOcx();
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {
@@ -41,11 +40,9 @@ var PB = function ($) {
         },
 
         initPagebtn: function () {
-            debugger;
         },
 
         initData: function () {
-            debugger;
             // this.setlogpath();
             // top.sdk_viewer.execFunction(pluginInterfce["NETDEV_SetWriteLog"], 1);
             // 默认关闭日志
@@ -64,7 +61,6 @@ var PB = function ($) {
         },
 
         selectedDevChannel: function(channelId, winObj, type, channelTxt) {
-            debugger;
             $("#_plugin_ctrl_list a").removeClass("active");
             $(winObj).addClass("active");
             $("#DevchannelID").val(channelId);
@@ -75,7 +71,6 @@ var PB = function ($) {
 
         /*************************************** login  **********************************/
         loginnvr: function(_ip, _port, _username, _password) {
-            debugger;
             this.ip = _ip;
             this.port = _port;
             this.username = _username;
@@ -106,7 +101,6 @@ var PB = function ($) {
 
         /*************************************** show multi windows  **********************************/
         rendersdkviewwindow: function(num) {
-            debugger;
             this.initOcxWindownum = num;
             var retcode = top.sdk_viewer.execFunction("NetSDKSetPlayWndNum", this.initOcxWindownum);
             if (0 != retcode) {
@@ -117,7 +111,6 @@ var PB = function ($) {
         /*************************************** 本地登录 相关 **********************************/
         // 局域网登录
         login: function (data) {
-            debugger;
             var SDKRet = top.sdk_viewer.execFunction(pluginInterfce["NETDEV_Login"], data);
             if (-1 == SDKRet) {
             	$MB.n_warning($.lang.tip["tiploginfail"]);
@@ -140,7 +133,6 @@ var PB = function ($) {
 
         /******************************* 查询相关 *********************************/
         commonQuery: function () {
-            debugger;
             var channelID = $("#DevchannelID").val();
             if (channelID == "") {
                 $MB.n_warning("请选择监控点");
@@ -199,7 +191,6 @@ var PB = function ($) {
         },
 
         findall: function () {
-            debugger;
             var result;
             var tBeginTime;
             var tEndTime;
@@ -232,7 +223,6 @@ var PB = function ($) {
         },
 
         closefind: function () {
-            debugger;
             var SDKRet = top.sdk_viewer.execFunction("NETDEV_FindClose", this.queryHandle);
             if (-1 == SDKRet) {
                 $MB.n_warning("查询视频失败");
@@ -240,7 +230,6 @@ var PB = function ($) {
         },
 
         playbackbytime: function (vmobj) {
-            debugger;
             this.currSpeedRT = 4;
             this.currSpeedGO = 10;
             this.nextSpeedRT = 0;
@@ -299,7 +288,6 @@ var PB = function ($) {
         },
 
         renderVideoProgress: function(playtime) {
-            debugger;
             var starttime = parseInt($("#_pbvideo_play_time_start").val());
             var endtime = parseInt($("#_pbvideo_play_time_end").val());
 
@@ -348,7 +336,6 @@ var PB = function ($) {
         },
 
         getProgress: function () {
-            // debugger;
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
                 // $MB.n_warning("No stream in the video windows.");
@@ -371,7 +358,6 @@ var PB = function ($) {
         },
         
         showCurrentProgress: function() {
-        	debugger;
             var pttime = this.getProgress();
             if (-1 == pttime) {
                 $MB.n_warning("get video progress fail.");
@@ -382,7 +368,6 @@ var PB = function ($) {
         },
 
         setProgressMS: function (playtime) {
-            debugger;
             var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
             var videoObj = this.videotypejsonMap[ResourceId];
             if(null == videoObj) {
@@ -404,7 +389,6 @@ var PB = function ($) {
         },
 
         setProgress: function () {
-            debugger;
             var _pbvideo_time = $("#_pbvideo_progress_time").val();
             if (_pbvideo_time == "") {
                 $MB.n_warning($.lang.tip["tipinputsearchtime"]);
@@ -477,8 +461,7 @@ var PB = function ($) {
         },
         
         fullScreen: function() {
-        	debugger;
-        	var SDKRet = top.sdk_viewer.execFunction("NetSDKFullScreen", 1); 
+        	var SDKRet = top.sdk_viewer.execFunction("NetSDKFullScreen", 1);
         	if (-1 == SDKRet) {
                 $MB.n_warning("全屏失败");
             } else {
@@ -487,7 +470,6 @@ var PB = function ($) {
         }, 
 
         speedRT: function() {
-            debugger;
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
                 $MB.n_warning("当前视窗没有回放的视频");
@@ -512,17 +494,9 @@ var PB = function ($) {
                 this.nextSpeedRT ++;
             }
             this.currSpeedRT = this.speedBW[this.nextSpeedRT];
-
-            // if(this.nextSpeedRT + 1 >= this.speedBW.length) {
-            //     this.nextSpeedRT = 0;
-            // } else {
-            //     this.nextSpeedRT ++ ;
-            // }
-            // this.currSpeedRT = this.speedBW.slice(this.nextSpeedRT, this.nextSpeedRT+1)[0];
         },
 
         speedGO: function() {
-            debugger;
             var ResourceId = this.checkStreamExists();
             if(-1 == ResourceId) {
                 $MB.n_warning("当前视窗没有回放的视频");
@@ -546,12 +520,6 @@ var PB = function ($) {
                 this.nextSpeedGO ++;
             }
             this.currSpeedGO = this.speedFW[this.nextSpeedGO];
-            // if(this.nextSpeedGO + 1 >= this.speedFW.length) {
-            //     this.nextSpeedGO = 0;
-            // } else {
-            //     this.nextSpeedGO ++ ;
-            // }
-            // this.currSpeedGO = this.speedFW.slice(this.nextSpeedGO, this.nextSpeedGO+1)[0];
         },
 
         checkStreamExists: function(_resourceId) {
@@ -631,8 +599,8 @@ var PB = function ($) {
         destory_activex: function () {
             if (top.sdk_viewer) {
                 this.stopallvideo();
-                var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
-                top.sdk_viewer.execFunction("NETDEV_StopPlayback", parseInt(ResourceId));
+                // var ResourceId = top.sdk_viewer.execFunction("NetSDKGetFocusWnd");
+                // top.sdk_viewer.execFunction("NETDEV_StopPlayback", parseInt(ResourceId));
                 top.sdk_viewer.execFunction("NETDEV_Cleanup");
                 delete top.sdk_viewer;
             }
@@ -642,12 +610,11 @@ var PB = function ($) {
         //滚动调滑动一小步，为解决关闭视频最后一帧画面问题
         bodyScroll: function () {
             var t = $("#playerContainer").height();
-            $('#playerContainer').animate({'height': t + 10}, 100);
-            $('#playerContainer').animate({'height': t - 10}, 100);
+            $('#playerContainer').animate({'height': t - 1}, 100);
+            $('#playerContainer').animate({'height': t + 1}, 100);
         },
         //提示信息
         msgtipshow: function (msg, icon) {
-            debugger;
             MSG.msgbox.show(msg, icon, 3000, 61, "errormsg");
         },
 
